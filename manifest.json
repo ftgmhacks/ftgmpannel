@@ -1,0 +1,26 @@
+{
+  "name": "Pak Digital \u2014 SMM Panel",
+  "short_name": "Pak Digital",
+  "description": "Pakistan's fastest and cheapest SMM panel for Instagram, TikTok, YouTube and Facebook growth.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f0f7f3",
+  "theme_color": "#0bc15c",
+  "lang": "en-PK",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/YCJ3NFXx/20260821-085028.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://i.postimg.cc/YCJ3NFXx/20260821-085028.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
