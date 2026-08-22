@@ -295,6 +295,37 @@ select.form-control {
   box-shadow: 0 6px 15px rgba(11, 193, 92, 0.1); animation: pop 0.22s ease;
 }
 
+/* ---------- Custom Dashboard Concentric Loader Style ---------- */
+.custom-loader-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+}
+.custom-loader-ring {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 4px solid var(--primary-soft);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.custom-loader-ring-outer {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border: 2px dashed var(--primary);
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: spinReverse 3s linear infinite;
+}
+@keyframes spinReverse {
+  to { transform: rotate(-360deg); }
+}
+
 /* ---------- Toast ---------- */
 .toast-container { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); text-align: center; z-index: 400; display: flex; flex-direction: column; gap: 0.5rem; width: min(92vw, 380px); }
 .toast { font-family: 'Inter', sans-serif;  padding: 0.8rem 1rem; border-radius: 12px; background: var(--brand-900); color: #fff; font-size: 0.87rem; box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(-12px); transition: all 0.28s; }
@@ -326,7 +357,7 @@ select.form-control {
 <header>
   <div class="header-content" style="justify-content: space-between;">
     <div class="logo-area" style="flex: 1; text-align: left;">
-      <img id="site-logo-header" src="https://i.postimg.cc/D0NthZgz/pak-digital.png" alt="Pak Digital Logo">
+      <img id="site-logo-header" src="https://i.postimg.cc/8PSv1rmP/20260818-100938.png" alt="Pak Digital Logo">
     </div>
     <div class="user-info">
       <span id="user-name-display" class="user-name-display">Loading...</span>
@@ -370,7 +401,14 @@ select.form-control {
   </div>
 </div>
 
-<div id="page-loader" class="loader-screen"><div class="spinner spinner-primary"></div></div>
+<!-- Custom Concentric Bolt Loader -->
+<div id="page-loader" class="loader-screen">
+  <div class="custom-loader-wrapper">
+    <i class="fa-solid fa-bolt" style="font-size: 22px; color: var(--primary); z-index: 10;"></i>
+    <div class="custom-loader-ring"></div>
+    <div class="custom-loader-ring-outer"></div>
+  </div>
+</div>
 
 <main class="main-content">
   <div class="container">
@@ -441,7 +479,8 @@ select.form-control {
       <div id="service-details-card" class="d-none mb-3">
         <div class="detail-grid mb-3">
           <div class="detail-box"><div class="k">Price / 1000</div><div class="v" id="service-price-display">—</div></div>
-          <div class="detail-box"><div class="k">Min / Max</div><div class="v" id="service-min-max">—</div></div>
+          <!-- Styled Minimum & Maximum Display card limits in Red text -->
+          <div class="detail-box"><div class="k">Min / Max</div><div class="v" id="service-min-max" style="color: #d93838 !important; font-weight: 800;">—</div></div>
           <div class="detail-box"><div class="k">Delivery</div><div class="v" id="service-time-display">—</div></div>
         </div>
         <p class="text-muted" style="font-size:0.85rem" id="service-description"></p>
@@ -472,7 +511,7 @@ select.form-control {
       <div id="order-success-alert" class="success-alert-box d-none mt-3">
         <i class="fa-solid fa-circle-check" style="font-size: 2.2rem; color: var(--primary); display: block; margin-bottom: 0.6rem;"></i>
         <strong style="display: block; font-size: 1.1rem; margin-bottom: 0.25rem;">Order Placed Successfully!</strong>
-        <span style="font-size: 0.9rem; color: var(--text-muted)">Your SMM order has been placed successfully and will be completed soon.</span>
+        <span style="font-size: 0.9rem; color: var(--text-muted)">Your order has been placed successfully and will be completed soon.</span>
       </div>
     </form>
 
