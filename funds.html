@@ -144,7 +144,7 @@ header {
 .page-head h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--brand-900); }
 .page-head p { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.2rem; }
 
-/* ---------- Cards ---------- */
+/* ---------- Cards & Grid Layouts (Mobile Friendly) ---------- */
 .card {
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
   box-shadow: var(--shadow-sm); padding: 1.5rem; margin-bottom: 1.25rem;
@@ -163,7 +163,7 @@ label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4
 }
 .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
 .form-hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.35rem; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -190,12 +190,19 @@ label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4
   transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
 }
 .copy-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+/* ---------- Upload Area States ---------- */
 .upload-area {
   border: 2px dashed var(--border); border-radius: var(--radius); padding: 2rem;
   text-align: center; cursor: pointer; transition: all 0.2s; background: var(--bg-soft);
+  position: relative;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .upload-area:hover, .upload-area.dragging { border-color: var(--primary); background: var(--primary-soft); }
-.upload-area i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
 
 /* ---------- Toast ---------- */
 .toast-container { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); text-align: center; z-index: 400; display: flex; flex-direction: column; gap: 0.5rem; width: min(92vw, 380px); }
@@ -205,16 +212,25 @@ label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4
 .toast-error { background: #d93838; }
 
 .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
-.spinner-primary { border-color: var(--primary-soft); border-top-color: var(--primary); width: 28px; height: 28px; }
+.spinner-primary { border-color: var(--primary-soft); border-top-color: var(--primary); width: 40px; height: 40px; border-width: 4px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loader-screen { position: fixed; inset: 0; background: var(--bg); display: grid; place-items: center; z-index: 500; }
 
+/* ---------- Responsive Adjustments (Highly Mobile Friendly) ---------- */
 @media (max-width: 860px) {
   .mobile-menu-btn { display: grid; place-items: center; }
   .sidebar { transform: translateX(100%); width: 72%; max-width: 300px; top: 0; padding-top: 1.25rem; box-shadow: -12px 0 30px rgba(0,0,0,0.15); }
   .sidebar.active { transform: translateX(0); }
   .main-content { margin-right: 0; }
+  .form-row { grid-template-columns: 1fr; gap: 1rem; }
   .user-name-display { display: none; }
+}
+@media (max-width: 480px) {
+  .upload-area { padding: 1.5rem 1rem; min-height: 150px; }
+  .card { padding: 1.25rem 1rem; }
+  .detail-box { padding: 1.25rem 1rem; }
+  .detail-box .v { font-size: 1.2rem; }
+  .copy-btn { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
 }
 .modal-overlay.active { display: flex !important; }
 </style>
@@ -276,29 +292,39 @@ label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4
       <!-- Deposit Submit Form -->
       <form id="add-funds-form" class="card">
         <div class="card-title"><i class="fa-solid fa-receipt"></i> Submit Screenshot</div>
+        
         <div class="form-group">
           <label for="fund-amount">Amount (PKR)</label>
           <input type="number" id="fund-amount" class="form-control" min="1" step="any" placeholder="1000" required>
         </div>
+        
         <div class="form-group">
           <label>Payment Screenshot</label>
-          <div class="upload-area" onclick="document.getElementById('fund-screenshot').click()" id="drop-zone">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            <div class="font-bold" id="file-name-display">Click or Drag Screenshot Here</div>
-            <p class="text-muted" style="font-size:0.8rem; margin-top:0.5rem;">JPG, PNG or PDF (Max 5MB)</p>
-            <div id="image-preview-container" class="d-none" style="margin-top: 1rem;">
-              <p style="color: var(--primary); font-weight: 700; margin-top: 0.5rem;">File Selected: <span id="selected-file-name" style="color: var(--brand-900);"></span> ✅</p>
+          <div class="upload-area" onclick="if(!isUploading) document.getElementById('fund-screenshot').click()" id="drop-zone">
+            <!-- Default Input UI State -->
+            <div id="upload-state-default" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.2rem; color: var(--primary); margin-bottom: 0.8rem;"></i>
+              <div class="font-bold">Click or Drag Screenshot Here</div>
+              <p class="text-muted" style="font-size:0.8rem; margin-top:0.4rem;">JPG, JPEG or PNG (Max 5MB)</p>
+            </div>
+            
+            <!-- Loading Upload Circle UI State -->
+            <div id="upload-state-loading" class="d-none" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+              <div class="spinner spinner-primary" style="margin: 0.5rem auto 0.8rem;"></div>
+              <div class="font-bold" style="color: var(--primary);">Uploading Screenshot...</div>
+              <p class="text-muted" style="font-size:0.8rem; margin-top:0.4rem;">Please do not exit this window</p>
+            </div>
+
+            <!-- Success UI State -->
+            <div id="upload-state-success" class="d-none" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+              <i class="fa-solid fa-circle-check" style="font-size: 2.2rem; color: var(--primary); margin-bottom: 0.8rem;"></i>
+              <div class="font-bold" style="color: var(--primary);">Screenshot Uploaded Successfully! ✅</div>
+              <p class="text-muted" style="font-size:0.8rem; margin-top:0.4rem;">You can now safely submit your request</p>
             </div>
           </div>
-          <input type="file" id="fund-screenshot" class="d-none" accept="image/*" required onchange="
-            const file = this.files[0];
-            if (file) {
-              document.getElementById('selected-file-name').textContent = file.name;
-              document.getElementById('image-preview-container').classList.remove('d-none');
-              document.getElementById('file-name-display').textContent = file.name;
-            }
-          ">
+          <input type="file" id="fund-screenshot" class="d-none" accept="image/*" required>
         </div>
+        
         <button type="submit" id="submit-funds-btn" class="btn btn-primary btn-block">
           <span class="btn-text">Submit Details</span>
           <span class="spinner d-none" id="funds-spinner"></span>
@@ -344,6 +370,9 @@ const IMGBB_API_KEY = "15215380e1407f437cdfe654a8a507d5";
 let currentUser = null;
 let currentUserData = {};
 let activePaymentMethodTitle = '';
+let uploadedScreenshotUrl = '';
+let isUploading = false;
+window.isUploading = isUploading;
 
 function showToast(message, type = 'success') {
   let container = document.getElementById('toast-container');
@@ -477,6 +506,52 @@ guardUserPage(async () => {
     list.classList.remove('d-none');
   }
 
+  // Handle Instant Image Auto-Upload
+  const fileInput = document.getElementById('fund-screenshot');
+  fileInput.addEventListener('change', async function() {
+    const file = this.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('File size exceeds 5 MB limit.', 'error');
+      this.value = '';
+      return;
+    }
+
+    // Toggle loading view states
+    isUploading = true;
+    window.isUploading = true;
+    document.getElementById('upload-state-default').classList.add('d-none');
+    document.getElementById('upload-state-loading').classList.remove('d-none');
+    document.getElementById('upload-state-success').classList.add('d-none');
+    document.getElementById('submit-funds-btn').disabled = true;
+
+    try {
+      const fd = new FormData();
+      fd.append('image', file);
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!data.success) throw new Error('Image upload failed. Please try again.');
+
+      uploadedScreenshotUrl = data.data.url;
+
+      // Toggle success view state
+      document.getElementById('upload-state-loading').classList.add('d-none');
+      document.getElementById('upload-state-success').classList.remove('d-none');
+      showToast('Screenshot uploaded successfully! ✅');
+    } catch (err) {
+      showToast(err.message, 'error');
+      // Fallback reset on upload issue
+      document.getElementById('upload-state-loading').classList.add('d-none');
+      document.getElementById('upload-state-default').classList.remove('d-none');
+      this.value = '';
+    } finally {
+      isUploading = false;
+      window.isUploading = false;
+      document.getElementById('submit-funds-btn').disabled = false;
+    }
+  });
+
   document.getElementById('add-funds-form').addEventListener('submit', submitFunds);
 });
 
@@ -485,45 +560,43 @@ async function submitFunds(e) {
   const amount = parseFloat(document.getElementById('fund-amount').value);
   if (amount < 50) return showToast('Minimum deposit is 50 PKR.', 'error');
 
-  const fileInput = document.getElementById('fund-screenshot');
-  if (!fileInput.files.length) return showToast('Please attach a screenshot.', 'error');
-  const file = fileInput.files[0];
-  if (file.size > 5 * 1024 * 1024) return showToast('File size exceeds 5 MB.', 'error');
+  if (isUploading) return showToast('Please wait for screenshot upload to complete.', 'error');
+  if (!uploadedScreenshotUrl) return showToast('Please select and upload a payment screenshot first.', 'error');
 
   const btn = document.getElementById('submit-funds-btn'), sp = document.getElementById('funds-spinner');
   btn.disabled = true; btn.querySelector('.btn-text').classList.add('d-none'); sp.classList.remove('d-none');
 
   try {
-    const fd = new FormData();
-    fd.append('image', file);
-    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: fd });
-    const data = await res.json();
-    if (!data.success) throw new Error('Image upload failed. Please try again.');
-
-    const screenshotUrl = data.data.url;
-
     await addDoc(collection(db, 'payments'), {
       paymentId: 'PAY-' + Math.floor(Math.random() * 100000000),
       userId: currentUser.uid, userEmail: currentUser.email,
       amount: amount,
       transactionId: 'N/A',
-      screenshotUrl: screenshotUrl,
+      screenshotUrl: uploadedScreenshotUrl,
       paymentMethod: activePaymentMethodTitle,
       status: 'Pending', createdAt: fsTS(), updatedAt: fsTS()
     });
 
+    // Formatting direct Emojis output request smoothly
     const waMsg = `🌟 DEPOSIT VERIFICATION REQUEST 🌟
 ----------------------------------
 👤 Client Email: ${currentUser.email}
 💰 Deposit Amount: ${money(amount)}
-📂 Payment Gateway: ${activePaymentMethodTitle}
-🧾 Screenshot Receipt: ${screenshotUrl}
+💳 Payment Gateway: ${activePaymentMethodTitle}
+🧾 Screenshot Receipt: ${uploadedScreenshotUrl}
 
 Please Verify My Payment And Add Funds.`;
     const waUrl = `https://wa.me/923104882921?text=${encodeURIComponent(waMsg)}`;
     
     showToast('Payment submitted! Redirecting to WhatsApp...');
     e.target.reset();
+    
+    // Clean up interface fields after completion
+    uploadedScreenshotUrl = '';
+    document.getElementById('upload-state-success').classList.add('d-none');
+    document.getElementById('upload-state-default').classList.remove('d-none');
+    document.getElementById('fund-screenshot').value = '';
+
     setTimeout(() => { window.location.href = waUrl; }, 2000);
   } catch (err) {
     showToast(err.message, 'error');
