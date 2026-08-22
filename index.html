@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Pak Digital</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="Pak Digital is Pakistan's premier social media growth and marketing platform. Get instant delivery on Instagram, YouTube, TikTok, Facebook, and Telegram services at wholesale rates.">
+<meta name="keywords" content="Pak Digital, SMM Panel, SMM Panel Pakistan, cheap smm panel, social media marketing, buy followers, buy likes, automatic SMM panel, digital growth">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph / Facebook SEO -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://new-smm02.firebaseapp.com/">
+<meta property="og:title" content="Pak Digital — Pakistan's #1 Social Media Growth Platform">
+<meta property="og:description" content="Boost your digital footprint with Pak Digital's automated and cost-effective SMM Panel services. Fast delivery guaranteed.">
+<meta property="og:image" content="https://i.postimg.cc/YCJ3NFXx/20260821-085028.png">
+
+<!-- Twitter SEO -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://new-smm02.firebaseapp.com/">
+<meta property="twitter:title" content="Pak Digital — Social Media Growth Platform">
+<meta property="twitter:description" content="Boost your digital footprint with Pak Digital's automated and cost-effective SMM Panel services. Fast delivery guaranteed.">
+<meta property="twitter:image" content="https://i.postimg.cc/YCJ3NFXx/20260821-085028.png">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="https://i.postimg.cc/YCJ3NFXx/20260821-085028.png">
+<link rel="apple-touch-icon" href="https://i.postimg.cc/YCJ3NFXx/20260821-085028.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0bc15c">
+
+<!-- Google Fonts & Fontshare Clash Display CDN -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Regular+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+/* ============================================================
+   NEW GREEN THEME (Redesigned Modern UI)
+   ============================================================ */
+:root {
+  --primary: #0bc15c;
+  --primary-dark: #099e4b;
+  --primary-soft: rgba(11, 193, 92, 0.1);
+  --bg: #f0f7f3;
+  --bg-card: #ffffff;
+  --input-bg: #eef4f0;
+  --text: #1a2b22;
+  --text-muted: #687870;
+  --border: #dce6e0;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.08);
+  --header-h: 70px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body, html { width: 100%; max-width: 100%; overflow-x: hidden; position: relative; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.auth-wrap, .steps-section, footer { width: 100%; max-width: 100%; box-sizing: border-box; }
+a { color: var(--primary); text-decoration: none; transition: 0.2s; }
+a:hover { color: var(--primary-dark); }
+.d-none { display: none !important; }
+.modal-overlay.active { display: flex !important; }
+
+/* ---------- Header ---------- */
+header {
+  background: #ffffff;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 1rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+}
+.header-logo {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.header-logo img {
+  max-height: calc(var(--header-h) - 16px);
+  width: auto;
+  object-fit: contain;
+}
+
+/* ---------- Redesigned Auth Wrapper ---------- */
+.auth-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--header-h) + 3rem) 1.25rem 4rem;
+  position: relative;
+}
+
+/* Decorative background elements */
+.bg-decor {
+  position: absolute;
+  z-index: -1;
+  opacity: 0.4;
+  filter: blur(60px);
+  border-radius: 50%;
+}
+.bg-decor-1 { width: 300px; height: 300px; background: var(--primary); top: 10%; right: -50px; }
+.bg-decor-2 { width: 250px; height: 250px; background: #0dbfa1; bottom: 10%; left: -50px; }
+
+.auth-card {
+  width: 100%;
+  max-width: 100%; width: min(440px, 100%);
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 3rem 2.5rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 5px;
+  background: linear-gradient(90deg, var(--primary), #0dbfa1);
+}
+
+.auth-card h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: #043b1e;
+  letter-spacing: -0.02em;
+}
+.auth-card .sub {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 2.5rem;
+}
+
+/* ---------- Clash Display Headings Style ---------- */
+.clash-text {
+  font-family: 'Clash Display', sans-serif;
+  color: #043b1e;
+}
+
+/* ---------- Social Icons Section ---------- */
+.social-icons-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+.social-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  transition: transform 0.2s;
+}
+.social-icon-box:hover { transform: translateY(-3px); }
+.icon-ig { background: #fee7f3; color: #e1306c; }
+.icon-fb { background: #e7f3ff; color: #1877f2; }
+.icon-yt { background: #ffe7e7; color: #ff0000; }
+.icon-tk { background: #f0f0f0; color: #000000; }
+
+/* ---------- Forms ---------- */
+.form-group { margin-bottom: 1.5rem; }
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  color: #043b1e;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.form-control {
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--input-bg);
+  transition: all 0.2s;
+}
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1.75rem;
+}
+.checkbox-group input {
+  width: 18px; height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  width: 100%;
+}
+.btn:disabled { opacity: 0.65; cursor: not-allowed; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #0dbfa1 100%);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(11, 193, 92, 0.25);
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(11, 193, 92, 0.35);
+}
+.btn-outline {
+  background: #ffffff;
+  color: var(--primary-dark);
+  border: 2px solid var(--primary);
+}
+.btn-outline:hover:not(:disabled) {
+  background: var(--primary-soft);
+}
+
+.divider {
+  text-align: center;
+  margin: 2rem 0;
+  position: relative;
+}
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 0; right: 0;
+  height: 1px;
+  background: var(--border);
+  z-index: 1;
+}
+.divider span {
+  position: relative;
+  z-index: 2;
+  background: var(--bg-card);
+  padding: 0 15px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ---------- Channel & Steps Section ---------- */
+.channel-section {
+  width: 100%;
+  max-width: 100%; width: min(440px, 100%);
+  margin-top: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.channel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #fff;
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.channel-btn:hover {
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+.steps-section {
+  width: 100%;
+  max-width: 1100px;
+  margin: 4rem auto 0;
+  padding: 0 1rem;
+}
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+.step-card {
+  background: #fff;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: 0.3s;
+}
+.step-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+.step-card img {
+  width: 140px;
+  height: auto;
+  margin-bottom: 1.25rem;
+  border-radius: 12px;
+}
+.step-card h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #043b1e;
+  margin-bottom: 0.5rem;
+}
+.step-card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.step-num {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--primary);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+footer {
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid var(--border);
+  padding: 3rem 1.5rem;
+  margin-top: 5rem;
+  text-align: center;
+}
+.footer-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 99px;
+  font-weight: 700;
+  margin-top: 1rem;
+  border: none;
+  cursor: pointer;
+}
+.footer-contact-btn:hover { color: #fff; transform: scale(1.05); }
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.footer-links a { color: var(--text-muted); }
+.footer-links a:hover { color: var(--primary); }
+
+/* ---------- Toast & Spinner ---------- */
+.toast-container { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); text-align: center; z-index: 400; display: flex; flex-direction: column; gap: 0.5rem; width: min(92vw, 380px); }
+.toast { font-family: 'Inter', sans-serif;  padding: 1rem 1.25rem; border-radius: 12px; background: #1a2b22; color: #fff; font-size: 0.9rem; font-weight: 600; box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(-12px); transition: all 0.3s; }
+.toast.show { opacity: 1; transform: none; }
+.toast-success { background: var(--primary-dark); }
+.toast-error { background: #d93838; }
+
+.spinner { width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+  .auth-card { padding: 2.5rem 1.5rem; }
+}
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; }
+.modal-overlay.active { display: flex; }
+.modal-content { background: white; padding: 2.5rem; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: var(--shadow-lg); animation: pop 0.3s ease; }
+.modal-btns { display: grid; gap: 1rem; margin-top: 1.5rem; }
+.modal-btn { display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem; border-radius: 12px; font-weight: 700; text-decoration: none; transition: 0.2s; }
+.modal-btn-wa { background: #25d366; color: white; }
+.modal-btn:hover { transform: translateY(-2px); filter: brightness(1.1); color: white; }
+@keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-logo" style="width: 100%; text-align: center;">
+    <img id="site-logo-header" src="https://i.postimg.cc/D0NthZgz/pak-digital.png" alt="Pak Digital Logo">
+  </div>
+</header>
+
+<div class="auth-wrap">
+  <div class="bg-decor bg-decor-1"></div>
+  <div class="bg-decor bg-decor-2"></div>
+
+  <div class="auth-card">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 class="clash-text" style="font-weight: 700; font-size: min(2.4rem, 9vw); margin-bottom: 0.5rem; letter-spacing: -0.01em; line-height: 1.25;">Pak-Digital.Store</h1>
+      <p class="clash-text" style="font-weight: 600; font-size: min(1.3rem, 5.5vw); margin-top: 0.4rem; letter-spacing: -0.01em; line-height: 1.25;">
+        <span style="color: #0bc15c;">Pakistan</span> 
+        <span style="color: #000000;">Whole Sale</span> 
+        <span style="color: #043b1e;">Social Media Services</span>
+      </p>
+    </div>
+    
+    <div class="social-icons-row" style="gap: 0.8rem; overflow-x: auto; padding: 10px 0; justify-content: center; flex-wrap: wrap;">
+      <div class="social-icon-box icon-ig"><i class="fa-brands fa-instagram"></i></div>
+      <div class="social-icon-box icon-tk"><i class="fa-brands fa-tiktok"></i></div>
+      <div class="social-icon-box icon-fb"><i class="fa-brands fa-facebook-f"></i></div>
+      <div class="social-icon-box icon-yt"><i class="fa-brands fa-youtube"></i></div>
+      <div class="social-icon-box icon-tg" style="background:#e7f3ff; color:#0088cc;"><i class="fa-brands fa-telegram"></i></div>
+      <div class="social-icon-box icon-tw" style="background:#e7f3ff; color:#1da1f2;"><i class="fa-brands fa-twitter"></i></div>
+      <div class="social-icon-box icon-wa" style="background:#e7f3ff; color:#25d366;"><i class="fa-brands fa-whatsapp"></i></div>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <form id="login-form">
+      <h1>Welcome</h1>
+      <p class="sub">Sign in to manage your growth</p>
+      
+      <div class="form-group">
+        <label for="login-email">Email Address</label>
+        <input type="email" id="login-email" class="form-control" placeholder="example@mail.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+      
+      <div class="checkbox-group" style="justify-content: space-between; width: 100%;">
+        <label style="display:flex; align-items:center; gap:0.5rem; font-weight:500; color:var(--text-muted); margin:0; text-transform: none;">
+          <input type="checkbox"> Remember me
+        </label>
+      </div>
+
+      <button type="submit" id="login-btn" class="btn btn-primary">
+        <span class="btn-text">Log In to Dashboard</span>
+        <span class="spinner d-none" id="login-spinner"></span>
+      </button>
+
+      <div class="divider"><span>New to Pak Digital?</span></div>
+      
+      <button type="button" id="show-register" class="btn btn-outline">
+        Create a Free Account
+      </button>
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form id="register-form" class="d-none">
+      <h1>Join Pak Digital</h1>
+      <p class="sub">Join us and start growing your reach</p>
+
+      <div class="form-group">
+        <label for="register-name">Full Name</label>
+        <input type="text" id="register-name" class="form-control" placeholder="Your full name" required>
+      </div>
+      <div class="form-group">
+        <label for="register-email">Email Address</label>
+        <input type="email" id="register-email" class="form-control" placeholder="example@mail.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="register-password">Password</label>
+        <input type="password" id="register-password" class="form-control" placeholder="Min 6 characters" required minlength="6">
+      </div>
+      <div class="form-group">
+        <label for="register-confirm">Confirm Password</label>
+        <input type="password" id="register-confirm" class="form-control" placeholder="Repeat password" required minlength="6">
+      </div>
+
+      <button type="submit" id="register-btn" class="btn btn-primary">
+        <span class="btn-text">Create Account</span>
+        <span class="spinner d-none" id="register-spinner"></span>
+      </button>
+
+      <div class="divider"><span>Already a member?</span></div>
+      
+      <button type="button" id="show-login" class="btn btn-outline">
+        Sign In Instead
+      </button>
+    </form>
+  </div>
+
+  <!-- Channel Section with WhatsApp Link & How To Use Youtube Link -->
+  <div class="channel-section" id="channel-area">
+    <a href="https://whatsapp.com/channel/0029VbDQFi9KmCPUDQEwVW2W" id="whatsapp-channel-btn" class="channel-btn" style="background:#25d366; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);" target="_blank">
+      <i class="fa-brands fa-whatsapp"></i> Join Our WhatsApp Channel
+    </a>
+    <a href="https://ftgmtools.pages.dev" id="how-to-use-btn" class="channel-btn" style="background:#ff0000; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);" target="_blank">
+      <i class="fa-brands fa-youtube"></i> How To Use?
+    </a>
+  </div>
+</div>
+
+<!-- Steps Section -->
+<div class="steps-section">
+  <div class="section-title">
+    <h2 style="text-align:center; margin-bottom: 2.5rem; font-weight:800; font-size:1.8rem; color:var(--brand-900);">How It Works</h2>
+  </div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <span class="step-num">Step 1</span>
+      <img src="https://i.postimg.cc/Nf1ykmV4/create-account.webp" alt="Create Account" style="width: 180px; height: auto;">
+      <h3>First Create Account</h3>
+      <p>Register a free account in seconds and join our growing community.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">Step 2</span>
+      <img src="https://i.postimg.cc/qv1v1LGG/add-funds.webp" alt="Add Funds" style="width: 180px; height: auto;">
+      <h3>Add Funds</h3>
+      <p>Top up your wallet using JazzCash, EasyPaisa, or other secure methods.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">Step 3</span>
+      <img src="https://i.postimg.cc/WbjpjKYc/place-order.webp" alt="Place Order" style="width: 180px; height: auto;">
+      <h3>Place Order</h3>
+      <p>Pick your service, paste your link, and hit the submit button.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">Step 4</span>
+      <img src="https://i.postimg.cc/RVXmm0nR/enjoy-results.webp" alt="Enjoy Results" style="width: 180px; height: auto;">
+      <h3>Enjoy Results!</h3>
+      <p>Sit back and watch your social presence grow with lightning speed.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div style="font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--text-muted);">
+    Admin Pr Only Whatsapp Allowed Ha Never Call | Direct Block | I'll Response In Few Minutes.
+    <br>
+    <button onclick="document.getElementById('contact-modal')?.classList.add('active')" style="background: var(--primary); color: #fff; border: none; padding: 0.8rem 1.8rem; border-radius: 99px; margin-top: 1.5rem; cursor: pointer; font-size: 0.9rem; font-weight: 700; box-shadow: var(--shadow-sm); transition: 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+      <i class="fa-solid fa-headset"></i> Contact Support
+    </button>
+  </div>
+  <div style="margin-top: 2rem; font-size: 0.85rem; color: var(--text-muted);">
+    &copy; 2026 Pak Digital. All Rights Reserved.
+  </div>
+</footer>
+
+<div class="modal-overlay" id="contact-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; display: none; align-items: center; justify-content: center;">
+  <div class="modal-content" style="background: white; padding: 2.5rem; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: var(--shadow-lg);">
+    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem; color: #043b1e;">Contact Admin</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">How would you like to reach us?</p>
+    <div class="modal-btns" style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+      <a href="https://wa.me/923104882921" class="modal-btn modal-btn-wa" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1.2rem; border-radius: 12px; font-weight: 700; text-decoration: none; background: #25d366; color: white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);">
+        <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> WhatsApp Contact
+      </a>
+    </div>
+    <button onclick="document.getElementById('contact-modal').classList.remove('active')" style="margin-top: 1.5rem; background: none; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600;">Close</button>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<!-- Separated logic import -->
+<script type="module" src="index.js"></script>
+
+<script>
+window.copyClipboard = (text) => {
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Link copied! 📋');
+  }).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast('Link copied! 📋');
+  });
+}
+</script>
+
+</body>
+</html>

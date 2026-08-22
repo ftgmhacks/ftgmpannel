@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Administration console for the FTGM Panel: users, orders, payments, categories and services.">
+<title>Admin Panel — FTGM Panel</title>
+<link class="favicon" rel="icon" href="https://i.postimg.cc/QCwPKNnp/20260815-000023.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0bc15c">
+<link rel="apple-touch-icon" href="https://i.postimg.cc/QCwPKNnp/20260815-000023.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Regular+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+/* ============================================================
+   FAST SMM PANEL — Professional Design System
+   Bright Green / Deep Forest Green (Sleek Modern WhatsApp Theme)
+   ============================================================ */
+:root {
+  --primary: #0bc15c;
+  --primary-dark: #099e4b;
+  --primary-soft: rgba(11, 193, 92, 0.12);
+  --brand-900: #061f10;
+  --brand-800: #0c331c;
+  --brand-700: #124727;
+  --bg: #f3f8f5;
+  --bg-card: #ffffff;
+  --bg-soft: #eaf3ee;
+  --text: #0d2115;
+  --text-muted: #5e7366;
+  --border: #d7e5dd;
+  --radius: 15px;
+  --radius-sm: 10px;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow: 0 12px 30px -12px rgba(11, 193, 92, 0.15);
+  --shadow-lg: 0 24px 60px -20px rgba(6, 31, 16, 0.2);
+  --gradient: linear-gradient(135deg, var(--primary) 0%, #0dbfa1 100%);
+  --sidebar-w: 264px;
+  --header-h: 68px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { width: 100%; max-width: 100%; overflow-x: hidden; 
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #f8fafc; color: var(--text); line-height: 1.55;
+  min-height: 100vh; -webkit-font-smoothing: antialiased;
+  width: 100%; max-width: 100%; overflow-x: hidden; margin: 0; padding: 0;}
+a { color: var(--primary); text-decoration: none; }
+img { max-width: 100%; display: block; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #b8cfc2; border-radius: 99px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+.d-none { display: none !important; }
+.text-center { text-align: center; }
+.text-muted { color: var(--text-muted); }
+.text-primary { color: var(--primary); }
+.text-danger { color: #d93838; }
+.text-success { color: #0bc15c; }
+.font-bold { font-weight: 700; }
+.font-medium { font-weight: 500; }
+.mt-4 { margin-top: 1.5rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.py-4 { padding: 1.5rem 0; }
+.gap-2 { gap: 0.5rem; }
+.w-full { width: 100%; }
+
+/* ---------- Header ---------- */
+header {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--header-h); z-index: 60;
+  background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.header-content {
+  height: 100%; max-width: 1500px; margin: 0 auto; padding: 0 0.8rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.logo-area { display: flex; align-items: center; gap: 0.75rem; }
+.logo-area img { height: 50px; width: auto; max-width: 250px; object-fit: contain; }
+.brand-mark {
+  display: flex; align-items: center; gap: 0.6rem; font-weight: 800; letter-spacing: -0.02em;
+  font-size: 1.05rem; white-space: nowrap; color: var(--brand-900);
+}
+.user-info { display: flex; align-items: center; gap: 0.6rem; }
+.wallet-badge {
+  display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 700; font-size: 0.85rem;
+  background: var(--primary-soft); color: var(--primary-dark);
+  padding: 0.45rem 0.8rem; border-radius: 99px; white-space: nowrap;
+}
+.mobile-menu-btn {
+  display: none; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text);
+  width: 40px; height: 40px; border-radius: 12px; font-size: 1.1rem; cursor: pointer;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar { box-shadow: -5px 0 20px rgba(0,0,0,0.2); 
+  position: fixed; top: var(--header-h); right: 0; bottom: 0; width: var(--sidebar-w); z-index: 55;
+  background: var(--brand-900); color: #eef7f3; padding: 1.25rem 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+}
+.sidebar-title {
+  font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(238, 247, 243, 0.45); margin: 0.25rem 0.75rem 0.75rem;
+}
+.sidebar-menu { display: flex; flex-direction: column; gap: 0.3rem; }
+.sidebar-menu button.nav-link {
+  display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 0.9rem; border-radius: var(--radius-sm);
+  color: rgba(238, 247, 243, 0.78); font-weight: 600; font-size: 0.92rem;
+  transition: all 0.18s ease; border: none; background: transparent; cursor: pointer;
+  width: 100%; text-align: left; font-family: inherit;
+}
+.sidebar-menu button.nav-link i { width: 20px; text-align: center; font-size: 1rem; }
+.sidebar-menu button.nav-link:hover {
+  background: rgba(255, 255, 255, 0.07); color: #fff; transform: translateX(-3px);
+}
+.sidebar-menu button.nav-link.active {
+  background: var(--gradient); color: #fff; box-shadow: 0 8px 20px rgba(11, 193, 92, 0.2);
+}
+.sidebar-menu a.text-danger { color: #ff9da2; }
+.sidebar-backdrop {
+  position: fixed; inset: 0; background: rgba(6, 31, 16, 0.4);
+  z-index: 54; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.sidebar-backdrop.active { opacity: 1; pointer-events: auto; }
+
+/* ---------- Main ---------- */
+.main-content { width: 100%; max-width: 100%; box-sizing: border-box; 
+  padding-top: calc(var(--header-h) + 2rem); padding-bottom: 3rem;
+  margin-right: var(--sidebar-w); min-height: 100vh;
+ width: 100%; max-width: 100%; box-sizing: border-box;}
+.container { max-width: 100%; margin: 0 auto; padding: 0 0.8rem;  padding: 0 1rem; box-sizing: border-box;}
+
+.page-head { margin-bottom: 1.5rem; }
+.page-head h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--brand-900); }
+.page-head p { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.2rem; }
+
+/* ---------- Cards ---------- */
+.card { border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: none;  border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); padding: 1.5rem; margin-bottom: 1.25rem;
+}
+.card-title {
+  font-size: 1.05rem; font-weight: 700; margin-bottom: 1.1rem; display: flex; align-items: center; gap: 0.6rem;
+}
+.card-title i { color: var(--primary); }
+
+/* ---------- Icon Picker Styling ---------- */
+.icon-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+}
+.icon-option {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: #fff;
+  transition: 0.2s;
+  font-size: 1.1rem;
+}
+.icon-option:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+}
+.icon-option.selected {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.drag-handle { cursor: grab; color: var(--text-muted); padding: 0.4rem; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; user-select: none; }
+.drag-handle:active { cursor: grabbing; color: var(--primary-dark); }
+tr.draggable-row { transition: background 0.15s, transform 0.15s; }
+tr.draggable-row.dragging { opacity: 0.4; background: var(--primary-soft) !important; }
+tr.draggable-row.drag-over { border-top: 2px solid var(--primary) !important; background: rgba(11, 193, 92, 0.08) !important; }
+.order-controls { display: flex; align-items: center; gap: 0.3rem; }
+.btn-icon-sm { width: 26px; height: 26px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 0.75rem; background: var(--bg-soft); border: 1px solid var(--border); color: var(--brand-900); cursor: pointer; }
+.btn-icon-sm:hover { background: var(--primary-soft); color: var(--primary-dark); border-color: var(--primary); }
+
+/* ---------- Stats ---------- */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+.stat-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.15rem; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 0.9rem;
+}
+.stat-icon {
+  width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
+  background: var(--primary-soft); color: var(--primary-dark); font-size: 1.1rem; flex-shrink: 0;
+}
+.stat-card .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-card .value { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; color: var(--brand-900); }
+
+/* ---------- Forms ---------- */
+.form-group { margin-bottom: 1.25rem; }
+label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--brand-900); }
+.form-control, select.form-control, textarea.form-control {
+  width: 100%; padding: 0.85rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 0.92rem; font-family: inherit; color: var(--text); background: var(--bg-card); transition: all 0.18s;
+}
+.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+textarea.form-control { resize: vertical; min-height: 90px; }
+select.form-control {
+  appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235e7366' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem;
+}
+.form-hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.35rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.8rem 1.2rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem;
+  border: none; cursor: pointer; font-family: inherit; transition: all 0.18s; white-space: nowrap;
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 8px 24px rgba(11, 193, 92, 0.25); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(11, 193, 92, 0.35); }
+.btn-secondary { background: var(--bg-soft); color: var(--brand-900); border: 1px solid var(--border); }
+.btn-secondary:hover:not(:disabled) { background: #dcece3; }
+.btn-success { background: #0bc15c; color: #fff; }
+.btn-danger { background: #d93838; color: #fff; }
+.btn-block { width: 100%; }
+.btn-sm { padding: 0.35rem 0.7rem; font-size: 0.76rem; border-radius: 8px; }
+
+/* ---------- Badges ---------- */
+.badge { display: inline-block; padding: 0.25rem 0.65rem; border-radius: 99px; font-size: 0.72rem; font-weight: 700; background: var(--bg-soft); color: var(--text-muted); }
+.badge-pending { background: rgba(246, 167, 35, 0.15); color: #b97708; }
+.badge-processing, .badge-inprogress { background: rgba(11, 193, 92, 0.14); color: var(--primary-dark); }
+.badge-completed, .badge-approved { background: rgba(22, 199, 132, 0.15); color: #0e8a5b; }
+.badge-cancelled, .badge-rejected { background: rgba(242, 84, 91, 0.14); color: #c73339; }
+
+/* ---------- Tables ---------- */
+.table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); background: #fff; }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 640px; }
+thead th {
+  background: var(--bg-soft); text-align: left; padding: 0.85rem 1rem; font-size: 0.72rem;
+  text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); font-weight: 700; white-space: nowrap;
+}
+tbody td { padding: 0.85rem 1rem; border-top: 1px solid var(--border); vertical-align: middle; border-radius: 0; }
+tbody tr:hover { background: #fafcff; }
+
+/* ---------- Modals ---------- */
+.modal {
+  position: fixed; inset: 0; background: rgba(6, 31, 16, 0.5); backdrop-filter: blur(4px);
+  z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem;
+}
+.modal.active { display: flex; }
+.modal-box {
+  background: #fff; border-radius: 20px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
+  box-shadow: var(--shadow-lg); animation: pop 0.22s ease;
+}
+@keyframes pop { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+.modal-head { padding: 1.1rem 1.4rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-head h3 { font-size: 1.05rem; font-weight: 700; }
+.modal-close { background: var(--bg-soft); border: none; width: 32px; height: 32px; border-radius: 9px; cursor: pointer; color: var(--text-muted); }
+.modal-body { padding: 1.4rem; }
+
+/* ---------- Toast ---------- */
+.toast-container { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); text-align: center; z-index: 400; display: flex; flex-direction: column; gap: 0.5rem; width: min(92vw, 380px); }
+.toast { font-family: 'Inter', sans-serif;  padding: 0.8rem 1rem; border-radius: 12px; background: var(--brand-900); color: #fff; font-size: 0.87rem; box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(-12px); transition: all 0.28s; }
+.toast.show { opacity: 1; transform: none; }
+.toast-success { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); }
+.toast-error { background: #d93838; }
+
+.spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+.spinner-primary { border-color: var(--primary-soft); border-top-color: var(--primary); width: 50px; height: 50px; border-width: 4px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-screen { position: fixed; inset: 0; background: #f8fafc; display: grid; place-items: center; z-index: 500; }
+
+@media (max-width: 860px) {
+  .mobile-menu-btn { display: grid; place-items: center; }
+  .sidebar { box-shadow: -12px 0 30px rgba(0,0,0,0.2);  transform: translateX(100%); width: 72%; max-width: 300px; top: 0; padding-top: 1.25rem; }
+  .sidebar.active { transform: translateX(0); }
+  .main-content { margin-right: 0; }
+  .form-row { grid-template-columns: 1fr; }
+}
+.modal-overlay.active { display: flex !important; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-content">
+    <div class="logo-area">
+      <span class="brand-mark">
+        <span class="brand-dot" style="width:34px; height:34px; border-radius:11px; background:var(--gradient); color:#fff; display:grid; place-items:center; font-size:0.95rem; box-shadow: 0 4px 12px rgba(11, 193, 92, 0.2)"><i class="fa-solid fa-shield-halved"></i></span>
+        <span style="font-weight: 800; font-size: 1.05rem;">FTGM Admin</span>
+      </span>
+    </div>
+    <div class="user-info">
+      <span class="wallet-badge"><i class="fa-solid fa-user-shield"></i> Super Admin</span>
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-title">Management</div>
+  <div class="sidebar-menu" id="admin-nav">
+    <button class="nav-link active" data-section="dashboard"><i class="fa-solid fa-gauge-high"></i> Dashboard</button>
+    <button class="nav-link" data-section="orders"><i class="fa-solid fa-box"></i> Orders</button>
+    <button class="nav-link" data-section="payments"><i class="fa-solid fa-money-bill-transfer"></i> Payments</button>
+    <button class="nav-link" data-section="users"><i class="fa-solid fa-users"></i> Users</button>
+    <button class="nav-link" data-section="categories"><i class="fa-solid fa-layer-group"></i> Categories</button>
+    <button class="nav-link" data-section="services"><i class="fa-solid fa-list-check"></i> Services</button>
+    <button class="nav-link" data-section="methods"><i class="fa-solid fa-building-columns"></i> Payment Methods</button>
+    <button class="nav-link" data-section="settings"><i class="fa-solid fa-gear"></i> Settings</button>
+    <a href="#" id="admin-logout-btn" class="text-danger mt-4"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </div>
+</nav>
+
+<div id="admin-auth-loading" class="loader-screen"><div class="spinner spinner-primary"></div></div>
+
+<main class="main-content">
+  <div class="container">
+
+    <!-- DASHBOARD -->
+    <section data-panel="dashboard">
+      <div class="page-head"><h1>Dashboard</h1><p>Live metrics and performance logs.</p></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+          <div><div class="label">Users</div><div class="value" id="stat-users">0</div></div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-wallet"></i></div>
+          <div><div class="label">Wallet Total</div><div class="value" id="stat-total-wallet">Rs. 0.00</div></div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-box"></i></div>
+          <div><div class="label">Orders</div><div class="value" id="stat-orders">0</div></div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+          <div><div class="label">Pending Orders</div><div class="value" id="stat-pending-orders">0</div></div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <div><div class="label">Completed</div><div class="value" id="stat-completed-orders">0</div></div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-receipt"></i></div>
+          <div><div class="label">Pending Payments</div><div class="value" id="stat-pending-payments">0</div></div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+          <div><div class="label">Approved Payments</div><div class="value" id="stat-approved-payments">0</div></div></div>
+      </div>
+    </section>
+
+    <!-- ORDERS -->
+    <section data-panel="orders" class="d-none">
+      <div class="page-head" style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between">
+        <div><h1>Orders</h1><p>Manage pending operations or issue wallet refunds.</p></div>
+        <button class="btn btn-secondary" id="sync-status-btn"><i class="fa-solid fa-rotate"></i> Sync API Status</button>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Order</th><th>User</th><th>Service</th><th>Qty / Charge</th><th>Status</th><th>API ID</th><th></th></tr></thead>
+        <tbody id="admin-orders-body"></tbody>
+      </table></div>
+    </section>
+
+    <!-- PAYMENTS -->
+    <section data-panel="payments" class="d-none">
+      <div class="page-head"><h1>Payments</h1><p>Authorize screenshots to credit client balances.</p></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Payment ID</th><th>User</th><th>Method</th><th>Amount</th><th>Proof</th><th>Status</th><th></th></tr></thead>
+        <tbody id="admin-payments-body"></tbody>
+      </table></div>
+    </section>
+
+    <!-- USERS -->
+    <section data-panel="users" class="d-none">
+      <div class="page-head"><h1>Users</h1><p>Adjust available funds, review registrations, or delete accounts.</p></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Name</th><th>Email</th><th>Joined</th><th>Wallet</th><th>Actions</th></tr></thead>
+        <tbody id="admin-users-body"></tbody>
+      </table></div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section data-panel="categories" class="d-none">
+      <div class="page-head" style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between">
+        <div><h1>Categories</h1><p>Drag handles or use up/down arrows to reorder categories easily.</p></div>
+        <div style="display:flex; gap:0.5rem; flex-wrap: wrap;">
+          <button class="btn btn-danger" id="delete-all-categories-btn"><i class="fa-solid fa-trash-can"></i> Delete All Categories</button>
+          <button class="btn btn-primary" id="add-category-btn"><i class="fa-solid fa-plus"></i> Add Category</button>
+        </div>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th style="width:40px">Order</th><th>Name</th><th>Status</th><th></th></tr></thead>
+        <tbody id="admin-categories-body"></tbody>
+      </table></div>
+    </section>
+
+    <!-- SERVICES -->
+    <section data-panel="services" class="d-none">
+      <div class="page-head" style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between">
+        <div><h1>Services</h1><p>Drag handles or use up/down arrows to adjust service order.</p></div>
+        <div style="display:flex; gap:0.5rem; flex-wrap: wrap;">
+          <button class="btn btn-danger" id="delete-all-services-btn"><i class="fa-solid fa-trash-can"></i> Delete All Services</button>
+          <button class="btn btn-secondary" id="import-api-btn"><i class="fa-solid fa-cloud-arrow-down"></i> Import from API</button>
+          <button class="btn btn-primary" id="add-service-btn"><i class="fa-solid fa-plus"></i> Add Service</button>
+        </div>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th style="width:40px">Order</th><th>Service</th><th>Category</th><th>Price / 1K</th><th>Min / Max</th><th>Status</th><th></th></tr></thead>
+        <tbody id="admin-services-body"></tbody>
+      </table></div>
+    </section>
+
+    <!-- PAYMENT METHODS -->
+    <section data-panel="methods" class="d-none">
+      <div class="page-head" style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between">
+        <div><h1>Payment Methods</h1><p>Payment options visible to users.</p></div>
+        <button class="btn btn-primary" id="add-pm-btn"><i class="fa-solid fa-plus"></i> Add Method</button>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Method</th><th>Account details</th><th>Status</th><th></th></tr></thead>
+        <tbody id="admin-pm-body"></tbody>
+      </table></div>
+    </section>
+
+    <!-- SETTINGS & OPERATION LOGS -->
+    <section data-panel="settings" class="d-none">
+      <div class="page-head"><h1>Settings</h1><p>Panel properties and database cleanups.</p></div>
+      
+      <!-- General Form -->
+      <form id="settings-form" class="card">
+        <div class="card-title"><i class="fa-solid fa-sliders"></i> Site Properties</div>
+        <div class="form-row">
+          <div class="form-group"><label for="set-site-name">Site Name</label>
+            <input id="set-site-name" class="form-control" placeholder="FTGM Panel"></div>
+          <div class="form-group"><label for="set-logo-url">Logo Image URL</label>
+            <input id="set-logo-url" class="form-control" placeholder="https://..."></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="set-footer-contact">Footer Contact Link (WhatsApp URL)</label>
+            <input id="set-footer-contact" class="form-control" placeholder="https://wa.me/..."></div>
+          <div class="form-group"><label for="set-telegram">Join Channel Link (Login Page)</label>
+            <input id="set-telegram" class="form-control" placeholder="https://t.me/..."></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="set-youtube">Dashboard Video URL</label>
+            <input id="set-youtube" class="form-control" placeholder="https://youtube.com/watch?v=..."></div>
+        </div>
+        <div class="card-title mt-4"><i class="fa-solid fa-cloud-arrow-down"></i> Provider API (PakFollowers)</div>
+        <div class="form-row">
+          <div class="form-group"><label for="set-api-url">API URL</label>
+            <input id="set-api-url" class="form-control" placeholder="https://www.pakfollowers.com/api/v2"></div>
+          <div class="form-group"><label for="set-api-key">API Key</label>
+            <input id="set-api-key" class="form-control" placeholder="Enter your API key"></div>
+        </div>
+
+        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Site Properties</button>
+      </form>
+
+      <!-- Database Clearance Form -->
+      <div class="card" style="border: 2px solid #d93838;">
+        <div class="card-title" style="color:#d93838"><i class="fa-solid fa-triangle-exclamation"></i> Database Housekeeping</div>
+        <p class="text-muted mb-3" style="font-size:0.85rem">Instantly wipe all client history categories. Warning: This action cannot be undone.</p>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap">
+          <button class="btn btn-danger" id="clear-orders-btn" type="button"><i class="fa-solid fa-trash-can"></i> Clear Order History</button>
+          <button class="btn btn-danger" id="clear-payments-btn" type="button"><i class="fa-solid fa-trash-can"></i> Clear Payment History</button>
+        </div>
+      </div>
+
+      <!-- Password Change -->
+      <form id="admin-credentials-form" class="card">
+        <div class="card-title"><i class="fa-solid fa-key"></i> Credentials</div>
+        <div class="form-group">
+          <label for="admin-edit-email">Admin Email</label>
+          <input type="email" id="admin-edit-email" class="form-control" placeholder="admin@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="admin-new-pass">New Password (Optional)</label>
+          <input type="password" id="admin-new-pass" class="form-control" minlength="6" placeholder="Leave blank to keep current">
+        </div>
+        <button class="btn btn-primary" type="submit">Update Credentials</button>
+      </form>
+    </section>
+
+  </div>
+</main>
+
+<!-- MODALS -->
+<div class="modal" id="wallet-modal"><div class="modal-box">
+  <div class="modal-head"><h3>Adjust Balance</h3><button class="modal-close" onclick="closeModal('wallet-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+  <form class="modal-body" id="wallet-form">
+    <input type="hidden" id="wallet-user-id">
+    <div class="form-group"><label for="wallet-action">Action</label>
+      <select id="wallet-action" class="form-control"><option value="add">Add funds</option><option value="deduct">Deduct funds</option></select></div>
+    <div class="form-group"><label for="wallet-amount">Amount (PKR)</label>
+      <input type="number" id="wallet-amount" class="form-control" min="1" step="any" required></div>
+    <button class="btn btn-primary btn-block" type="submit">Apply</button>
+  </form>
+</div></div>
+
+<div class="modal" id="order-status-modal"><div class="modal-box">
+  <div class="modal-head"><h3>Update Order Status</h3><button class="modal-close" onclick="closeModal('order-status-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+  <form class="modal-body" id="order-status-form">
+    <input type="hidden" id="edit-order-id"><input type="hidden" id="edit-order-user"><input type="hidden" id="edit-order-amount">
+    <div class="form-group"><label for="edit-order-status">Status</label>
+      <select id="edit-order-status" class="form-control">
+        <option>Pending</option><option>Processing</option><option>Completed</option>
+        <option>Partial</option><option>Cancelled</option><option>Refunded</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit">Save Changes</button>
+  </form>
+</div></div>
+
+<div class="modal" id="screenshot-modal"><div class="modal-box">
+  <div class="modal-head"><h3>Payment Proof</h3><button class="modal-close" onclick="closeModal('screenshot-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="modal-body"><img id="screenshot-view-img" src="" alt="Payment screenshot" style="border-radius:12px; width:100%;"></div>
+</div></div>
+
+<div class="modal" id="category-modal"><div class="modal-box">
+  <div class="modal-head"><h3 id="cat-modal-title">Add Category</h3><button class="modal-close" onclick="closeModal('category-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+  <form class="modal-body" id="category-form">
+    <input type="hidden" id="cat-id">
+    <div class="form-group"><label for="cat-name">Category name</label>
+      <input id="cat-name" class="form-control" placeholder="Instagram" required></div>
+    <div class="form-group"><label for="cat-icon">Category Icon (FontAwesome)</label>
+      <input type="hidden" id="cat-icon" value="fa-solid fa-layer-group">
+      <div id="cat-icon-picker" class="icon-picker-grid"></div>
+      <div class="form-hint">Select a brand icon for this category.</div>
+    </div>
+    <div class="form-group"><label for="cat-status">Status</label>
+      <select id="cat-status" class="form-control"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+    <div class="flex gap-2">
+      <button class="btn btn-primary" type="submit" id="cat-submit-btn" style="flex:1">Save Category</button>
+      <button class="btn btn-danger d-none" type="button" id="cat-delete-btn">Delete</button>
+    </div>
+  </form>
+</div></div>
+
+<div class="modal" id="service-modal"><div class="modal-box">
+  <div class="modal-head"><h3 id="srv-modal-title">Add Service</h3><button class="modal-close" onclick="closeModal('service-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+  <form class="modal-body" id="service-form">
+    <input type="hidden" id="srv-id">
+    <div class="form-group"><label for="srv-category">Category</label><select id="srv-category" class="form-control" required></select></div>
+    <div class="form-row">
+      <div class="form-group"><label for="srv-name">Service name</label><input id="srv-name" class="form-control" placeholder="Instagram Followers — Real" required></div>
+      <div class="form-group"><label for="srv-external-id">External API ID (PakFollowers)</label><input id="srv-external-id" class="form-control" placeholder="e.g. 123"></div>
+    </div>
+    <div class="form-group"><label>Service Icon</label>
+      <input type="hidden" id="srv-icon" value="fa-solid fa-circle-check">
+      <div id="srv-icon-picker" class="icon-picker-grid"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="srv-price">Price per 1000 (PKR)</label><input type="number" id="srv-price" class="form-control" step="any" min="0" required></div>
+      <div class="form-group"><label for="srv-time">Delivery time</label><input id="srv-time" class="form-control" placeholder="0-6 hours" required></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="srv-min">Min quantity</label><input type="number" id="srv-min" class="form-control" min="1" required></div>
+      <div class="form-group"><label for="srv-max">Max quantity</label><input type="number" id="srv-max" class="form-control" min="1" required></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="srv-status">Status</label>
+        <select id="srv-status" class="form-control"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+    </div>
+    <div class="form-group"><label for="srv-desc">Description</label><textarea id="srv-desc" class="form-control" placeholder="Quality, notes..."></textarea></div>
+    <div class="flex gap-2">
+      <button class="btn btn-primary" type="submit" style="flex:1">Save Service</button>
+      <button class="btn btn-danger d-none" type="button" id="srv-delete-btn">Delete</button>
+    </div>
+  </form>
+</div></div>
+
+<div class="modal" id="pm-modal"><div class="modal-box">
+  <div class="modal-head"><h3 id="pm-modal-title">Add Payment Method</h3><button class="modal-close" onclick="closeModal('pm-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+  <form class="modal-body" id="pm-form">
+    <input type="hidden" id="pm-id">
+    <div class="form-group"><label for="pm-title">Title</label><input id="pm-title" class="form-control" placeholder="JazzCash" required></div>
+    <div class="form-group"><label>Method Icon</label>
+      <input type="hidden" id="pm-icon" value="fa-solid fa-building-columns">
+      <div id="pm-icon-picker" class="icon-picker-grid"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="pm-acc-num">Account number</label><input id="pm-acc-num" class="form-control" required></div>
+      <div class="form-group"><label for="pm-acc-name">Account name</label><input id="pm-acc-name" class="form-control" required></div>
+    </div>
+    <div class="form-group"><label for="pm-inst">Instructions</label><textarea id="pm-inst" class="form-control"></textarea></div>
+    <div class="form-group"><label for="pm-status">Status</label>
+      <select id="pm-status" class="form-control"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+    <div class="flex gap-2">
+      <button class="btn btn-primary" type="submit" style="flex:1">Save Method</button>
+      <button class="btn btn-danger d-none" type="button" id="pm-delete-btn">Delete</button>
+    </div>
+  </form>
+</div></div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, updateEmail, onAuthStateChanged, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, doc, getDoc, setDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD6VSIGbUJqIMQb53k1mXAcGjNu9PFC1w0",
+  authDomain: "new-smm02.firebaseapp.com",
+  databaseURL: "https://new-smm02-default-rtdb.firebaseio.com",
+  projectId: "new-smm02",
+  storageBucket: "new-smm02.firebasestorage.app",
+  messagingSenderId: "2203224901",
+  appId: "1:2203224901:web:7b328bb0ea4c381afe0c2c"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const SUPER_ADMIN_UID = "Q0NoYuEprlW6SvvOrv7lnx5kSeg1";
+
+let currentUser = null;
+let usersCache = {};
+let categoriesCache = [];
+let servicesCache = [];
+let pmsCache = [];
+let isCategorySubmitting = false;
+
+function showToast(message, type = 'success') {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  const icon = type === 'success' ? '<i class="fa-solid fa-check"></i> ' : '<i class="fa-solid fa-xmark"></i> ';
+  toast.innerHTML = icon + message;
+  container.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 4000);
+}
+window.showToast = showToast;
+
+/* ---- SMM Provider API bridge (avoids browser CORS block) ---- */
+const SMM_PROXY = 'https://project--0158a941-e1aa-495e-8f88-9b83a66f9bbe.lovable.app/api/public/smm';
+async function smmApi(params) {
+  const res = await fetch(SMM_PROXY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params)
+  });
+  const text = await res.text();
+  let data;
+  try { data = JSON.parse(text); } catch (e) { throw new Error('Invalid provider response'); }
+  if (data && data.error) throw new Error(data.error);
+  return data;
+}
+window.smmApi = smmApi;
+
+const money = (n) => 'Rs. ' + (parseFloat(n || 0)).toFixed(2);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+window.copyClipboard = (text) => {
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Link copied! 📋');
+  }).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast('Link copied! 📋');
+  });
+}
+const stamp = (t) => t && t.toDate ? t.toDate().toLocaleString() : 'N/A';
+
+// Modal logic
+window.openModal = (id) => document.getElementById(id)?.classList.add('active');
+window.closeModal = (id) => document.getElementById(id)?.classList.remove('active');
+
+/* ---------- Safety Loader Removal & Timer ---------- */
+const loaderTimeout = setTimeout(() => {
+  hideLoader();
+}, 5000);
+
+function hideLoader() {
+  clearTimeout(loaderTimeout);
+  const loader = document.getElementById('admin-auth-loading');
+  if (loader) loader.style.display = 'none';
+}
+
+/* ---------- Busy Loading Indicator Helper ---------- */
+function setButtonBusy(btn, isBusy) {
+  if (!btn) return;
+  if (isBusy) {
+    btn.disabled = true;
+    btn.dataset.originalHtml = btn.innerHTML;
+    btn.innerHTML = `<span class="spinner" style="width: 14px; height: 14px; display: inline-block; border-width: 2px; vertical-align: middle; margin-right: 6px;"></span> Loading...`;
+  } else {
+    btn.disabled = false;
+    if (btn.dataset.originalHtml !== undefined) {
+      btn.innerHTML = btn.dataset.originalHtml;
+    }
+  }
+}
+
+/* ---------- Layout Responsiveness Toggler ---------- */
+function initLayout() {
+  const btn = document.getElementById('mobile-menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+  let backdrop = document.querySelector('.sidebar-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.className = 'sidebar-backdrop';
+    document.body.appendChild(backdrop);
+  }
+  const close = () => { sidebar.classList.remove('active'); backdrop.classList.remove('active'); };
+  btn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    sidebar.classList.toggle('active');
+    backdrop.classList.toggle('active', sidebar.classList.contains('active'));
+  });
+  backdrop.addEventListener('click', close);
+}
+initLayout();
+
+/* ---------- Navigation Switching ---------- */
+document.querySelectorAll('#admin-nav .nav-link').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('#admin-nav .nav-link').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[data-panel]').forEach(p =>
+    p.classList.toggle('d-none', p.dataset.panel !== btn.dataset.section));
+  if (window.innerWidth <= 860) {
+    document.getElementById('sidebar').classList.remove('active');
+    document.querySelector('.sidebar-backdrop')?.classList.remove('active');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}));
+
+/* ---------- Auth Guard Validation ---------- */
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    hideLoader();
+    window.location.href = 'index.html';
+    return;
+  }
+  if (user.uid !== SUPER_ADMIN_UID) {
+    hideLoader();
+    await signOut(auth);
+    window.location.href = 'index.html';
+    return;
+  }
+  currentUser = user;
+  hideLoader();
+
+  try { await loadUsers(); } catch (e) { console.error('Error loading users:', e); }
+  try { await loadOrders(); } catch (e) { console.error('Error loading orders:', e); }
+  try { await loadPayments(); } catch (e) { console.error('Error loading payments:', e); }
+  try { await loadCategories(); } catch (e) { console.error('Error loading categories:', e); }
+  try { await loadServices(); } catch (e) { console.error('Error loading services:', e); }
+  try { await loadPaymentMethods(); } catch (e) { console.error('Error loading payment methods:', e); }
+  try { await loadSettings(); } catch (e) { console.error('Error loading settings:', e); }
+  try { await initAdminCreds(); } catch (e) { console.error('Error init creds:', e); }
+});
+
+async function initAdminCreds() {
+    const emailField = document.getElementById('admin-edit-email');
+    if (emailField && currentUser) {
+        emailField.value = currentUser.email || '';
+    }
+}
+
+document.getElementById('admin-credentials-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const newEmail = document.getElementById('admin-edit-email').value.trim();
+  const newPass = document.getElementById('admin-new-pass').value;
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  setButtonBusy(submitBtn, true);
+  
+  try {
+    if (newEmail && newEmail !== currentUser.email) {
+      await updateEmail(currentUser, newEmail);
+    }
+    if (newPass) {
+      if (newPass.length < 6) throw new Error('Password must be at least 6 characters');
+      await updatePassword(currentUser, newPass);
+    }
+    showToast('Credentials updated successfully!');
+    document.getElementById('admin-new-pass').value = '';
+  } catch (err) {
+    let msg = err.message;
+    if (msg.includes('requires-recent-login')) msg = 'Please log out and log back in to change sensitive credentials.';
+    showToast(msg, 'error');
+  } finally {
+    setButtonBusy(submitBtn, false);
+  }
+});
+
+document.getElementById('admin-logout-btn').addEventListener('click', async (e) => {
+  e.preventDefault(); await signOut(auth); window.location.href = 'index.html';
+});
+
+const badge = (s) => `<span class="badge badge-${String(s || '').toLowerCase().replace(/\s+/g, '')}">${esc(s)}</span>`;
+
+/* ---------- Users Handling ---------- */
+async function loadUsers() {
+  const tbody = document.getElementById('admin-users-body');
+  try {
+    let snap;
+    try {
+      snap = await getDocs(query(collection(db, 'users'), orderBy('createdAt', 'desc')));
+    } catch (e) {
+      snap = await getDocs(collection(db, 'users'));
+    }
+    tbody.innerHTML = ''; usersCache = {}; let total = 0;
+    snap.forEach(d => {
+      const u = d.data();
+      usersCache[u.uid || d.id] = u;
+      total += parseFloat(u.wallet || 0);
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td class="font-bold" style="color:var(--brand-900)">${esc(u.name)}</td>
+          <td>${esc(u.email)}</td>
+          <td class="text-muted" style="font-size:0.8rem">${stamp(u.createdAt)}</td>
+          <td class="text-primary font-bold">${money(u.wallet)}</td>
+          <td>
+            <button class="btn btn-sm btn-secondary" data-wallet="${esc(u.uid || d.id)}">Adjust Balance</button>
+            <button class="btn btn-sm btn-danger" style="background:#d93838; margin-left:0.25rem" data-delete-user="${esc(u.uid || d.id)}"><i class="fa-solid fa-trash-can"></i> Delete</button>
+          </td>
+        </tr>`);
+    });
+    if (snap.empty) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No users found.</td></tr>';
+    document.getElementById('stat-users').textContent = snap.size;
+    document.getElementById('stat-total-wallet').textContent = money(total);
+    
+    tbody.querySelectorAll('[data-wallet]').forEach(b => b.addEventListener('click', () => {
+      document.getElementById('wallet-user-id').value = b.dataset.wallet;
+      document.getElementById('wallet-form').reset();
+      openModal('wallet-modal');
+    }));
+
+    tbody.querySelectorAll('[data-delete-user]').forEach(b => b.addEventListener('click', async (e) => {
+      const uid = b.dataset.deleteUser;
+      if (!confirm('Are you absolutely sure you want to permanently delete this user account? This will wipe their profile from the database.')) return;
+      setButtonBusy(e.currentTarget, true);
+      try {
+        await deleteDoc(doc(db, 'users', uid));
+        showToast('User account deleted successfully.');
+        await loadUsers();
+      } catch (err) { showToast(err.message, 'error'); }
+      finally { setButtonBusy(e.currentTarget, false); }
+    }));
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Failed to load users: ${esc(err.message)}</td></tr>`;
+  }
+}
+
+document.getElementById('wallet-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const uid = document.getElementById('wallet-user-id').value;
+  const action = document.getElementById('wallet-action').value;
+  const amount = parseFloat(document.getElementById('wallet-amount').value);
+  if (!uid || !amount || amount <= 0) return;
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  setButtonBusy(submitBtn, true);
+  try {
+    const userRef = doc(db, 'users', uid);
+    const snap = await getDoc(userRef);
+    if (!snap.exists()) throw new Error('User not found.');
+    const cur = parseFloat(snap.data().wallet || 0);
+    const next = Math.max(0, action === 'add' ? cur + amount : cur - amount);
+    await updateDoc(userRef, { wallet: next });
+    await addDoc(collection(db, 'walletTransactions'), {
+      transactionId: 'TRX-' + Math.floor(Math.random() * 100000000),
+      userId: uid, type: 'adjustment', amount: action === 'add' ? amount : -amount,
+      description: 'Admin adjustment (' + action + ')', createdAt: fsTS()
+    });
+    showToast('Balance adjusted successfully!');
+    closeModal('wallet-modal');
+    await loadUsers();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setButtonBusy(submitBtn, false); }
+});
+
+/* ---------- Orders Processing ---------- */
+async function loadOrders() {
+  const tbody = document.getElementById('admin-orders-body');
+  try {
+    let snap;
+    try {
+      snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
+    } catch (e) {
+      snap = await getDocs(collection(db, 'orders'));
+    }
+    tbody.innerHTML = ''; let pending = 0, completed = 0;
+    snap.forEach(d => {
+      const o = d.data();
+      if (o.status === 'Pending' || o.status === 'Processing' || o.status === 'In Progress') {
+          pending++;
+      }
+      if (o.status === 'Completed') completed++;
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td><div class="font-bold" style="color:var(--brand-900)">${esc(o.orderId)}</div>
+            <div class="text-muted" style="font-size:0.72rem">${stamp(o.createdAt)}</div></td>
+          <td style="font-size:0.82rem">${esc(o.userEmail)}</td>
+          <td><div class="font-medium" style="font-size:0.85rem">${esc(o.serviceName)}</div>
+            <button onclick="window.copyClipboard('${esc(o.targetLink)}')" class="btn btn-sm btn-secondary font-bold" style="padding: 0.2rem 0.5rem; font-size: 0.65rem;">Copy Link</button></td>
+          <td><div>Qty: ${esc(o.quantity)}</div><div class="text-primary font-bold">${money(o.price)}</div></td>
+          <td>${badge(o.status)}</td>
+          <td style="font-size:0.8rem; color:var(--text-muted)">${o.apiOrderId || 'Manual'}</td>
+          <td><button class="btn btn-sm btn-secondary" data-order="${d.id}" data-status="${esc(o.status)}"
+                data-user="${esc(o.userId)}" data-amount="${o.price}">Edit Status</button></td>
+        </tr>`);
+    });
+    if (snap.empty) tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No orders placed yet.</td></tr>';
+    document.getElementById('stat-orders').textContent = snap.size;
+    document.getElementById('stat-pending-orders').textContent = pending;
+    document.getElementById('stat-completed-orders').textContent = completed;
+    tbody.querySelectorAll('[data-order]').forEach(b => b.addEventListener('click', () => {
+      document.getElementById('edit-order-id').value = b.dataset.order;
+      document.getElementById('edit-order-status').value = b.dataset.status;
+      document.getElementById('edit-order-user').value = b.dataset.user;
+      document.getElementById('edit-order-amount').value = b.dataset.amount;
+      openModal('order-status-modal');
+    }));
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Failed to load orders: ${esc(err.message)}</td></tr>`;
+  }
+}
+
+document.getElementById('order-status-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('edit-order-id').value;
+  const status = document.getElementById('edit-order-status').value;
+  const userId = document.getElementById('edit-order-user').value;
+  const amount = parseFloat(document.getElementById('edit-order-amount').value);
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  setButtonBusy(submitBtn, true);
+  try {
+    const orderRef = doc(db, 'orders', id);
+    const snap = await getDoc(orderRef);
+    if (!snap.exists()) throw new Error('Order snapshot missing.');
+    if (status === 'Refunded' && snap.data().status !== 'Refunded') {
+      const userRef = doc(db, 'users', userId);
+      const uSnap = await getDoc(userRef);
+      if (uSnap.exists()) {
+        await updateDoc(userRef, { wallet: parseFloat(uSnap.data().wallet || 0) + amount });
+        await addDoc(collection(db, 'walletTransactions'), {
+          transactionId: 'TRX-' + Math.floor(Math.random() * 100000000),
+          userId, type: 'refund', amount,
+          description: 'Order refund: ' + snap.data().orderId, createdAt: fsTS()
+        });
+      }
+    }
+    await updateDoc(orderRef, { status, updatedAt: fsTS() });
+    showToast('Order parameters saved!');
+    closeModal('order-status-modal');
+    await loadOrders(); await loadUsers();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setButtonBusy(submitBtn, false); }
+});
+
+/* ---------- Payments Queue ---------- */
+async function loadPayments() {
+  const tbody = document.getElementById('admin-payments-body');
+  try {
+    let snap;
+    try {
+      snap = await getDocs(query(collection(db, 'payments'), orderBy('createdAt', 'desc')));
+    } catch (e) {
+      snap = await getDocs(collection(db, 'payments'));
+    }
+    tbody.innerHTML = ''; let pending = 0, approved = 0;
+    snap.forEach(d => {
+      const p = d.data();
+      if (p.status === 'Pending') {
+          pending++;
+      }
+      if (p.status === 'Approved') approved++;
+      const actions = p.status === 'Pending'
+        ? `<button class="btn btn-sm btn-success mb-2" data-approve="${d.id}" data-user="${esc(p.userId)}" data-amount="${p.amount}">Approve</button>
+           <button class="btn btn-sm btn-danger" style="background:#d93838;" data-reject="${d.id}">Reject</button>`
+        : '<span class="text-muted" style="font-size:0.75rem">Handled</span>';
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td><div class="font-bold" style="color:var(--brand-900)">${esc(p.paymentId)}</div>
+            <div class="text-muted" style="font-size:0.72rem">${stamp(p.createdAt)}</div></td>
+          <td style="font-size:0.82rem">${esc(p.userEmail)}</td>
+          <td><div class="font-medium">${esc(p.paymentMethod)}</div>
+            <div class="text-muted" style="font-size:0.72rem">TID: ${esc(p.transactionId)}</div></td>
+          <td class="text-primary font-bold">${money(p.amount)}</td>
+          <td><button class="btn btn-sm btn-secondary" data-shot="${esc(p.screenshotUrl)}">View Screen</button></td>
+          <td>${badge(p.status)}</td>
+          <td>${actions}</td>
+        </tr>`);
+    });
+    if (snap.empty) tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No deposits detected.</td></tr>';
+    document.getElementById('stat-pending-payments').textContent = pending;
+    document.getElementById('stat-approved-payments').textContent = approved;
+
+    tbody.querySelectorAll('[data-shot]').forEach(b => b.addEventListener('click', () => {
+      document.getElementById('screenshot-view-img').src = b.dataset.shot;
+      openModal('screenshot-modal');
+    }));
+    tbody.querySelectorAll('[data-approve]').forEach(b => b.addEventListener('click',
+      (e) => approvePayment(e.currentTarget, b.dataset.approve, b.dataset.user, parseFloat(b.dataset.amount))));
+    tbody.querySelectorAll('[data-reject]').forEach(b => b.addEventListener('click',
+      (e) => rejectPayment(e.currentTarget, b.dataset.reject)));
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Failed to load payments: ${esc(err.message)}</td></tr>`;
+  }
+}
+
+async function approvePayment(btn, id, userId, amount) {
+  if (!confirm('Add funds to this user account?')) return;
+  setButtonBusy(btn, true);
+  try {
+    const payRef = doc(db, 'payments', id);
+    const pSnap = await getDoc(payRef);
+    if (!pSnap.exists() || pSnap.data().status !== 'Pending') {
+      setButtonBusy(btn, false);
+      return showToast('Operation lock exception.', 'error');
+    }
+    const userRef = doc(db, 'users', userId);
+    const uSnap = await getDoc(userRef);
+    if (uSnap.exists()) {
+      await updateDoc(userRef, { wallet: parseFloat(uSnap.data().wallet || 0) + amount });
+      await addDoc(collection(db, 'walletTransactions'), {
+        transactionId: 'TRX-' + Math.floor(Math.random() * 100000000),
+        userId, type: 'deposit', amount,
+        description: 'Approved Topup: ' + pSnap.data().paymentId, createdAt: fsTS()
+      });
+    }
+    await updateDoc(payRef, { status: 'Approved', updatedAt: fsTS() });
+    showToast('Topup approved successfully!');
+    await loadPayments(); await loadUsers();
+  } catch (err) { showToast(err.message, 'error'); setButtonBusy(btn, false); }
+}
+
+async function rejectPayment(btn, id) {
+  if (!confirm('Reject this deposit screenshot?')) return;
+  setButtonBusy(btn, true);
+  try {
+    await updateDoc(doc(db, 'payments', id), { status: 'Rejected', updatedAt: fsTS() });
+    showToast('Payment slip rejected.');
+    await loadPayments();
+  } catch (err) { showToast(err.message, 'error'); setButtonBusy(btn, false); }
+}
+
+/* ---------- Categories ---------- */
+async function loadCategories() {
+  const tbody = document.getElementById('admin-categories-body');
+  try {
+    const snap = await getDocs(collection(db, 'categories'));
+    tbody.innerHTML = ''; categoriesCache = [];
+    
+    snap.forEach(d => {
+      const c = { id: d.id, ...d.data() };
+      categoriesCache.push(c);
+    });
+
+    categoriesCache.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+    categoriesCache.forEach((c, idx) => {
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr class="draggable-row" draggable="true" data-cat-id="${c.id}" data-index="${idx}">
+          <td>
+            <div class="order-controls">
+              <span class="drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i></span>
+              <button class="btn-icon-sm cat-move-up" data-idx="${idx}" title="Move Up"><i class="fa-solid fa-arrow-up"></i></button>
+              <button class="btn-icon-sm cat-move-down" data-idx="${idx}" title="Move Down"><i class="fa-solid fa-arrow-down"></i></button>
+            </div>
+          </td>
+          <td class="font-bold" style="color:var(--brand-900)">${esc(c.name)}</td>
+          <td>${c.status === 'active' ? '<span class="badge badge-completed">Active</span>' : '<span class="badge badge-cancelled">Inactive</span>'}</td>
+          <td><button class="btn btn-sm btn-secondary" data-cat="${c.id}">Edit</button></td>
+        </tr>`);
+    });
+    
+    if (snap.empty) tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No categories loaded. Click Add Category.</td></tr>';
+    
+    tbody.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', () => editCategory(b.dataset.cat)));
+    tbody.querySelectorAll('.cat-move-up').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); moveCategory(parseInt(b.dataset.idx), -1); }));
+    tbody.querySelectorAll('.cat-move-down').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); moveCategory(parseInt(b.dataset.idx), 1); }));
+
+    initDragAndDrop(tbody, 'category');
+
+    const sel = document.getElementById('srv-category');
+    if (sel) {
+      sel.innerHTML = categoriesCache.length ? '' : '<option value="">Create a category label first</option>';
+      categoriesCache.forEach(c => {
+        const o = document.createElement('option');
+        o.value = c.id; o.textContent = c.name;
+        sel.appendChild(o);
+      });
+    }
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Failed to load categories: ${esc(err.message)}</td></tr>`;
+  }
+}
+
+async function moveCategory(fromIndex, offset) {
+  const toIndex = fromIndex + offset;
+  if (toIndex < 0 || toIndex >= categoriesCache.length) return;
+  const temp = categoriesCache[fromIndex];
+  categoriesCache[fromIndex] = categoriesCache[toIndex];
+  categoriesCache[toIndex] = temp;
+  await saveCategoryOrders();
+}
+
+async function saveCategoryOrders() {
+  try {
+    for (let i = 0; i < categoriesCache.length; i++) {
+      categoriesCache[i].sortOrder = i;
+      await updateDoc(doc(db, 'categories', categoriesCache[i].id), { sortOrder: i });
+    }
+    showToast('Category sequence updated successfully!');
+    await loadCategories(); await loadServices();
+  } catch (err) { showToast(err.message, 'error'); }
+}
+
+document.getElementById('add-category-btn').addEventListener('click', () => {
+  document.getElementById('category-form').reset();
+  document.getElementById('cat-id').value = '';
+  document.getElementById('cat-modal-title').textContent = 'Add Category';
+  document.getElementById('cat-delete-btn').classList.add('d-none');
+  openModal('category-modal');
+});
+
+function editCategory(id) {
+  const c = categoriesCache.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('cat-id').value = id;
+  document.getElementById('cat-name').value = c.name || '';
+  document.getElementById('cat-icon').value = c.icon || 'fa-solid fa-layer-group';
+  document.getElementById('cat-status').value = c.status || 'active';
+  document.getElementById('cat-modal-title').textContent = 'Edit Category';
+  document.getElementById('cat-delete-btn').classList.remove('d-none');
+  openModal('category-modal');
+}
+
+document.getElementById('category-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (isCategorySubmitting) return;
+  isCategorySubmitting = true;
+
+  const submitBtn = document.getElementById('cat-submit-btn');
+  setButtonBusy(submitBtn, true);
+
+  const id = document.getElementById('cat-id').value;
+  const nameVal = document.getElementById('cat-name').value.trim();
+  const statusVal = document.getElementById('cat-status').value;
+
+  try {
+    if (id) {
+      await updateDoc(doc(db, 'categories', id), {
+        name: nameVal,
+        icon: document.getElementById('cat-icon').value.trim(),
+        status: statusVal
+      });
+      showToast('Category configurations saved.');
+    } else {
+      const maxSort = categoriesCache.reduce((m, c) => Math.max(m, c.sortOrder || 0), -1);
+      await addDoc(collection(db, 'categories'), {
+        name: nameVal,
+        icon: document.getElementById('cat-icon').value.trim(),
+        status: statusVal,
+        sortOrder: maxSort + 1,
+        createdAt: fsTS()
+      });
+      showToast('Category generated.');
+    }
+    closeModal('category-modal');
+    await loadCategories(); await loadServices();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally {
+    setButtonBusy(submitBtn, false);
+    isCategorySubmitting = false;
+  }
+});
+
+document.getElementById('cat-delete-btn').addEventListener('click', async (e) => {
+  const id = document.getElementById('cat-id').value;
+  if (!id || !confirm('Permanently delete category?')) return;
+  const btn = e.currentTarget;
+  setButtonBusy(btn, true);
+  try {
+    await deleteDoc(doc(db, 'categories', id));
+    showToast('Category deleted.');
+    closeModal('category-modal');
+    await loadCategories(); await loadServices();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setButtonBusy(btn, false); }
+});
+
+/* ---------- Services Config ---------- */
+async function loadServices() {
+  const tbody = document.getElementById('admin-services-body');
+  try {
+    const snap = await getDocs(collection(db, 'services'));
+    tbody.innerHTML = ''; servicesCache = [];
+    
+    snap.forEach(d => {
+      const s = { id: d.id, ...d.data() };
+      servicesCache.push(s);
+    });
+    
+    servicesCache.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+    servicesCache.forEach((s, idx) => {
+      const cat = categoriesCache.find(c => c.id === s.category)?.name || 'Unmapped';
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr class="draggable-row" draggable="true" data-srv-id="${s.id}" data-index="${idx}">
+          <td>
+            <div class="order-controls">
+              <span class="drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i></span>
+              <button class="btn-icon-sm srv-move-up" data-idx="${idx}" title="Move Up"><i class="fa-solid fa-arrow-up"></i></button>
+              <button class="btn-icon-sm srv-move-down" data-idx="${idx}" title="Move Down"><i class="fa-solid fa-arrow-down"></i></button>
+            </div>
+          </td>
+          <td class="font-bold" style="color:var(--brand-900)">${esc(s.name)}</td>
+          <td>${esc(cat)}</td>
+          <td class="text-primary font-bold">${money(s.price)}</td>
+          <td>${esc(s.minQty)} / ${esc(s.maxQty)}</td>
+          <td>${s.status === 'active' ? '<span class="badge badge-completed">Active</span>' : '<span class="badge badge-cancelled">Inactive</span>'}</td>
+          <td><button class="btn btn-sm btn-secondary" data-srv="${s.id}">Edit</button></td>
+        </tr>`);
+    });
+    
+    if (snap.empty) tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No services loaded. Click Add Service.</td></tr>';
+    
+    tbody.querySelectorAll('[data-srv]').forEach(b => b.addEventListener('click', () => editService(b.dataset.srv)));
+    tbody.querySelectorAll('.srv-move-up').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); moveService(parseInt(b.dataset.idx), -1); }));
+    tbody.querySelectorAll('.srv-move-down').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); moveService(parseInt(b.dataset.idx), 1); }));
+
+    initDragAndDrop(tbody, 'service');
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Failed to load services: ${esc(err.message)}</td></tr>`;
+  }
+}
+
+async function moveService(fromIndex, offset) {
+  const toIndex = fromIndex + offset;
+  if (toIndex < 0 || toIndex >= servicesCache.length) return;
+  const temp = servicesCache[fromIndex];
+  servicesCache[fromIndex] = servicesCache[toIndex];
+  servicesCache[toIndex] = temp;
+  await saveServiceOrders();
+}
+
+async function saveServiceOrders() {
+  try {
+    for (let i = 0; i < servicesCache.length; i++) {
+      servicesCache[i].sortOrder = i;
+      await updateDoc(doc(db, 'services', servicesCache[i].id), { sortOrder: i });
+    }
+    showToast('Services sequence updated successfully!');
+    await loadServices();
+  } catch (err) { showToast(err.message, 'error'); }
+}
+
+document.getElementById('add-service-btn').addEventListener('click', () => {
+  if (!categoriesCache.length) return showToast('Add structural categories first.', 'error');
+  document.getElementById('service-form').reset();
+  document.getElementById('srv-id').value = '';
+  document.getElementById('srv-modal-title').textContent = 'Add Service';
+  document.getElementById('srv-delete-btn').classList.add('d-none');
+  openModal('service-modal');
+});
+
+function editService(id) {
+  const s = servicesCache.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('srv-id').value = id;
+  document.getElementById('srv-category').value = s.category || '';
+  document.getElementById('srv-name').value = s.name || '';
+  document.getElementById('srv-external-id').value = s.externalId || '';
+  document.getElementById('srv-icon').value = s.icon || 'fa-solid fa-circle-check';
+  document.getElementById('srv-price').value = s.price ?? '';
+  document.getElementById('srv-min').value = s.minQty ?? '';
+  document.getElementById('srv-max').value = s.maxQty ?? '';
+  document.getElementById('srv-time').value = s.estimatedTime || '';
+  document.getElementById('srv-desc').value = s.description || '';
+  document.getElementById('srv-status').value = s.status || 'active';
+  document.getElementById('srv-modal-title').textContent = 'Edit Service';
+  document.getElementById('srv-delete-btn').classList.remove('d-none');
+  openModal('service-modal');
+}
+
+document.getElementById('service-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('srv-id').value;
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  setButtonBusy(submitBtn, true);
+
+  try {
+    if (id) {
+      await updateDoc(doc(db, 'services', id), {
+        category: document.getElementById('srv-category').value,
+        name: document.getElementById('srv-name').value.trim(),
+        externalId: document.getElementById('srv-external-id').value.trim(),
+        icon: document.getElementById('srv-icon').value.trim(),
+        price: parseFloat(document.getElementById('srv-price').value),
+        minQty: parseInt(document.getElementById('srv-min').value),
+        maxQty: parseInt(document.getElementById('srv-max').value),
+        estimatedTime: document.getElementById('srv-time').value.trim(),
+        description: document.getElementById('srv-desc').value.trim(),
+        status: document.getElementById('srv-status').value
+      });
+      showToast('Service specifications updated.');
+    } else {
+      const maxSort = servicesCache.reduce((m, s) => Math.max(m, s.sortOrder || 0), -1);
+      await addDoc(collection(db, 'services'), {
+        category: document.getElementById('srv-category').value,
+        name: document.getElementById('srv-name').value.trim(),
+        externalId: document.getElementById('srv-external-id').value.trim(),
+        icon: document.getElementById('srv-icon').value.trim(),
+        price: parseFloat(document.getElementById('srv-price').value),
+        minQty: parseInt(document.getElementById('srv-min').value),
+        maxQty: parseInt(document.getElementById('srv-max').value),
+        estimatedTime: document.getElementById('srv-time').value.trim(),
+        description: document.getElementById('srv-desc').value.trim(),
+        status: document.getElementById('srv-status').value,
+        sortOrder: maxSort + 1,
+        createdAt: fsTS()
+      });
+      showToast('Service rate added.');
+    }
+    closeModal('service-modal');
+    await loadServices();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setButtonBusy(submitBtn, false); }
+});
+
+document.getElementById('srv-delete-btn').addEventListener('click', async (e) => {
+  const id = document.getElementById('srv-id').value;
+  if (!id || !confirm('Permanently delete SMM service configuration?')) return;
+  const btn = e.currentTarget;
+  setButtonBusy(btn, true);
+  try {
+    await deleteDoc(doc(db, 'services', id));
+    showToast('Service layout deleted.');
+    closeModal('service-modal');
+    await loadServices();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setButtonBusy(btn, false); }
+});
+
+/* ---------- Universal HTML5 Drag and Drop Handler ---------- */
+function initDragAndDrop(tbody, type) {
+  let draggedRow = null;
+
+  tbody.querySelectorAll('.draggable-row').forEach(row => {
+    row.addEventListener('dragstart', (e) => {
+      draggedRow = row;
+      row.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+
+    row.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (row !== draggedRow) {
+        row.classList.add('drag-over');
+      }
+    });
+
+    row.addEventListener('dragleave', () => {
+      row.classList.remove('drag-over');
+    });
+
+    row.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      row.classList.remove('drag-over');
+      if (draggedRow && draggedRow !== row) {
+        const fromIdx = parseInt(draggedRow.dataset.index);
+        const toIdx = parseInt(row.dataset.index);
+
+        if (type === 'category') {
+          const item = categoriesCache.splice(fromIdx, 1)[0];
+          categoriesCache.splice(toIdx, 0, item);
+          await saveCategoryOrders();
+        } else if (type === 'service') {
+          const item = servicesCache.splice(fromIdx, 1)[0];
+          servicesCache.splice(toIdx, 0, item);
+          await saveServiceOrders();
+        }
+      }
+    });
+
+    row.addEventListener('dragend', () => {
+      row.classList.remove('dragging');
+      tbody.querySelectorAll('.draggable-row').forEach(r => r.classList.remove('drag-over'));
+    });
+  });
+}
+
+/* ---------- Payment Options ---------- */
+async function loadPaymentMethods() {
+  const tbody = document.getElementById('admin-pm-body');
+  try {
+    const snap = await getDocs(collection(db, 'paymentMethods'));
+    tbody.innerHTML = ''; pmsCache = [];
+    snap.forEach(d => {
+      const p = { id: d.id, ...d.data() };
+      pmsCache.push(p);
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td class="font-bold" style="color:var(--brand-900)">${esc(p.title)}</td>
+          <td><div>Account: <strong>${esc(p.accountNumber)}</strong></div><div class="text-muted" style="font-size:0.75rem">Name: ${esc(p.accountName)}</div></td>
+          <td>${p.status === 'active' ? '<span class="badge badge-completed">Active</span>' : '<span class="badge badge-cancelled">Inactive</span>'}</td>
+          <td><button class="btn btn-sm btn-secondary" data-pm="${p.id}">Edit</button></td>
+        </tr>`);
+    });
+    if (snap.empty) tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No deposit gateways found.</td></tr>';
+    tbody.querySelectorAll('[data-pm]').forEach(b => b.addEventListener('click', () => editPM(b.dataset.pm)));
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Failed to load payment methods: ${esc(err.message)}</td></tr>`;
+  }
+}
+
+document.getElementById('add-pm-btn').addEventListener('click', () => {
+  document.getElementById('pm-form').reset();
+  document.getElementById('pm-id').value = '';
+  document.getElementById('pm-modal-title').textContent = 'Add Payment Method';
+  document.getElementById('pm-delete-btn').classList.add('d-none');
+  openModal('pm-modal');
+});
+
+function editPM(id) {
+  const p = pmsCache.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('pm-id').value = id;
+  document.getElementById('pm-title').value = p.title || '';
+  document.getElementById('pm-icon').value = p.icon || 'fa-solid fa-building-columns';
+  document.getElementById('pm-acc-num').value = p.accountNumber || '';
+  document.getElementById('pm-acc-name').value = p.accountName || '';
+  document.getElementById('pm-inst').value = p.instructions || '';
+  document.getElementById('pm-status').value = p.status || 'active';
+  document.getElementById('pm-modal-title').textContent = 'Edit Gateway';
+  document.getElementById('pm-delete-btn').classList.remove('d-none');
+  openModal('pm-modal');
+}
+
+document.getElementById('pm-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('pm-id').value;
+  const data = {
+    title: document.getElementById('pm-title').value.trim(),
+    icon: document.getElementById('pm-icon').value.trim(),
+    accountNumber: document.getElementById('pm-acc-num').value.trim(),
+    accountName: document.getElementById('pm-acc-name').value.trim(),
+    instructions: document.getElementById('pm-inst').value.trim(),
+    status: document.getElementById('pm-status').value
+  };
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  setButtonBusy(submitBtn, true);
+  try {
+    if (id) { await updateDoc(doc(db, 'paymentMethods', id), data); showToast('Gateway specs updated.'); }
+    else { await addDoc(collection(db, 'paymentMethods'), { ...data, createdAt: fsTS() }); showToast('Gateway specs added.'); }
+    closeModal('pm-modal');
+    await loadPaymentMethods();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setButtonBusy(submitBtn, false); }
+});
+
+document.getElementById('pm-delete-btn').addEventListener('click', async (e) => {
+  const id = document.getElementById('pm-id').value;
+  if (!id || !confirm('Permanently remove this deposit gateway?')) return;
+  const btn = e.currentTarget;
+  setButtonBusy(btn, true);
+  try {
+    await deleteDoc(doc(db, 'paymentMethods', id));
+    showToast('Deposit gateway deleted.');
+    closeModal('pm-modal');
+    await loadPaymentMethods();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setButtonBusy(btn, false); }
+});
+
+/* ---------- Settings Configurations & Auto YouTube Link Parser ---------- */
+function parseYouTubeUrl(url) {
+  if (!url) return '';
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  if (match && match[2].length === 11) {
+    return 'https://www.youtube.com/embed/' + match[2];
+  }
+  return url;
+}
+
+async function loadSettings() {
+  const snap = await getDoc(doc(db, 'settings', 'general'));
+  if (!snap.exists()) return;
+  const s = snap.data();
+  document.getElementById('set-site-name').value = s.siteName || '';
+  document.getElementById('set-logo-url').value = s.logoUrl || '';
+  document.getElementById('set-telegram').value = s.channelUrl || '';
+  document.getElementById('set-youtube').value = s.dashboardVideo || '';
+  document.getElementById('set-footer-contact').value = s.footerContact || '';
+  document.getElementById('set-api-url').value = s.apiUrl || 'https://www.pakfollowers.com/api/v2';
+  document.getElementById('set-api-key').value = s.apiKey || '9d121ff73bb012eb41b18c01065e51daeba9602c';
+  
+  API_URL = document.getElementById('set-api-url').value;
+  API_KEY = document.getElementById('set-api-key').value;
+}
+
+const ICONS_POOL = [
+  'fa-brands fa-instagram', 'fa-brands fa-facebook', 'fa-brands fa-tiktok', 'fa-brands fa-youtube',
+  'fa-brands fa-telegram', 'fa-brands fa-twitter', 'fa-brands fa-whatsapp', 'fa-brands fa-snapchat',
+  'fa-brands fa-linkedin', 'fa-brands fa-discord', 'fa-brands fa-twitch', 'fa-brands fa-threads',
+  'fa-solid fa-heart', 'fa-solid fa-user-plus', 'fa-solid fa-eye', 'fa-solid fa-share',
+  'fa-solid fa-fire', 'fa-solid fa-star', 'fa-solid fa-bolt', 'fa-solid fa-circle-check',
+  'fa-solid fa-layer-group', 'fa-solid fa-building-columns', 'fa-solid fa-wallet', 'fa-solid fa-cart-shopping'
+];
+
+function setupIconPicker(containerId, inputId) {
+  const container = document.getElementById(containerId);
+  const input = document.getElementById(inputId);
+  if (!container || !input) return;
+  
+  container.innerHTML = '';
+  ICONS_POOL.forEach(iconClass => {
+    const div = document.createElement('div');
+    div.className = 'icon-option' + (input.value === iconClass ? ' selected' : '');
+    div.innerHTML = `<i class="${iconClass}"></i>`;
+    div.addEventListener('click', () => {
+      container.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
+      div.classList.add('selected');
+      input.value = iconClass;
+    });
+    container.appendChild(div);
+  });
+}
+
+function refreshIconPickers() {
+  setupIconPicker('cat-icon-picker', 'cat-icon');
+  setupIconPicker('srv-icon-picker', 'srv-icon');
+  setupIconPicker('pm-icon-picker', 'pm-icon');
+}
+
+// Intercept Modal Open to refresh icons
+const originalOpenModal = window.openModal;
+window.openModal = function(id) {
+  originalOpenModal(id);
+  if (id === 'category-modal' || id === 'service-modal' || id === 'pm-modal') {
+    refreshIconPickers();
+  }
+};
+
+document.getElementById('settings-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  setButtonBusy(submitBtn, true);
+  try {
+    const rawYtUrl = document.getElementById('set-youtube').value.trim();
+    const cleanYtUrl = parseYouTubeUrl(rawYtUrl);
+
+    await setDoc(doc(db, 'settings', 'general'), {
+      siteName: document.getElementById('set-site-name').value.trim(),
+      logoUrl: document.getElementById('set-logo-url').value.trim(),
+      channelUrl: document.getElementById('set-telegram').value.trim(),
+      dashboardVideo: cleanYtUrl,
+      footerContact: document.getElementById('set-footer-contact').value.trim(),
+      apiUrl: document.getElementById('set-api-url').value.trim(),
+      apiKey: document.getElementById('set-api-key').value.trim(),
+      updatedAt: fsTS()
+    }, { merge: true });
+    
+    API_URL = document.getElementById('set-api-url').value.trim();
+    API_KEY = document.getElementById('set-api-key').value.trim();
+    
+    showToast('Site configs written successfully.');
+    await loadSettings();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setButtonBusy(submitBtn, false); }
+});
+
+/* ---------- Clean Log Actions (Orders / Payments clearance) ---------- */
+async function clearLogCollection(colName, btn) {
+  if (!confirm(`⚠️ DANGER OPERATIONAL ALERT: Are you completely certain you want to wipe ALL documentation inside the '${colName}' history? This action is immediate and absolute.`)) return;
+  setButtonBusy(btn, true);
+  try {
+    const snap = await getDocs(collection(db, colName));
+    if (snap.empty) {
+      setButtonBusy(btn, false);
+      return showToast(`Target '${colName}' logging queue is already empty.`, 'error');
+    }
+    let cnt = 0;
+    for (const d of snap.docs) {
+      await deleteDoc(doc(db, colName, d.id));
+      cnt++;
+    }
+    showToast(`Deleted ${cnt} documents inside collection '${colName}'.`);
+    if (colName === 'orders') await loadOrders();
+    if (colName === 'payments') await loadPayments();
+  } catch (err) {
+    showToast(err.message, 'error');
+    setButtonBusy(btn, false);
+  }
+}
+
+document.getElementById('clear-orders-btn').addEventListener('click', (e) => clearLogCollection('orders', e.currentTarget));
+document.getElementById('clear-payments-btn').addEventListener('click', (e) => clearLogCollection('payments', e.currentTarget));
+
+/* ---------- PakFollowers API Automation ---------- */
+let API_URL = 'https://www.pakfollowers.com/api/v2';
+let API_KEY = '9d121ff73bb012eb41b18c01065e51daeba9602c';
+
+document.getElementById('import-api-btn')?.addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  if (!confirm('Fetch and import all services from PakFollowers? Existing services will not be affected.')) return;
+  setButtonBusy(btn, true);
+  try {
+    const apiServices = await smmApi({ url: API_URL, key: API_KEY, action: 'services' });
+
+    if (!Array.isArray(apiServices)) throw new Error('Invalid API response format.');
+
+    let imported = 0;
+    for (const s of apiServices) {
+      const exists = servicesCache.find(x => x.externalId == s.service);
+      if (exists) continue;
+
+      let catId = '';
+      const existingCat = categoriesCache.find(x => x.name.toLowerCase() === s.category.toLowerCase());
+      if (existingCat) {
+        catId = existingCat.id;
+      } else {
+        const catRes = await addDoc(collection(db, 'categories'), {
+          name: s.category,
+          icon: 'fa-solid fa-layer-group',
+          status: 'active',
+          sortOrder: categoriesCache.length,
+          createdAt: fsTS()
+        });
+        catId = catRes.id;
+        categoriesCache.push({ id: catId, name: s.category, status: 'active' });
+      }
+
+      const ratePKR = parseFloat(s.rate); 
+
+      await addDoc(collection(db, 'services'), {
+        category: catId,
+        name: s.name,
+        externalId: String(s.service),
+        icon: 'fa-solid fa-circle-check',
+        price: ratePKR,
+        minQty: parseInt(s.min),
+        maxQty: parseInt(s.max),
+        estimatedTime: 'Automated',
+        description: `Type: ${s.type}`,
+        status: 'active',
+        sortOrder: servicesCache.length + imported,
+        createdAt: fsTS()
+      });
+      imported++;
+    }
+    showToast(`Successfully imported ${imported} new services.`);
+    await loadCategories(); await loadServices();
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    setButtonBusy(btn, false);
+  }
+});
+
+document.getElementById('delete-all-services-btn')?.addEventListener('click', async (e) => {
+  if (!confirm('Are you absolutely sure you want to delete ALL services inside the panel? This cannot be undone.')) return;
+  const btn = e.currentTarget;
+  setButtonBusy(btn, true);
+  try {
+    const snap = await getDocs(collection(db, 'services'));
+    if (snap.empty) {
+      showToast('No services currently exist in the database.', 'error');
+      return;
+    }
+    const batch = writeBatch(db);
+    snap.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+    showToast('All SMM services removed successfully!');
+    await loadServices();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setButtonBusy(btn, false); }
+});
+
+document.getElementById('delete-all-categories-btn')?.addEventListener('click', async (e) => {
+  if (!confirm('Are you absolutely sure you want to delete ALL categories inside the panel? This will not delete services, but unmapped services will lose their category labels.')) return;
+  const btn = e.currentTarget;
+  setButtonBusy(btn, true);
+  try {
+    const snap = await getDocs(collection(db, 'categories'));
+    if (snap.empty) {
+      showToast('No categories currently exist in the database.', 'error');
+      return;
+    }
+    const batch = writeBatch(db);
+    snap.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+    showToast('All categories removed successfully!');
+    await loadCategories();
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setButtonBusy(btn, false); }
+});
+
+document.getElementById('sync-status-btn')?.addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  setButtonBusy(btn, true);
+  try {
+    const snap = await getDocs(query(collection(db, 'orders'), where('status', 'in', ['Pending', 'Processing', 'In Progress'])));
+    let synced = 0;
+    
+    for (const docSnap of snap.docs) {
+      const o = docSnap.data();
+      if (!o.apiOrderId) continue;
+
+      const apiData = await smmApi({ url: API_URL, key: API_KEY, action: 'status', order: o.apiOrderId });
+
+      if (apiData.status) {
+        let localStatus = apiData.status;
+        if (localStatus === 'In progress') localStatus = 'In Progress';
+        
+        if (localStatus !== o.status) {
+          await updateDoc(doc(db, 'orders', docSnap.id), { 
+            status: localStatus,
+            start_count: apiData.start_count || o.start_count || 0,
+            remains: apiData.remains || o.remains || 0,
+            updatedAt: fsTS() 
+          });
+          synced++;
+        }
+      }
+    }
+    showToast(`Synced ${synced} orders with provider.`);
+    await loadOrders();
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    setButtonBusy(btn, false);
+  }
+});
+</script>
+
+<div class="modal-overlay" id="contact-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; display: none; align-items: center; justify-content: center;">
+  <div class="modal-content" style="background: white; padding: 2.5rem; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: var(--shadow-lg);">
+    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--brand-900);">Contact Admin</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">How would you like to reach us?</p>
+    <div class="modal-btns" style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+      <a href="https://wa.me/923104882921" class="modal-btn" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem; border-radius: 12px; font-weight: 700; text-decoration: none; background: #25d366; color: white;">
+        <i class="fa-brands fa-whatsapp"></i> WhatsApp Contact
+      </a>
+    </div>
+    <button onclick="document.getElementById('contact-modal').classList.remove('active')" style="margin-top: 1.5rem; background: none; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600;">Close</button>
+  </div>
+</div>
+</body>
+</html>
