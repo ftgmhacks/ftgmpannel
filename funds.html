@@ -639,11 +639,11 @@ async function submitFunds(e) {
       status: 'Pending', createdAt: fsTS(), updatedAt: fsTS()
     });
 
-    const waMsg = `😀 FUNDS VERIFICATION REQUEST 💰 
-👤 Client Email: ${currentUser.email}
-💰 Deposit Amount: ${money(amount)}
-💳 Payment Gateway: ${activePaymentMethodTitle}
-🧾 Screenshot Receipt: ${uploadedScreenshotUrl}
+    const waMsg = `╭━━〔 𝗙𝘂𝗻𝗱𝘀 𝗥𝗲𝗾𝘂𝗲𝘀𝘁 〕━━┈⊷
+┃ 📧 ${currentUser.email}
+┃ 💰 ${money(amount)}
+┃ ♻️ ${activePaymentMethodTitle}
+┃ 🧾 : ${uploadedScreenshotUrl}
 
 Please Verify My Payment And Add Funds.`;
     const waUrl = `https://wa.me/923104882921?text=${encodeURIComponent(waMsg)}`;
