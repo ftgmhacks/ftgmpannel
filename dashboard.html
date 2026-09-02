@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Place a new social media marketing order: followers, likes, views and more at wholesale rates on Pak Digital.">
+<title>New Order — Pak Digital</title>
+<link rel="icon" href="https://i.postimg.cc/YCJ3NFXx/20260821-085028.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0bc15c">
+<link rel="apple-touch-icon" href="https://i.postimg.cc/YCJ3NFXx/20260821-085028.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Regular+Urdu:wght@400;700&family=Amiri&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+
+:root {
+  --primary: #0bc15c;
+  --primary-dark: #099e4b;
+  --primary-soft: rgba(11, 193, 92, 0.12);
+  --brand-900: #061f10;
+  --brand-800: #0c331c;
+  --brand-700: #124727;
+  --bg: #f3f8f5;
+  --bg-card: #ffffff;
+  --bg-soft: #eaf3ee;
+  --text: #0d2115;
+  --text-muted: #5e7366;
+  --border: #d7e5dd;
+  --radius: 15px;
+  --radius-sm: 10px;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow: 0 12px 30px -12px rgba(11, 193, 92, 0.15);
+  --shadow-lg: 0 24px 60px -20px rgba(6, 31, 16, 0.2);
+  --gradient: linear-gradient(135deg, var(--primary) 0%, #0dbfa1 100%);
+  --sidebar-w: 264px;
+  --header-h: 68px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  min-height: 100vh; -webkit-font-smoothing: antialiased;
+  width: 100%; max-width: 100%; overflow-x: hidden; margin: 0; padding: 0;
+}
+a { color: var(--primary); text-decoration: none; }
+img { max-width: 100%; display: block; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #b8cfc2; border-radius: 99px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+.d-none { display: none !important; }
+.text-center { text-align: center; }
+.text-muted { color: var(--text-muted); }
+.text-primary { color: var(--primary); }
+.text-danger { color: #d93838; }
+.font-bold { font-weight: 700; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-4 { margin-top: 1.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.py-4 { padding: 1.5rem 0; }
+.gap-2 { gap: 0.5rem; }
+.w-full { width: 100%; }
+
+header {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--header-h); z-index: 60;
+  background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.header-content {
+  height: 100%; max-width: 1500px; margin: 0 auto; padding: 0 0.8rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.logo-area { display: flex; align-items: center; gap: 0.75rem; height: 100%; }
+.logo-area img { max-height: calc(var(--header-h) - 16px); width: auto; object-fit: contain; }
+.user-info { display: flex; align-items: center; gap: 0.6rem; }
+.wallet-badge {
+  display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 700; font-size: 0.85rem;
+  background: var(--primary-soft); color: var(--primary-dark);
+  padding: 0.45rem 0.8rem; border-radius: 99px; white-space: nowrap;
+}
+.user-name-display {
+  font-size: 0.85rem; color: var(--text-muted); max-width: 120px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.avatar-chip {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--brand-800); color: #fff;
+  display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+}
+.mobile-menu-btn {
+  display: none; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text);
+  width: 40px; height: 40px; border-radius: 12px; font-size: 1.1rem; cursor: pointer;
+}
+
+.sidebar {
+  position: fixed; top: var(--header-h); right: 0; bottom: 0; width: var(--sidebar-w); z-index: 55;
+  background: var(--brand-900); color: #eef7f3; padding: 1.25rem 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+}
+.sidebar-title {
+  font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(238, 247, 243, 0.45); margin: 0.25rem 0.75rem 0.75rem;
+}
+.sidebar-menu { display: flex; flex-direction: column; gap: 0.3rem; }
+.sidebar-menu a {
+  display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 0.9rem; border-radius: var(--radius-sm);
+  color: rgba(238, 247, 243, 0.78); font-weight: 600; font-size: 0.92rem;
+  transition: all 0.18s ease;
+}
+.sidebar-menu a i { width: 20px; text-align: center; font-size: 1rem; }
+.sidebar-menu a:hover {
+  background: rgba(255, 255, 255, 0.07); color: #fff; transform: translateX(-3px);
+}
+.sidebar-menu a.active {
+  background: var(--gradient); color: #fff; box-shadow: 0 8px 20px rgba(11, 193, 92, 0.2);
+}
+.sidebar-menu a.text-danger { color: #ff9da2; }
+.sidebar-foot {
+  margin-top: auto; padding: 1.1rem; border-radius: 14px; background: rgba(255, 255, 255, 0.05);
+  font-size: 0.8rem; color: rgba(238, 247, 243, 0.7); text-align: center;
+}
+.sidebar-backdrop {
+  position: fixed; inset: 0; background: rgba(6, 31, 16, 0.4);
+  z-index: 54; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.sidebar-backdrop.active { opacity: 1; pointer-events: auto; }
+
+.main-content {
+  padding-top: calc(var(--header-h) + 2rem); padding-bottom: 3rem;
+  margin-right: var(--sidebar-w); min-height: 100vh;
+  box-sizing: border-box;
+}
+.container { max-width: 100%; margin: 0 auto; padding: 0 1rem; box-sizing: border-box; }
+
+.page-head { margin-bottom: 1.5rem; }
+.page-head h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--brand-900); }
+.page-head p { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.2rem; }
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.5rem;
+}
+
+.video-card {
+  overflow: hidden; padding: 0 !important;
+  background: #000;
+  border-radius: var(--radius);
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.video-loader {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5;
+  display: flex; align-items: center; justify-content: center;
+}
+.video-card iframe {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 1;
+}
+
+.custom-select-wrap {
+  position: relative;
+  width: 100%;
+}
+.custom-select-trigger {
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.custom-select-trigger:hover { border-color: var(--primary); }
+.custom-select-options {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  display: none;
+}
+.custom-select-options.show { display: block; }
+.custom-option {
+  padding: 0.8rem 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: 0.2s;
+  font-size: 0.95rem;
+}
+.custom-option:hover { background: var(--primary-soft); }
+.custom-option i { width: 20px; text-align: center; }
+
+.card-title {
+  font-size: 1.05rem; font-weight: 700; margin-bottom: 1.1rem; display: flex; align-items: center; gap: 0.6rem;
+}
+.card-title i { color: var(--primary); }
+
+.service-links {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem; margin-bottom: 1.5rem;
+}
+.service-link-card {
+  display: flex; align-items: center; gap: 0.9rem; padding: 1.1rem 1.2rem;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); color: var(--text); transition: all 0.18s ease;
+}
+.service-link-card:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: var(--shadow); }
+.service-link-card .icon {
+  width: 46px; height: 46px; flex-shrink: 0; border-radius: 13px; display: grid; place-items: center;
+  background: var(--primary-soft); color: var(--primary-dark); font-size: 1.2rem;
+}
+.service-link-card .txt { min-width: 0; }
+.service-link-card .txt strong { display: block; font-size: 0.95rem; font-weight: 700; color: var(--brand-900); }
+.service-link-card .txt span { display: block; font-size: 0.78rem; color: var(--text-muted); margin-top: 0.1rem; }
+.service-link-card .go { margin-left: auto; color: var(--text-muted); font-size: 0.85rem; }
+
+.hero-card {
+  background: linear-gradient(135deg, #07170e 0%, #112d1c 100%);
+  color: #fff; border: 1px solid rgba(11, 193, 92, 0.25); position: relative; overflow: hidden;
+  box-shadow: 0 12px 30px rgba(6, 31, 16, 0.4);
+  border-radius: var(--radius);
+}
+.hero-card::after {
+  content: ""; position: absolute; width: 320px; height: 320px; right: -90px; top: -140px;
+  background: radial-gradient(circle, rgba(11, 193, 92, 0.3) 0%, rgba(11, 193, 92, 0) 70%);
+  border-radius: 50%;
+}
+.hero-card > * { position: relative; z-index: 1; }
+
+.form-group { margin-bottom: 1.25rem; }
+label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--brand-900); }
+.form-control, select.form-control {
+  width: 100%; padding: 0.85rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 0.92rem; font-family: inherit; color: var(--text); background: var(--bg-card); transition: all 0.18s;
+}
+.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+select.form-control {
+  appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 24 24' fill='none' stroke='%235e7366' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem;
+}
+.form-hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.35rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.8rem 1.2rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem;
+  border: none; cursor: pointer; font-family: inherit; transition: all 0.18s; white-space: nowrap;
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 8px 24px rgba(11, 193, 92, 0.25); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(11, 193, 92, 0.35); }
+.btn-secondary { background: var(--bg-soft); color: var(--brand-900); border: 1px solid var(--border); }
+.btn-secondary:hover:not(:disabled) { background: #dcece3; }
+.btn-success { background: #0bc15c; color: #fff; }
+.btn-block { width: 100%; }
+
+.detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; }
+.detail-box { background: var(--bg-soft); border-radius: var(--radius-sm); padding: 0.8rem; }
+.detail-box .k { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.detail-box .v { font-weight: 700; font-size: 0.95rem; margin-top: 0.15rem; color: var(--brand-900); }
+
+.service-desc-box {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.2rem;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--brand-900);
+  font-weight: 500;
+  white-space: pre-line;
+  word-break: break-word;
+  box-shadow: var(--shadow-sm);
+}
+
+.total-bar {
+  display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.2rem;
+  border-radius: var(--radius-sm); background: var(--brand-800); color: #fff; margin-bottom: 1rem;
+}
+.total-bar .amount { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+
+.success-alert-box {
+  border: 2px solid var(--primary); background: rgba(11, 193, 92, 0.08); padding: 1.2rem;
+  border-radius: var(--radius); text-align: center; color: var(--brand-900);
+  box-shadow: 0 6px 15px rgba(11, 193, 92, 0.1); animation: pop 0.22s ease;
+}
+
+/* =========================================================
+   ===== PERFECT MATH LOADER SCREEN (ZERO OVERLAP) ===== 
+   ========================================================= */
+.loader-screen {
+  position: fixed; inset: 0; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 500;
+  overflow: hidden;
+}
+.loader-screen::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 70%, rgba(11, 193, 92, 0.06) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(13, 191, 161, 0.04) 0%, transparent 50%);
+}
+
+.loader-center-box {
+  position: relative;
+  width: 400px; height: 400px;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+/* 1. Static Center Logo (Bigger Size) */
+.loader-logo-circle {
+  position: absolute;
+  z-index: 20;
+  width: 120px; height: 120px; /* Increased size */
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 4px solid var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+.loader-logo-circle img {
+  width: 75px; height: 75px; /* Increased size */
+  object-fit: contain;
+}
+
+/* 2. Rotating Orbit Container (Dashed Ring + Icons) */
+.orbit-container {
+  position: absolute;
+  z-index: 10;
+  width: 290px; height: 290px; /* Big orbit track */
+  border: 3px dashed rgba(11, 193, 92, 0.6); /* Visible rotating ring */
+  border-radius: 50%;
+  /* Fast and smooth rotation */
+  animation: spinOrbit 12s linear infinite; 
+}
+
+/* Spoke guarantees 100% mathematical distance from center (Zero Overlap) */
+.orbit-spoke {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+}
+
+/* Wrapper places the icon precisely on the dashed ring */
+.orbit-icon-wrapper {
+  position: absolute;
+  top: -24px; /* Half of 48px to center perfectly on the ring */
+  left: 50%;
+  margin-left: -24px;
+  width: 48px; height: 48px; /* Bigger Icon Size */
+  /* Counter-spin so the icons don't go upside down */
+  animation: counterSpinOrbit 12s linear infinite;
+}
+
+/* Social Icon Design (No borders, bigger font) */
+.social-icon {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.35rem; /* Bigger font size inside */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.18);
+  border: none !important;
+}
+
+/* Brand Colors */
+.social-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; }
+.social-icon.facebook { background: #1877F2; color: #fff; }
+.social-icon.youtube { background: #FF0000; color: #fff; }
+.social-icon.twitter { background: #000000; color: #fff; }
+.social-icon.whatsapp { background: #25D366; color: #fff; }
+.social-icon.tiktok { background: #000000; color: #fff; }
+.social-icon.telegram { background: #0088CC; color: #fff; }
+.social-icon.snapchat { background: #FFFC00; color: #000; }
+.social-icon.pinterest { background: #E60023; color: #fff; }
+.social-icon.linkedin { background: #0A66C2; color: #fff; }
+.social-icon.discord { background: #5865F2; color: #fff; }
+.social-icon.reddit { background: #FF4500; color: #fff; }
+
+/* Pure Animations */
+@keyframes spinOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes counterSpinOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+/* Auto-scale down on very small phones to prevent layout breaking */
+@media (max-width: 400px) {
+  .loader-center-box { transform: scale(0.85); }
+}
+/* ========================================================= */
+
+
+/* ===== SHAKE ANIMATION FOR CATEGORY SELECT ===== */
+@keyframes shakeSelect {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+.shake-animation {
+  animation: shakeSelect 0.6s ease-in-out;
+  border-color: #ff6b6b !important;
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15) !important;
+}
+
+/* ===== STATS SECTION ===== */
+.stats-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gradient);
+  transform: scaleX(0);
+  transition: transform 0.5s ease;
+}
+.stat-card.visible::before {
+  transform: scaleX(1);
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary);
+}
+.stat-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  display: grid; place-items: center;
+  font-size: 1.3rem;
+  margin: 0 auto 0.75rem;
+}
+.stat-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--brand-900);
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ===== SERVICE BUTTONS BELOW ORDER ===== */
+.order-service-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.order-service-links .service-link-card {
+  flex-direction: column;
+  text-align: center;
+  padding: 1.25rem 0.8rem;
+}
+.order-service-links .service-link-card .icon {
+  width: 52px; height: 52px;
+  border-radius: 16px;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+.order-service-links .service-link-card .txt strong {
+  font-size: 0.88rem;
+}
+.order-service-links .service-link-card .go {
+  display: none;
+}
+@media (max-width: 640px) {
+  .order-service-links {
+    grid-template-columns: 1fr;
+  }
+  .order-service-links .service-link-card {
+    flex-direction: row;
+    text-align: left;
+  }
+  .order-service-links .service-link-card .icon {
+    margin-bottom: 0;
+  }
+}
+
+.toast-container { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); text-align: center; z-index: 400; display: flex; flex-direction: column; gap: 0.5rem; width: min(92vw, 380px); }
+.toast { font-family: 'Inter', sans-serif; padding: 0.8rem 1rem; border-radius: 12px; background: var(--brand-900); color: #fff; font-size: 0.87rem; box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(-12px); transition: all 0.28s; }
+.toast.show { opacity: 1; transform: none; }
+.toast-success { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); }
+.toast-error { background: #d93838; }
+
+.spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+.spinner-primary { border-color: var(--primary-soft); border-top-color: var(--primary); width: 50px; height: 50px; border-width: 4px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 860px) {
+  .mobile-menu-btn { display: grid; place-items: center; }
+  .sidebar { 
+    transform: translateX(100%); width: 72%; max-width: 300px; 
+    top: var(--header-h) !important; height: calc(100vh - var(--header-h)) !important;
+    padding-top: 1rem; box-shadow: -12px 0 30px rgba(0,0,0,0.15);
+  }
+  .sidebar.active { transform: translateX(0); }
+  .main-content { margin-right: 0; }
+  .form-row { grid-template-columns: 1fr; }
+  .user-name-display { display: none; }
+  .order-service-links { grid-template-columns: 1fr; }
+  .order-service-links .service-link-card { flex-direction: row; text-align: left; }
+  .order-service-links .service-link-card .icon { margin-bottom: 0; }
+  .stats-section { grid-template-columns: repeat(2, 1fr); }
+}
+.modal-overlay.active { display: flex !important; }
+</style>
+<base target="_blank">
+</head>
+<body>
+<header>
+  <div class="header-content" style="justify-content: space-between;">
+    <div class="logo-area" style="flex: 1; text-align: left;">
+      <img id="site-logo-header" src="https://i.postimg.cc/D0NthZgz/pak-digital.png" alt="Logo">
+    </div>
+    <div class="user-info">
+      <span id="user-name-display" class="user-name-display">Loading...</span>
+      <span class="avatar-chip" id="user-avatar">U</span>
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-title">Menu</div>
+  <div class="sidebar-menu">
+      <a href="dashboard.html" class="active"><i class="fa-solid fa-bolt"></i> New Order</a>
+      <a href="nadra.html"><i class="fa-solid fa-id-card"></i> NADRA Services</a>
+      <a href="numbers.html"><i class="fa-brands fa-whatsapp"></i> Fake Numbers</a>
+      <a href="ai.html"><i class="fa-solid fa-toolbox"></i> Other Tools</a>
+      <a href="funds.html"><i class="fa-solid fa-wallet"></i> Add Funds</a>
+      <a href="history.html"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+      <a href="profile.html"><i class="fa-solid fa-user"></i> My Profile</a>
+      <a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a>
+      <a href="#" id="logout-btn" class="text-danger mt-4"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </div>
+  <div class="sidebar-foot" style="text-align: center; padding: 1.5rem 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 14px; margin-top: auto;">
+    <div style="font-family: 'Inter', sans-serif; font-size: 0.75rem; color: rgba(238, 247, 243, 0.6); line-height: 1.4;">
+      Contact The Main Admin If WhatsApp Support Is Not Responding.
+      <br>
+      <button onclick="document.getElementById('contact-modal').classList.add('active')" style="background: none; border: 1px solid var(--primary); color: var(--primary); padding: 0.35rem 0.8rem; border-radius: 99px; margin-top: 0.6rem; cursor: pointer; font-size: 0.7rem; font-weight: 600;">Contact Support</button>
+    </div>
+  </div>
+</nav>
+
+<div class="modal-overlay" id="contact-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; display: none; align-items: center; justify-content: center;">
+  <div class="modal-content" style="background: white; padding: 2.5rem; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: var(--shadow-lg);">
+    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--brand-900);">Contact Admin</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">How would you like to reach us?</p>
+    <div class="modal-btns" style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+      <a href="profile.html" class="modal-btn" style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem; border-radius: 12px; font-weight: 700; text-decoration: none; background: var(--primary); color: white;">
+        <i class="fa-solid fa-user"></i> User Profile
+      </a>
+      <a href="https://wa.me/923104882921" class="modal-btn" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem; border-radius: 12px; font-weight: 700; text-decoration: none; background: #25d366; color: white;">
+        <i class="fa-brands fa-whatsapp"></i> WhatsApp Contact
+      </a>
+    </div>
+    <button onclick="document.getElementById('contact-modal').classList.remove('active')" style="margin-top: 1.5rem; background: none; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600;">Close</button>
+  </div>
+</div>
+
+<!-- ===== PERFECT MATHEMATICAL LOADER SCREEN ===== -->
+<div id="page-loader" class="loader-screen">
+  <div class="loader-center-box">
+    
+    <!-- 1. Center Logo (Bigger) -->
+    <div class="loader-logo-circle">
+      <img src="https://i.postimg.cc/RVM4Fy0z/pak-digital-store.png" alt="Pak Digital">
+    </div>
+
+    <!-- 2. The Spinning Orbit Container -->
+    <div class="orbit-container">
+      
+      <!-- 12 Icons exactly 30 degrees apart (360/12 = 30) -->
+      <!-- This pure math method guarantees zero overlapping -->
+      
+      <!-- Icon 1 -->
+      <div class="orbit-spoke" style="transform: rotate(0deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon instagram" style="transform: rotate(0deg);"><i class="fa-brands fa-instagram"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 2 -->
+      <div class="orbit-spoke" style="transform: rotate(30deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon facebook" style="transform: rotate(-30deg);"><i class="fa-brands fa-facebook-f"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 3 -->
+      <div class="orbit-spoke" style="transform: rotate(60deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon youtube" style="transform: rotate(-60deg);"><i class="fa-brands fa-youtube"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 4 -->
+      <div class="orbit-spoke" style="transform: rotate(90deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon twitter" style="transform: rotate(-90deg);"><i class="fa-brands fa-x-twitter"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 5 -->
+      <div class="orbit-spoke" style="transform: rotate(120deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon whatsapp" style="transform: rotate(-120deg);"><i class="fa-brands fa-whatsapp"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 6 -->
+      <div class="orbit-spoke" style="transform: rotate(150deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon tiktok" style="transform: rotate(-150deg);"><i class="fa-brands fa-tiktok"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 7 -->
+      <div class="orbit-spoke" style="transform: rotate(180deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon telegram" style="transform: rotate(-180deg);"><i class="fa-brands fa-telegram"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 8 -->
+      <div class="orbit-spoke" style="transform: rotate(210deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon snapchat" style="transform: rotate(-210deg);"><i class="fa-brands fa-snapchat"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 9 -->
+      <div class="orbit-spoke" style="transform: rotate(240deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon pinterest" style="transform: rotate(-240deg);"><i class="fa-brands fa-pinterest-p"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 10 -->
+      <div class="orbit-spoke" style="transform: rotate(270deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon linkedin" style="transform: rotate(-270deg);"><i class="fa-brands fa-linkedin-in"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 11 -->
+      <div class="orbit-spoke" style="transform: rotate(300deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon discord" style="transform: rotate(-300deg);"><i class="fa-brands fa-discord"></i></div>
+        </div>
+      </div>
+      
+      <!-- Icon 12 -->
+      <div class="orbit-spoke" style="transform: rotate(330deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon reddit" style="transform: rotate(-330deg);"><i class="fa-brands fa-reddit-alien"></i></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<main class="main-content">
+  <div class="container">
+    <div class="text-center" style="font-family: 'Noto Nastaliq Urdu', 'Amiri', serif; font-size: 1.55rem; color: var(--brand-900); margin: 0.25rem 0 1.25rem; font-weight: 500; line-height: 2.2;">
+      بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+    </div>
+
+    <div class="card hero-card">
+      <div style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between">
+        <div>
+          <div style="font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.8">Wallet Balance</div>
+          <div style="font-size:2rem; font-weight:800; letter-spacing:-0.02em; color: var(--primary);" id="hero-wallet">Rs. 0.00</div>
+          <p style="opacity:0.85; font-size:0.88rem; margin-top:0.25rem">Instant deposit options are active. Boost your growth.</p>
+        </div>
+        <div style="display:flex; gap:0.6rem; flex-wrap:wrap">
+          <a class="btn btn-primary" href="funds.html"><i class="fa-solid fa-plus"></i> Add Funds</a>
+          <a class="btn btn-secondary" href="history.html" style="background:rgba(255,255,255,0.1); color:#fff; border-color:transparent"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-head">
+      <h1 style="display:none;">Order Service</h1>
+    </div>
+
+    <div class="card video-card" id="dashboard-video-container" style="display:none;">
+        <div class="video-loader">
+            <div style="width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.2); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        </div>
+        <iframe id="dashboard-video-frame" src="" allowfullscreen onload="this.parentElement.querySelector('.video-loader').style.display='none';"></iframe>
+    </div>
+
+    <form id="new-order-form" class="card">
+      <div class="card-title"><i class="fa-solid fa-bolt"></i> Order Details</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Select Category</label>
+          <div class="custom-select-wrap" id="category-custom-wrap" style="position: relative; width: 100%;">
+            <div class="custom-select-trigger" id="cat-trigger">
+              <span>Select a category...</span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="custom-select-options" id="cat-options"></div>
+          </div>
+          <select id="order-category" class="d-none" required>
+            <option value="" disabled selected>Select a category...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Select Service</label>
+          <div class="custom-select-wrap" id="service-custom-wrap" style="position: relative; width: 100%;">
+            <div class="custom-select-trigger" id="srv-trigger">
+              <span>Select a service...</span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="custom-select-options" id="srv-options"></div>
+          </div>
+          <select id="order-service" class="d-none" required>
+            <option value="" disabled selected>Select a service...</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="service-details-card" class="d-none mb-3">
+        <div class="detail-grid mb-3">
+          <div class="detail-box"><div class="k">Price / 1000</div><div class="v" id="service-price-display">—</div></div>
+          <div class="detail-box"><div class="k">Min / Max</div><div class="v" id="service-min-max" style="color: #d93838 !important; font-weight: 800;">—</div></div>
+          <div class="detail-box"><div class="k">Delivery</div><div class="v" id="service-time-display">—</div></div>
+        </div>
+        <div class="service-desc-box" id="service-description"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="order-link">Target (Link / Username / Target ID)</label>
+        <input type="text" id="order-link" class="form-control" placeholder="Enter link, username, or target ID" required>
+        <div class="form-hint">Make sure your profile or post is public.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="order-quantity">Quantity</label>
+        <input type="number" id="order-quantity" class="form-control" placeholder="1000" min="1" required>
+      </div>
+
+      <div class="total-bar">
+        <span>Total Charge</span>
+        <span class="amount" id="order-total-charge">Rs. 0.00</span>
+      </div>
+
+      <button type="submit" id="submit-order-btn" class="btn btn-primary btn-block" disabled>
+        <span class="btn-text">Place Order</span>
+        <span class="spinner d-none" id="order-spinner"></span>
+      </button>
+
+      <div id="order-success-alert" class="success-alert-box d-none mt-3">
+        <i class="fa-solid fa-circle-check" style="font-size: 2.2rem; color: var(--primary); display: block; margin-bottom: 0.6rem;"></i>
+        <strong style="display: block; font-size: 1.1rem; margin-bottom: 0.25rem;">Order Placed Successfully!</strong>
+        <span style="font-size: 0.9rem; color: var(--text-muted)">Your order has been placed successfully and will be completed soon.</span>
+      </div>
+
+      <!-- NADRA, Fake Numbers, Other Services buttons below Place Order -->
+      <div class="order-service-links">
+        <a class="service-link-card" href="nadra.html">
+          <span class="icon"><i class="fa-solid fa-id-card"></i></span>
+          <span class="txt"><strong>NADRA</strong><span>Identity Services</span></span>
+        </a>
+        <a class="service-link-card" href="numbers.html">
+          <span class="icon"><i class="fa-brands fa-whatsapp"></i></span>
+          <span class="txt"><strong>Fake Numbers</strong><span>WhatsApp Numbers</span></span>
+        </a>
+        <a class="service-link-card" href="ai.html">
+          <span class="icon"><i class="fa-solid fa-toolbox"></i></span>
+          <span class="txt"><strong>Other Services</strong><span>Tools & More</span></span>
+        </a>
+      </div>
+    </form>
+
+    <!-- Stats Section — ABOVE Privacy Policy -->
+    <div class="stats-section" id="stats-section">
+      <div class="stat-card" data-target="250" data-suffix="+">
+        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-number" data-value="0">0</div>
+        <div class="stat-label">Users</div>
+      </div>
+      <div class="stat-card" data-target="50" data-suffix="+">
+        <div class="stat-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+        <div class="stat-number" data-value="0">0</div>
+        <div class="stat-label">Orders</div>
+      </div>
+      <div class="stat-card" data-target="5000" data-suffix="+">
+        <div class="stat-icon"><i class="fa-solid fa-wallet"></i></div>
+        <div class="stat-number" data-value="0">0</div>
+        <div class="stat-label">Funds Added</div>
+      </div>
+      <div class="stat-card" data-target="2000" data-suffix="+">
+        <div class="stat-icon"><i class="fa-solid fa-people-group"></i></div>
+        <div class="stat-number" data-value="0">0</div>
+        <div class="stat-label">Community</div>
+      </div>
+    </div>
+
+    <div class="card" style="border: 1px solid var(--border);">
+      <div class="card-title" style="color: var(--brand-900)"><i class="fa-solid fa-circle-info"></i> Privacy Policy & Terms of Service</div>
+      <div style="font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); display: flex; flex-direction: column; gap: 1rem;">
+        <div>
+          <strong style="color: var(--brand-900); display: block; margin-bottom: 0.25rem;">1. Terms of Service</strong>
+          By placing an order on our platform, you automatically agree to our terms. We are not responsible for any drops or profile suspensions that result from utilizing third-party marketing services. Make sure your destination link is fully public before submitting details.
+        </div>
+        <div>
+          <strong style="color: var(--brand-900); display: block; margin-bottom: 0.25rem;">2. Privacy Policy</strong>
+          We value your privacy. Your personal registration details, wallet transactions, and order history are kept highly secure on our cloud servers and will never be shared with third parties.
+        </div>
+        <div>
+          <strong style="color: var(--brand-900); display: block; margin-bottom: 0.25rem;">3. Refund & Cancellation</strong>
+          Once an SMM order is successfully processed, it cannot be edited, cancelled, or refunded unless the system marks it as partially fulfilled. In case of system drops, refunds are instantly credited to your wallet balance.
+        </div>
+      </div>
+    </div>
+
+    <footer style="text-align: center; margin-top: 2rem; padding: 2rem; border-top: 1px solid var(--border); width: 100%;">
+        <div style="font-family: 'Inter', sans-serif; font-size: 0.95rem; color: var(--text-muted);">
+            Contact The Main Admin If WhatsApp Support Is Not Responding.
+            <br>
+            <button type="button" onclick="document.getElementById('contact-modal').classList.add('active')" style="background: var(--primary); color:#fff; border: none; padding: 0.7rem 1.6rem; border-radius: 99px; margin-top: 1rem; cursor: pointer; font-size: 0.9rem; font-weight: 700;">
+              <i class="fa-solid fa-headset"></i> Contact Admin
+            </button>
+        </div>
+    </footer>
+  </div>
+</main>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script type="module" src="pak.js"></script>
+
+<script type="module" src="store.js"></script>
+
+<script>
+// ===== SHAKE ANIMATION FOR CATEGORY SELECT =====
+(function() {
+  const catTrigger = document.getElementById('cat-trigger');
+  const catOptions = document.getElementById('cat-options');
+  let shakeInterval;
+  let hasInteracted = false;
+
+  function startShake() {
+    if (hasInteracted) return;
+    shakeInterval = setInterval(() => {
+      if (hasInteracted) {
+        clearInterval(shakeInterval);
+        catTrigger.classList.remove('shake-animation');
+        return;
+      }
+      catTrigger.classList.add('shake-animation');
+      setTimeout(() => {
+        catTrigger.classList.remove('shake-animation');
+      }, 600);
+    }, 3500);
+    // First shake immediately
+    setTimeout(() => {
+      if (!hasInteracted) {
+        catTrigger.classList.add('shake-animation');
+        setTimeout(() => catTrigger.classList.remove('shake-animation'), 600);
+      }
+    }, 1500);
+  }
+
+  catTrigger.addEventListener('click', function() {
+    hasInteracted = true;
+    clearInterval(shakeInterval);
+    catTrigger.classList.remove('shake-animation');
+  });
+
+  // Also stop shake when options are shown
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (catOptions.classList.contains('show')) {
+        hasInteracted = true;
+        clearInterval(shakeInterval);
+        catTrigger.classList.remove('shake-animation');
+      }
+    });
+  });
+  observer.observe(catOptions, { attributes: true, attributeFilter: ['class'] });
+
+  // Start after page loads
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startShake);
+  } else {
+    startShake();
+  }
+})();
+
+// ===== STATS COUNTER ANIMATION =====
+(function() {
+  const statCards = document.querySelectorAll('.stat-card');
+  const statNumbers = document.querySelectorAll('.stat-number');
+  let animated = false;
+
+  function formatNumber(num) {
+    if (num >= 1000) {
+      return (num / 1000).toFixed(0) + 'k';
+    }
+    return num.toString();
+  }
+
+  function animateCounter(el, target, suffix, duration) {
+    const start = 0;
+    const startTime = performance.now();
+
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(start + (target - start) * easeProgress);
+      el.textContent = formatNumber(current) + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        el.textContent = formatNumber(target) + suffix;
+      }
+    }
+
+    requestAnimationFrame(update);
+  }
+
+  function checkAndAnimate() {
+    if (animated) return;
+
+    const section = document.getElementById('stats-section');
+    if (!section) return;
+
+    const rect = section.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    if (rect.top < windowHeight - 100) {
+      animated = true;
+      statCards.forEach(card => card.classList.add('visible'));
+
+      statNumbers.forEach((el, index) => {
+        const card = el.closest('.stat-card');
+        const target = parseInt(card.dataset.target);
+        const suffix = card.dataset.suffix || '';
+        const duration = 2000 + (index * 300); // staggered
+
+        setTimeout(() => {
+          animateCounter(el, target, suffix, duration);
+        }, index * 150);
+      });
+    }
+  }
+
+  window.addEventListener('scroll', checkAndAnimate);
+  window.addEventListener('load', checkAndAnimate);
+  checkAndAnimate();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — Pak Digital</title>
+<link class="favicon" rel="icon" href="https://i.postimg.cc/YCJ3NFXx/20260821-085028.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+
+:root {
+  --primary: #0bc15c;
+  --primary-dark: #099e4b;
+  --primary-soft: rgba(11, 193, 92, 0.12);
+  --brand-900: #061f10;
+  --brand-800: #0c331c;
+  --brand-700: #124727;
+  --bg: #f3f8f5;
+  --bg-card: #ffffff;
+  --bg-soft: #eaf3ee;
+  --text: #0d2115;
+  --text-muted: #5e7366;
+  --border: #d7e5dd;
+  --radius: 15px;
+  --radius-sm: 10px;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow: 0 12px 30px -12px rgba(11, 193, 92, 0.15);
+  --shadow-lg: 0 24px 60px -20px rgba(6, 31, 16, 0.2);
+  --gradient: linear-gradient(135deg, var(--primary) 0%, #0dbfa1 100%);
+  --sidebar-w: 264px;
+  --header-h: 68px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  min-height: 100vh; -webkit-font-smoothing: antialiased;
+ width: 100%; max-width: 100%; overflow-x: hidden; margin: 0; padding: 0;}
+a { color: var(--primary); text-decoration: none; }
+img { max-width: 100%; display: block; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #b8cfc2; border-radius: 99px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+.d-none { display: none !important; }
+.text-center { text-align: center; }
+.text-muted { color: var(--text-muted); }
+.text-primary { color: var(--primary); }
+.text-danger { color: #d93838; }
+.font-bold { font-weight: 700; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.py-4 { padding: 1.5rem 0; }
+.gap-2 { gap: 0.5rem; }
+.w-full { width: 100%; }
+
+header {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--header-h); z-index: 60;
+  background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.header-content {
+  height: 100%; max-width: 1500px; margin: 0 auto; padding: 0 0.8rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.logo-area { display: flex; align-items: center; gap: 0.75rem; height: 100%; }
+.logo-area img { max-height: calc(var(--header-h) - 16px); width: auto; object-fit: contain; }
+.user-info { display: flex; align-items: center; gap: 0.6rem; }
+.wallet-badge {
+  display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 700; font-size: 0.85rem;
+  background: var(--primary-soft); color: var(--primary-dark);
+  padding: 0.45rem 0.8rem; border-radius: 99px; white-space: nowrap;
+}
+.user-name-display {
+  font-size: 0.85rem; color: var(--text-muted); max-width: 120px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.avatar-chip {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--brand-800); color: #fff;
+  display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+}
+.mobile-menu-btn {
+  display: none; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text);
+  width: 40px; height: 40px; border-radius: 12px; font-size: 1.1rem; cursor: pointer;
+}
+
+.sidebar {
+  position: fixed; top: var(--header-h); right: 0; bottom: 0; width: var(--sidebar-w); z-index: 55;
+  background: var(--brand-900); color: #eef7f3; padding: 1.25rem 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+}
+.sidebar-title {
+  font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(238, 247, 243, 0.45); margin: 0.25rem 0.75rem 0.75rem;
+}
+.sidebar-menu { display: flex; flex-direction: column; gap: 0.3rem; }
+.sidebar-menu a {
+  display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 0.9rem; border-radius: var(--radius-sm);
+  color: rgba(238, 247, 243, 0.78); font-weight: 600; font-size: 0.92rem;
+  transition: all 0.18s ease;
+}
+.sidebar-menu a i { width: 20px; text-align: center; font-size: 1rem; }
+.sidebar-menu a:hover {
+  background: rgba(255, 255, 255, 0.07); color: #fff; transform: translateX(-3px);
+}
+.sidebar-menu a.active {
+  background: var(--gradient); color: #fff; box-shadow: 0 8px 20px rgba(11, 193, 92, 0.2);
+}
+.sidebar-menu a.text-danger { color: #ff9da2; }
+.sidebar-foot {
+  margin-top: auto; padding: 0.9rem; border-radius: 14px; background: rgba(255, 255, 255, 0.05);
+  font-size: 0.75rem; color: rgba(238, 247, 243, 0.6); text-align: center;
+}
+.sidebar-backdrop {
+  position: fixed; inset: 0; background: rgba(6, 31, 16, 0.4);
+  z-index: 54; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.sidebar-backdrop.active { opacity: 1; pointer-events: auto; }
+
+.main-content {
+  padding-top: calc(var(--header-h) + 1.5rem); padding-bottom: 3rem;
+  margin-right: var(--sidebar-w); min-height: 100vh;
+ box-sizing: border-box;}
+.container { max-width: 100%; margin: 0 auto; padding: 0 0.8rem;  padding: 0 1rem; box-sizing: border-box;}
+
+.page-head { margin-bottom: 1.5rem; }
+.page-head h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--brand-900); }
+.page-head p { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.2rem; }
+
+.card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); padding: 1.5rem; margin-bottom: 1.25rem;
+}
+.card-title {
+  font-size: 1.05rem; font-weight: 700; margin-bottom: 1.1rem; display: flex; align-items: center; gap: 0.6rem;
+}
+.card-title i { color: var(--primary); }
+
+.form-group { margin-bottom: 1.25rem; }
+label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--brand-900); }
+.form-control, select.form-control {
+  width: 100%; padding: 0.85rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 0.92rem; font-family: inherit; color: var(--text); background: var(--bg-card); transition: all 0.18s;
+}
+.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.8rem 1.2rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem;
+  border: none; cursor: pointer; font-family: inherit; transition: all 0.18s; white-space: nowrap;
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 8px 24px rgba(11, 193, 92, 0.25); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(11, 193, 92, 0.35); }
+.btn-block { width: 100%; }
+
+.stats { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; background: var(--bg-soft); padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+
+.spent-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(11, 193, 92, 0.15);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  display: inline-block;
+}
+
+.toast-container { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); text-align: center; z-index: 400; display: flex; flex-direction: column; gap: 0.5rem; width: min(92vw, 380px); }
+.toast { font-family: 'Inter', sans-serif;  padding: 0.8rem 1rem; border-radius: 12px; background: var(--brand-900); color: #fff; font-size: 0.87rem; box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(-12px); transition: all 0.28s; }
+.toast.show { opacity: 1; transform: none; }
+.toast-success { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); }
+.toast-error { background: #d93838; }
+
+/* =========================================================
+   ===== PERFECT MATH LOADER SCREEN (ZERO OVERLAP) ===== 
+   ========================================================= */
+.loader-screen {
+  position: fixed; inset: 0; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 500;
+  overflow: hidden;
+}
+.loader-screen::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 70%, rgba(11, 193, 92, 0.06) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(13, 191, 161, 0.04) 0%, transparent 50%);
+}
+
+.loader-center-box {
+  position: relative;
+  width: 400px; height: 400px;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+/* 1. Static Center Logo (Bigger Size) */
+.loader-logo-circle {
+  position: absolute;
+  z-index: 20;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 4px solid var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+.loader-logo-circle img {
+  width: 75px; height: 75px;
+  object-fit: contain;
+}
+
+/* 2. Rotating Orbit Container (Dashed Ring + Icons) */
+.orbit-container {
+  position: absolute;
+  z-index: 10;
+  width: 290px; height: 290px;
+  border: 3px dashed rgba(11, 193, 92, 0.6);
+  border-radius: 50%;
+  animation: spinOrbit 12s linear infinite; 
+}
+
+/* Spoke guarantees 100% mathematical distance from center (Zero Overlap) */
+.orbit-spoke {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+}
+
+/* Wrapper places the icon precisely on the dashed ring */
+.orbit-icon-wrapper {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  margin-left: -24px;
+  width: 48px; height: 48px;
+  animation: counterSpinOrbit 12s linear infinite;
+}
+
+/* Social Icon Design (No borders, bigger font) */
+.social-icon {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.35rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.18);
+  border: none !important;
+}
+
+/* Brand Colors */
+.social-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; }
+.social-icon.facebook { background: #1877F2; color: #fff; }
+.social-icon.youtube { background: #FF0000; color: #fff; }
+.social-icon.twitter { background: #000000; color: #fff; }
+.social-icon.whatsapp { background: #25D366; color: #fff; }
+.social-icon.tiktok { background: #000000; color: #fff; }
+.social-icon.telegram { background: #0088CC; color: #fff; }
+.social-icon.snapchat { background: #FFFC00; color: #000; }
+.social-icon.pinterest { background: #E60023; color: #fff; }
+.social-icon.linkedin { background: #0A66C2; color: #fff; }
+.social-icon.discord { background: #5865F2; color: #fff; }
+.social-icon.reddit { background: #FF4500; color: #fff; }
+
+/* Pure Animations */
+@keyframes spinOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes counterSpinOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@media (max-width: 400px) {
+  .loader-center-box { transform: scale(0.85); }
+}
+/* ========================================================= */
+
+@media (max-width: 860px) {
+  .mobile-menu-btn { display: grid; place-items: center; }
+  .sidebar { transform: translateX(100%); width: 72%; max-width: 300px; top: 0; padding-top: 1.25rem; box-shadow: -12px 0 30px rgba(0,0,0,0.15); }
+  .sidebar.active { transform: translateX(0); }
+  .main-content { margin-right: 0; }
+  .user-name-display { display: none; }
+}
+.modal-overlay.active { display: flex !important; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-content">
+    <div class="logo-area">
+      <img id="site-logo-header" src="https://i.postimg.cc/D0NthZgz/pak-digital.png" alt="Pak Digital Logo">
+    </div>
+    <div class="user-info">
+      <span class="wallet-badge"><i class="fa-solid fa-wallet"></i> <span id="header-wallet-balance">Rs. 0.00</span></span>
+      <span id="user-name-display" class="user-name-display">Loading...</span>
+      <span class="avatar-chip" id="user-avatar">U</span>
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-title">Menu</div>
+  <div class="sidebar-menu">
+      <a href="dashboard.html"><i class="fa-solid fa-bolt"></i> New Order</a>
+      <a href="nadra.html"><i class="fa-solid fa-id-card"></i> NADRA Services</a>
+      <a href="numbers.html"><i class="fa-brands fa-whatsapp"></i> Fake Numbers</a>
+      <a href="ai.html"><i class="fa-solid fa-robot"></i> AI Subscriptions</a>
+      <a href="funds.html"><i class="fa-solid fa-wallet"></i> Add Funds</a>
+      <a href="history.html"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+      <a href="profile.html" class="active"><i class="fa-solid fa-user"></i> My Profile</a>
+      <a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a>
+      <a href="#" id="logout-btn" class="text-danger mt-4"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </div>
+  <div class="sidebar-foot">
+    &copy; 2026 Pak Digital
+  </div>
+</nav>
+
+<!-- ===== PERFECT MATHEMATICAL LOADER SCREEN ===== -->
+<div id="page-loader" class="loader-screen">
+  <div class="loader-center-box">
+    <!-- Center Logo (Bigger) -->
+    <div class="loader-logo-circle">
+      <img src="https://i.postimg.cc/RVM4Fy0z/pak-digital-store.png" alt="Pak Digital">
+    </div>
+
+    <!-- The Spinning Orbit Container -->
+    <div class="orbit-container">
+      <div class="orbit-spoke" style="transform: rotate(0deg);"><div class="orbit-icon-wrapper"><div class="social-icon instagram" style="transform: rotate(0deg);"><i class="fa-brands fa-instagram"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(30deg);"><div class="orbit-icon-wrapper"><div class="social-icon facebook" style="transform: rotate(-30deg);"><i class="fa-brands fa-facebook-f"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(60deg);"><div class="orbit-icon-wrapper"><div class="social-icon youtube" style="transform: rotate(-60deg);"><i class="fa-brands fa-youtube"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(90deg);"><div class="orbit-icon-wrapper"><div class="social-icon twitter" style="transform: rotate(-90deg);"><i class="fa-brands fa-x-twitter"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(120deg);"><div class="orbit-icon-wrapper"><div class="social-icon whatsapp" style="transform: rotate(-120deg);"><i class="fa-brands fa-whatsapp"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(150deg);"><div class="orbit-icon-wrapper"><div class="social-icon tiktok" style="transform: rotate(-150deg);"><i class="fa-brands fa-tiktok"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(180deg);"><div class="orbit-icon-wrapper"><div class="social-icon telegram" style="transform: rotate(-180deg);"><i class="fa-brands fa-telegram"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(210deg);"><div class="orbit-icon-wrapper"><div class="social-icon snapchat" style="transform: rotate(-210deg);"><i class="fa-brands fa-snapchat"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(240deg);"><div class="orbit-icon-wrapper"><div class="social-icon pinterest" style="transform: rotate(-240deg);"><i class="fa-brands fa-pinterest-p"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(270deg);"><div class="orbit-icon-wrapper"><div class="social-icon linkedin" style="transform: rotate(-270deg);"><i class="fa-brands fa-linkedin-in"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(300deg);"><div class="orbit-icon-wrapper"><div class="social-icon discord" style="transform: rotate(-300deg);"><i class="fa-brands fa-discord"></i></div></div></div>
+      <div class="orbit-spoke" style="transform: rotate(330deg);"><div class="orbit-icon-wrapper"><div class="social-icon reddit" style="transform: rotate(-330deg);"><i class="fa-brands fa-reddit-alien"></i></div></div></div>
+    </div>
+  </div>
+</div>
+
+<main class="main-content">
+  <div class="container" style="max-width: 600px; margin: 0 auto;">
+    <div class="page-head">
+      <h1>My Profile</h1>
+      <p>Configure your details and secure your user profile.</p>
+    </div>
+
+    <div class="card">
+      <div class="stats">
+        <div><strong>Total Spent</strong></div>
+        <div id="total-spent" style="font-weight:800; color: var(--primary);">
+          <div class="spent-spinner"></div>
+        </div>
+      </div>
+      <form id="profile-form">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="profile-name" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="profile-username" class="form-control" minlength="3" maxlength="24" required>
+        </div>
+        <div class="form-group">
+          <label>New Password (Optional)</label>
+          <input type="password" id="profile-pass" class="form-control" placeholder="Leave blank to keep same">
+        </div>
+        <button type="submit" id="profile-submit-btn" class="btn btn-primary btn-block">Update Profile</button>
+      </form>
+    </div>
+
+    <footer style="text-align: center; margin-top: 2rem; padding: 2.5rem 1rem; border-top: 1px solid var(--border); width: 100%; box-sizing: border-box;">
+        <div style="font-family: 'Inter', sans-serif; font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
+            Contact The Main Admin If Support Is Not Responding.
+            <br>
+            <button onclick="document.getElementById('contact-modal').classList.add('active')" style="background: var(--primary); color: #fff; border: none; padding: 0.6rem 1.4rem; border-radius: 99px; margin-top: 0.8rem; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Contact Support</button>
+        </div>
+    </footer>
+  </div>
+</main>
+
+<div id="toast-container" class="toast-container"></div>
+
+<div class="modal-overlay" id="contact-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; display: none; align-items: center; justify-content: center;">
+  <div class="modal-content" style="background: white; padding: 2.5rem; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: var(--shadow-lg);">
+    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--brand-900);">Contact Admin</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">How would you like to reach us?</p>
+    <div class="modal-btns" style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+      <a href="https://wa.me/923104882921" class="modal-btn" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem; border-radius: 12px; font-weight: 700; text-decoration: none; background: #25d366; color: white;">
+        <i class="fa-brands fa-whatsapp"></i> WhatsApp Contact
+      </a>
+    </div>
+    <button onclick="document.getElementById('contact-modal').classList.remove('active')" style="margin-top: 1.5rem; background: none; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600;">Close</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, updatePassword, updateProfile, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, setDoc, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD6VSIGbUJqIMQb53k1mXAcGjNu9PFC1w0",
+  authDomain: "new-smm02.firebaseapp.com",
+  databaseURL: "https://new-smm02-default-rtdb.firebaseio.com",
+  projectId: "new-smm02",
+  storageBucket: "new-smm02.firebasestorage.app",
+  messagingSenderId: "2203224901",
+  appId: "1:2203224901:web:7b328bb0ea4c381afe0c2c"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const SUPER_ADMIN_UID = "Q0NoYuEprlW6SvvOrv7lnx5kSeg1";
+let currentUser = null;
+let currentUserData = {};
+
+function showToast(message, type = 'success') {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  const icon = type === 'success' ? '<i class="fa-solid fa-check"></i> ' : '<i class="fa-solid fa-xmark"></i> ';
+  toast.innerHTML = icon + message;
+  container.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 4000);
+}
+window.showToast = showToast;
+
+const money = (n) => 'Rs. ' + (parseFloat(n || 0)).toFixed(2);
+const initials = (name) => (name || 'U').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+const displayNameOf = (data, email) => {
+  const d = data || {};
+  const value = (d.username || d.name || '').toString().trim();
+  if (value && value.toLowerCase() !== 'user') return value;
+  const mail = (d.email || email || '').toString().trim();
+  return mail.includes('@') ? mail.split('@')[0] : (mail || 'User');
+};
+
+function initLayout() {
+  const btn = document.getElementById('mobile-menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+  let backdrop = document.querySelector('.sidebar-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.className = 'sidebar-backdrop';
+    document.body.appendChild(backdrop);
+  }
+  const close = () => { sidebar.classList.remove('active'); backdrop.classList.remove('active'); };
+  btn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    sidebar.classList.toggle('active');
+    backdrop.classList.toggle('active', sidebar.classList.contains('active'));
+  });
+  backdrop.addEventListener('click', close);
+}
+
+async function loadCommonData() {
+  if (currentUser) {
+    const snap = await getDoc(doc(db, 'users', currentUser.uid));
+    if (snap.exists()) {
+      currentUserData = snap.data();
+      const w = document.getElementById('header-wallet-balance');
+      const n = document.getElementById('user-name-display');
+      const a = document.getElementById('user-avatar');
+      if (w) w.textContent = money(currentUserData.wallet);
+      const shownName = displayNameOf(currentUserData, currentUser.email);
+      if (n) n.textContent = shownName;
+      if (a) a.textContent = initials(shownName);
+    }
+  }
+  const settingsSnap = await getDoc(doc(db, 'settings', 'general'));
+  if (settingsSnap.exists()) {
+    const settings = settingsSnap.data();
+    if (settings.logoUrl) {
+      document.getElementById('site-logo-header').src = settings.logoUrl;
+    }
+  }
+  document.getElementById('logout-btn')?.addEventListener('click', async (e) => {
+    e.preventDefault(); await signOut(auth); window.location.href = 'index.html';
+  });
+}
+
+function guardUserPage(onReady) {
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) { window.location.href = 'index.html'; return; }
+    currentUser = user;
+    const userRef = doc(db, 'users', user.uid);
+    const snap = await getDoc(userRef);
+    if (!snap.exists()) {
+      await setDoc(userRef, {
+        uid: user.uid, name: user.displayName || displayNameOf({}, user.email),
+        username: user.displayName || displayNameOf({}, user.email), email: user.email,
+        wallet: 0, role: user.uid === SUPER_ADMIN_UID ? 'admin' : 'user',
+        status: 'active', createdAt: fsTS()
+      });
+    }
+    await loadCommonData();
+    initLayout();
+    document.getElementById('page-loader')?.remove();
+    try { await onReady(); } catch (err) { console.error(err); showToast(err.message, 'error'); }
+  });
+}
+
+function setButtonBusy(btn, isBusy) {
+  if (!btn) return;
+  if (isBusy) {
+    btn.disabled = true;
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = 'Updating...';
+  } else {
+    btn.disabled = false;
+    if (btn.dataset.originalText) {
+      btn.textContent = btn.dataset.originalText;
+    }
+  }
+}
+
+guardUserPage(async () => {
+  const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
+  if (uSnap.exists()) {
+    const u = uSnap.data();
+    document.getElementById('profile-name').value = u.name || '';
+    document.getElementById('profile-username').value = u.username || displayNameOf(u, currentUser.email);
+  }
+  
+  const orders = await getDocs(query(collection(db, 'orders'), where('userId', '==', currentUser.uid)));
+  let spent = 0;
+  orders.forEach(o => {
+    const oData = o.data();
+    if (oData.status !== 'Refunded' && oData.status !== 'Cancelled') {
+      spent += parseFloat(oData.price || 0);
+    }
+  });
+  
+  document.getElementById('total-spent').innerHTML = money(spent);
+});
+
+document.getElementById('profile-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('profile-name').value.trim();
+  const username = document.getElementById('profile-username').value.trim();
+  const pass = document.getElementById('profile-pass').value;
+  const submitBtn = document.getElementById('profile-submit-btn');
+
+  if (!name) return showToast('Name cannot be empty', 'error');
+  if (!username) return showToast('Username cannot be empty', 'error');
+
+  setButtonBusy(submitBtn, true);
+  try {
+    await updateProfile(auth.currentUser, { displayName: username });
+    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+      name: name, username: username, usernameLower: username.toLowerCase()
+    });
+    if (pass) {
+      if (pass.length < 6) throw new Error('Password must be at least 6 characters');
+      await updatePassword(auth.currentUser, pass);
+      document.getElementById('profile-pass').value = '';
+    }
+    showToast('Profile updated successfully!');
+    await loadCommonData();
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    setButtonBusy(submitBtn, false);
+  }
+});
+</script>
+
+</body>
+</html>
