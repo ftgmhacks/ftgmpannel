@@ -1,7 +1,7 @@
 --- START OF FILE text/javascript ---
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, query, where, doc, getDoc, setDoc, runTransaction, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, where, doc, getDoc, setDoc, runTransaction, addDoc, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD6VSIGbUJqIMQb53k1mXAcGjNu9PFC1w0",
@@ -29,16 +29,13 @@ export const MANUAL_TYPES = {
 let currentUser = null;
 let currentUserData = {};
 let siteSettings = {};
-let manualServices = [];
-let isSubmitting = false;
 
-// 1. FIXED TOAST: Intercepts and suppresses premature store.js permission errors securely
+// 1. FIXED TOAST
 function showToast(message, type = 'success') {
   if (typeof message === 'string' && (message.toLowerCase().includes('missing or insufficient permissions') || message.toLowerCase().includes('permission-denied'))) {
-    console.warn('Suppressed premature permission toast.', message);
-    return; // Stops the annoying error from showing on UI
+    console.warn('Suppressed premature permission toast.');
+    return; 
   }
-
   let container = document.getElementById('toast-container');
   if (!container) {
     container = document.createElement('div');
@@ -58,6 +55,21 @@ function showToast(message, type = 'success') {
   }, 4000);
 }
 window.showToast = window.showToast || showToast;
+
+const SMM_PROXY = 'https://project--0158a941-e1aa-495e-8f88-9b83a66f9bbe.lovable.app/api/public/smm';
+async function smmApi(params) {
+  const res = await fetch(SMM_PROXY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params)
+  });
+  const text = await res.text();
+  let data;
+  try { data = JSON.parse(text); } catch (e) { throw new Error('Invalid provider response'); }
+  if (data && data.error) throw new Error(data.error);
+  return data;
+}
+window.smmApi = smmApi;
 
 const money = (n) => 'Rs. ' + (parseFloat(n || 0)).toFixed(2);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -116,6 +128,10 @@ async function loadCommonData() {
     siteSettings = s.data();
     const logo = document.getElementById('site-logo-header');
     if (logo && siteSettings.logoUrl) logo.src = siteSettings.logoUrl;
+    if (siteSettings.dashboardVideo && document.getElementById('dashboard-video-frame')) {
+      document.getElementById('dashboard-video-frame').src = siteSettings.dashboardVideo;
+      document.getElementById('dashboard-video-container').style.display = 'block';
+    }
   }
   document.getElementById('logout-btn')?.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -144,205 +160,258 @@ function guardUserPage(onReady) {
     }
     await loadCommonData();
     initLayout();
+    
+    // THIS LINE WAS MISSING FOR DASHBOARD IN PREVIOUS FIX! Removes Loader.
     document.getElementById('page-loader')?.remove();
+    
     try { await onReady(); } catch (err) { console.error(err); showToast(err.message, 'error'); }
-    initBroadcast();
   });
 }
 
-function broadcastStyles() {
-  if (document.getElementById('broadcast-styles')) return;
-  const style = document.createElement('style');
-  style.id = 'broadcast-styles';
-  style.textContent = `
-.bc-overlay { position: fixed; inset: 0; background: rgba(6, 31, 16, 0.55); backdrop-filter: blur(5px); z-index: 3000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-.bc-box { background: #fff; border-radius: 18px; width: 100%; max-width: 430px; overflow: hidden; box-shadow: 0 24px 60px -20px rgba(6, 31, 16, 0.45); animation: bcPop 0.25s ease; }
-@keyframes bcPop { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
-.bc-head { background: linear-gradient(135deg, #0bc15c 0%, #0dbfa1 100%); color: #fff; padding: 1.15rem 1.3rem; display: flex; align-items: center; gap: 0.7rem; }
-.bc-head i { font-size: 1.15rem; }
-.bc-head h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 1.05rem; font-weight: 800; margin: 0; line-height: 1.4; word-break: break-word; }
-.bc-body { padding: 1.4rem 1.3rem; }
-.bc-msg { font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif; direction: rtl; text-align: right; font-size: 1.05rem; line-height: 2.5; color: #0d2115; white-space: pre-line; word-break: break-word; max-height: 46vh; overflow-y: auto; }
-.bc-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; padding: 0 1.3rem 1.3rem; }
-.bc-btn { flex: 1 1 130px; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 1.1rem; border-radius: 10px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer; text-decoration: none; }
-.bc-btn-action { background: linear-gradient(135deg, #0bc15c 0%, #0dbfa1 100%); color: #fff; }
-.bc-btn-close { background: #eaf3ee; color: #0d2115; border: 1px solid #d7e5dd; }
-@media (max-width: 480px) { .bc-msg { font-size: 0.98rem; line-height: 2.3; } }`;
-  document.head.appendChild(style);
-}
+// =========================================================
+// ROUTER: Decides which logic to run based on the Page
+// =========================================================
+const pageType = document.body.dataset.serviceType || '';
 
-async function initBroadcast() {
-  try {
-    const snap = await getDoc(doc(db, 'settings', 'broadcast'));
-    if (!snap.exists()) return;
-    const b = snap.data();
-    if (!b.active) return;
-    if (!String(b.title || '').trim() && !String(b.message || '').trim()) return;
-
-    const stampValue = b.updatedAt && b.updatedAt.toMillis ? b.updatedAt.toMillis() : (b.version || 0);
-    const key = 'pd-broadcast-' + stampValue;
-    if (localStorage.getItem(key) === 'seen') return;
-
-    broadcastStyles();
-    const overlay = document.createElement('div');
-    overlay.className = 'bc-overlay';
-
-    const actionUrl = String(b.actionUrl || '').trim();
-    const actionLabel = String(b.actionLabel || '').trim() || 'Open Link';
-    const actionHtml = actionUrl
-      ? `<a class="bc-btn bc-btn-action" href="${esc(actionUrl)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${esc(actionLabel)}</a>`
-      : '';
-
-    overlay.innerHTML = `
-      <div class="bc-box" role="dialog" aria-modal="true">
-        <div class="bc-head"><i class="fa-solid fa-bullhorn"></i><h3>${esc(b.title || 'Announcement')}</h3></div>
-        <div class="bc-body"><div class="bc-msg">${esc(b.message || '')}</div></div>
-        <div class="bc-actions">
-          ${actionHtml}
-          <button type="button" class="bc-btn bc-btn-close" id="bc-close-btn"><i class="fa-solid fa-xmark"></i> Close</button>
-        </div>
-      </div>`;
-
-    document.body.appendChild(overlay);
-    overlay.querySelector('#bc-close-btn').addEventListener('click', () => {
-      localStorage.setItem(key, 'seen');
-      overlay.remove();
-    });
-  } catch (err) {
-    console.error('Broadcast load failed', err);
-  }
-}
-
-function calcTotal() {
-  const sel = document.getElementById('ms-service');
-  const svc = manualServices.find(x => x.id === sel.value);
-  const qty = parseInt(document.getElementById('ms-qty').value) || 0;
-  const total = svc && qty > 0 ? parseFloat(svc.price || 0) * qty : 0;
-  document.getElementById('ms-total').textContent = money(total);
-  return total;
-}
-
-function renderServiceDetails() {
-  const sel = document.getElementById('ms-service');
-  const svc = manualServices.find(x => x.id === sel.value);
-  const card = document.getElementById('ms-details-card');
-  if (!svc) { card.classList.add('d-none'); document.getElementById('ms-submit').disabled = true; calcTotal(); return; }
-  document.getElementById('ms-price-per').textContent = money(svc.price);
-  document.getElementById('ms-desc').textContent = svc.description || 'No extra details provided for this service.';
-  card.classList.remove('d-none');
-  document.getElementById('ms-submit').disabled = false;
-  calcTotal();
-}
-
-async function submitManualOrder(e, type) {
-  e.preventDefault();
-  if (isSubmitting) return;
-
-  const svc = manualServices.find(x => x.id === document.getElementById('ms-service').value);
-  const qty = parseInt(document.getElementById('ms-qty').value);
-  const details = document.getElementById('ms-details').value.trim();
-
-  if (!svc) return showToast('Please select a service.', 'error');
-  if (!qty || qty < 1) return showToast('Quantity must be at least 1.', 'error');
-  if (!details) return showToast('Please provide the required details.', 'error');
-
-  const unitPrice = parseFloat(svc.price || 0);
-  const total = unitPrice * qty;
-  if (total <= 0) return showToast('This service is not priced correctly. Please contact admin.', 'error');
-
-  const btn = document.getElementById('ms-submit');
-  const sp = document.getElementById('ms-spinner');
-  isSubmitting = true;
-  btn.disabled = true;
-  btn.querySelector('.btn-text').classList.add('d-none');
-  sp.classList.remove('d-none');
-
-  const orderId = 'ORD-' + Math.floor(Math.random() * 100000000);
-
-  try {
-    const userRef = doc(db, 'users', currentUser.uid);
-    const orderRef = doc(collection(db, 'orders'));
-    const trxRef = doc(collection(db, 'walletTransactions'));
-
-    await runTransaction(db, async (tx) => {
-      const uSnap = await tx.get(userRef);
-      if (!uSnap.exists()) throw new Error('User profile not found. Please re-login.');
-      
-      const balance = parseFloat(uSnap.data().wallet || 0);
-      if (balance < total) throw new Error('Insufficient balance. Please add funds to your wallet.');
-
-      // Update User Wallet
-      tx.update(userRef, { wallet: balance - total });
-      
-      // Create Order
-      tx.set(orderRef, {
-        orderId,
-        orderType: 'manual', // Set as manual
-        serviceType: type, // nadra, fake_numbers, etc
-        apiOrderId: null,
-        userId: currentUser.uid,
-        userEmail: currentUser.email,
-        userName: displayNameOf(uSnap.data(), currentUser.email),
-        serviceId: svc.id,
-        serviceName: svc.name,
-        unitPrice,
-        quantity: qty,
-        price: total,
-        targetDetails: details, // Saving user inputs here
-        status: 'Pending',
-        createdAt: fsTS(),
-        updatedAt: fsTS()
-      });
-      
-      // Create Transaction Record
-      tx.set(trxRef, {
-        transactionId: 'TRX-' + Math.floor(Math.random() * 100000000),
-        userId: currentUser.uid,
-        type: 'order',
-        amount: -total,
-        description: `Order placed (${type}): ` + orderId,
-        createdAt: fsTS()
-      });
-    });
-
-    showToast('Order placed successfully!');
-    e.target.reset();
-    document.getElementById('ms-details-card').classList.add('d-none');
-    document.getElementById('ms-total').textContent = 'Rs. 0.00';
-    document.getElementById('ms-submit').disabled = true;
-
-    const success = document.getElementById('ms-success');
-    document.getElementById('ms-success-id').textContent = orderId;
-    document.getElementById('ms-wa-btn').href = whatsappLink();
-    success.classList.remove('d-none');
-    success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-    // Refresh layout data
-    await loadCommonData();
-    document.getElementById('hero-wallet').textContent = money(currentUserData.wallet);
-  } catch (err) {
-    showToast(err.message, 'error');
-  } finally {
-    isSubmitting = false;
-    btn.disabled = false;
-    btn.querySelector('.btn-text').classList.remove('d-none');
-    sp.classList.add('d-none');
-  }
-}
-
-function startManualServicePage(type) {
+if (pageType && MANUAL_TYPES[pageType]) {
+  // If we are on NADRA, Fake Numbers or AI Subscriptions page
+  startManualServicePage(pageType);
+} 
+else if (document.getElementById('new-order-form') && document.getElementById('order-category')) {
+  // If we are on SMM Dashboard page
+  startDashboardPage();
+} 
+else {
+  // If we are on any other page (Profile, History, Funds)
   guardUserPage(async () => {
-    document.getElementById('hero-wallet').textContent = money(currentUserData.wallet);
+    console.log("Generic page loaded");
+  });
+}
+
+// =========================================================
+// 1. DASHBOARD SMM LOGIC
+// =========================================================
+function startDashboardPage() {
+  guardUserPage(async () => {
+    const heroWallet = document.getElementById('hero-wallet');
+    if (heroWallet) heroWallet.textContent = money(currentUserData.wallet);
+
+    let availableServices = [];
+    const catSelect = document.getElementById('order-category');
+    const catOptions = document.getElementById('cat-options');
+    const catTrigger = document.getElementById('cat-trigger');
+    const srvSelect = document.getElementById('order-service');
+    const srvOptions = document.getElementById('srv-options');
+    const srvTrigger = document.getElementById('srv-trigger');
+    const newOrderForm = document.getElementById('new-order-form');
+
+    function toggleDropdown(options) {
+      document.querySelectorAll('.custom-select-options').forEach(el => {
+        if (el !== options) el.classList.remove('show');
+      });
+      options.classList.toggle('show');
+    }
+
+    window.addEventListener('click', (e) => {
+      if (!e.target.closest('.custom-select-wrap')) {
+        document.querySelectorAll('.custom-select-options').forEach(el => el.classList.remove('show'));
+      }
+    });
+
+    if (catTrigger) catTrigger.addEventListener('click', () => toggleDropdown(catOptions));
+    if (srvTrigger) srvTrigger.addEventListener('click', () => {
+      if (catSelect.value) toggleDropdown(srvOptions);
+    });
+
+    const getIconColor = (iconClass) => {
+      if (iconClass.includes('instagram')) return '#e1306c';
+      if (iconClass.includes('facebook')) return '#1877f2';
+      if (iconClass.includes('youtube')) return '#ff0000';
+      if (iconClass.includes('tiktok')) return '#000000';
+      if (iconClass.includes('telegram')) return '#0088cc';
+      if (iconClass.includes('twitter')) return '#1da1f2';
+      return 'var(--primary)';
+    };
+
+    try {
+      const [catSnap, srvSnap] = await Promise.all([
+        getDocs(query(collection(db, 'categories'), where('status', '==', 'active'))),
+        getDocs(query(collection(db, 'services'), where('status', '==', 'active')))
+      ]);
+      const categoriesList = [];
+      catSnap.forEach(d => categoriesList.push({ id: d.id, ...d.data() }));
+      categoriesList.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+      categoriesList.forEach(c => {
+        const o = document.createElement('option');
+        o.value = c.id; o.textContent = c.name;
+        catSelect.appendChild(o);
+
+        const div = document.createElement('div');
+        div.className = 'custom-option';
+        const iconColor = getIconColor(c.icon || '');
+        div.innerHTML = `<i class="${c.icon || 'fa-solid fa-layer-group'}" style="color:${iconColor}"></i> <span>${c.name}</span>`;
+        div.addEventListener('click', () => {
+          catSelect.value = c.id;
+          catTrigger.querySelector('span').innerHTML = div.innerHTML;
+          catOptions.classList.remove('show');
+          catSelect.dispatchEvent(new Event('change'));
+        });
+        catOptions.appendChild(div);
+      });
+
+      srvSnap.forEach(d => availableServices.push({ id: d.id, ...d.data() }));
+      availableServices.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+    } catch (err) {
+      console.error("Dashboard DB error:", err);
+    }
+
+    catSelect.addEventListener('change', () => {
+      srvSelect.innerHTML = '<option value="" disabled selected>Select a service...</option>';
+      srvOptions.innerHTML = '';
+      srvTrigger.querySelector('span').textContent = 'Select a service...';
+      
+      availableServices.filter(s => s.category === catSelect.value).forEach(s => {
+        const o = document.createElement('option'); o.value = s.id; o.textContent = s.name;
+        srvSelect.appendChild(o);
+
+        const div = document.createElement('div'); div.className = 'custom-option';
+        const iconColor = getIconColor(s.icon || '');
+        div.innerHTML = `<i class="${s.icon || 'fa-solid fa-circle-check'}" style="color:${iconColor}"></i> <span>${s.name}</span>`;
+        div.addEventListener('click', () => {
+          srvSelect.value = s.id;
+          srvTrigger.querySelector('span').innerHTML = div.innerHTML;
+          srvOptions.classList.remove('show');
+          srvSelect.dispatchEvent(new Event('change'));
+        });
+        srvOptions.appendChild(div);
+      });
+      document.getElementById('service-details-card').classList.add('d-none');
+      document.getElementById('submit-order-btn').disabled = true;
+      calcTotal();
+    });
+
+    srvSelect.addEventListener('change', () => {
+      const s = availableServices.find(x => x.id === srvSelect.value);
+      if (!s) return;
+      document.getElementById('service-details-card').classList.remove('d-none');
+      document.getElementById('service-description').textContent = s.description || '';
+      document.getElementById('service-min-max').textContent = `${s.minQty} / ${s.maxQty}`;
+      document.getElementById('service-price-display').textContent = money(s.price);
+      document.getElementById('service-time-display').textContent = s.estimatedTime || '—';
+      document.getElementById('submit-order-btn').disabled = false;
+      calcTotal();
+    });
+
+    function calcTotal() {
+      const s = availableServices.find(x => x.id === document.getElementById('order-service').value);
+      const qty = parseInt(document.getElementById('order-quantity').value) || 0;
+      document.getElementById('order-total-charge').textContent = (s && qty > 0) ? money((s.price / 1000) * qty) : 'Rs. 0.00';
+    }
+
+    document.getElementById('order-quantity').addEventListener('input', calcTotal);
+    
+    newOrderForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const srv = availableServices.find(x => x.id === document.getElementById('order-service').value);
+      const link = document.getElementById('order-link').value.trim();
+      const qty = parseInt(document.getElementById('order-quantity').value);
+      
+      if (!srv) return showToast('Please select a service.', 'error');
+      if (qty < srv.minQty || qty > srv.maxQty) return showToast(`Quantity must be between ${srv.minQty} and ${srv.maxQty}.`, 'error');
+
+      const total = (srv.price / 1000) * qty;
+      const btn = document.getElementById('submit-order-btn');
+      const sp = document.getElementById('order-spinner');
+      btn.disabled = true; btn.querySelector('.btn-text').classList.add('d-none'); sp.classList.remove('d-none');
+
+      try {
+        const userRef = doc(db, 'users', currentUser.uid);
+        const uSnap = await getDoc(userRef);
+        let wallet = parseFloat(uSnap.data().wallet || 0);
+        
+        if (wallet < total) throw new Error('Insufficient balance. Please add funds to your wallet.');
+
+        const settingsSnap = await getDoc(doc(db, 'settings', 'general'));
+        const settings = settingsSnap.exists() ? settingsSnap.data() : {};
+        const API_URL = settings.apiUrl || '';
+        const API_KEY = settings.apiKey || '';
+
+        let apiOrderId = null;
+        let apiError = null;
+
+        if (srv.externalId) {
+          if (!API_URL || !API_KEY) throw new Error('API config missing. Contact admin.');
+          try {
+            const apiData = await smmApi({ url: API_URL, key: API_KEY, action: 'add', service: srv.externalId, link: link, quantity: qty });
+            if (apiData.order) { apiOrderId = apiData.order; } 
+            else if (apiData.error) { throw new Error('API Error: ' + apiData.error); }
+          } catch (err) {
+            apiError = err.message;
+            throw new Error('Automated ordering failed: ' + err.message);
+          }
+        }
+
+        // Deduct Wallet manually for SMM (because API call can't run inside Firestore transaction)
+        await runTransaction(db, async (tx) => {
+            const latestSnap = await tx.get(userRef);
+            wallet = parseFloat(latestSnap.data().wallet || 0);
+            if (wallet < total) throw new Error('Insufficient balance.');
+            tx.update(userRef, { wallet: wallet - total });
+        });
+
+        const orderId = 'ORD-' + Math.floor(Math.random() * 100000000);
+        await addDoc(collection(db, 'orders'), {
+          orderId, orderType: 'smm', apiOrderId: apiOrderId || null,
+          userId: currentUser.uid, userEmail: currentUser.email,
+          userName: displayNameOf(currentUserData, currentUser.email),
+          serviceId: srv.id, serviceName: srv.name, category: srv.category,
+          targetLink: link, quantity: qty, price: total, 
+          status: apiOrderId ? 'Pending' : 'Pending (Manual)',
+          apiError: apiError || null, createdAt: fsTS(), updatedAt: fsTS()
+        });
+        await addDoc(collection(db, 'walletTransactions'), {
+          transactionId: 'TRX-' + Math.floor(Math.random() * 100000000),
+          userId: currentUser.uid, type: 'order', amount: -total,
+          description: 'Order placed: ' + orderId, createdAt: fsTS()
+        });
+
+        showToast('Order placed successfully!');
+        e.target.reset();
+        document.getElementById('service-details-card').classList.add('d-none');
+        document.getElementById('order-total-charge').textContent = 'Rs. 0.00';
+        
+        const successAlert = document.getElementById('order-success-alert');
+        successAlert.classList.remove('d-none');
+        setTimeout(() => successAlert.classList.add('d-none'), 10000);
+
+        await loadCommonData();
+        if(heroWallet) heroWallet.textContent = money(currentUserData.wallet);
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        btn.disabled = false; btn.querySelector('.btn-text').classList.remove('d-none'); sp.classList.add('d-none');
+      }
+    });
+  });
+}
+
+// =========================================================
+// 2. MANUAL SERVICES LOGIC (NADRA, Ai, Fake Numbers)
+// =========================================================
+function startManualServicePage(type) {
+  let manualServices = [];
+  let isSubmitting = false;
+
+  guardUserPage(async () => {
+    const heroWallet = document.getElementById('hero-wallet');
+    if (heroWallet) heroWallet.textContent = money(currentUserData.wallet);
     document.getElementById('ms-wa-btn').href = whatsappLink();
 
     const sel = document.getElementById('ms-service');
     
-    // 2. FIXED QUERY: Client-side filtering to avoid Composite Index errors
-    const snap = await getDocs(query(
-      collection(db, 'manualServices'),
-      where('status', '==', 'active')
-    ));
-
+    // FETCH SERVICES SECURELY
+    const snap = await getDocs(query(collection(db, 'manualServices'), where('status', '==', 'active')));
     manualServices = [];
     snap.forEach(d => {
         const data = d.data();
@@ -352,32 +421,98 @@ function startManualServicePage(type) {
     });
     
     manualServices.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
-
     sel.innerHTML = '<option value="" disabled selected>Select a service...</option>';
+    
     manualServices.forEach(s => {
       const o = document.createElement('option');
-      o.value = s.id;
-      o.textContent = `${s.name} — ${money(s.price)} / ${MANUAL_TYPES[type].unit}`;
+      o.value = s.id; o.textContent = `${s.name} — ${money(s.price)} / ${MANUAL_TYPES[type].unit}`;
       sel.appendChild(o);
     });
 
     if (!manualServices.length) {
       sel.innerHTML = '<option value="" disabled selected>No services available yet</option>';
-      showToast('No services published yet. Please check back soon.', 'error');
+      showToast('No services published yet.', 'error');
     }
 
     sel.addEventListener('change', renderServiceDetails);
     document.getElementById('ms-qty').addEventListener('input', calcTotal);
     document.getElementById('ms-form').addEventListener('submit', (e) => submitManualOrder(e, type));
   });
-}
 
-const pageType = document.body.dataset.serviceType || '';
-if (pageType && MANUAL_TYPES[pageType]) {
-  startManualServicePage(pageType);
-} else {
-  onAuthStateChanged(auth, (user) => {
-    if (user) initBroadcast();
-  });
+  function calcTotal() {
+    const sel = document.getElementById('ms-service');
+    const svc = manualServices.find(x => x.id === sel.value);
+    const qty = parseInt(document.getElementById('ms-qty').value) || 0;
+    const total = svc && qty > 0 ? parseFloat(svc.price || 0) * qty : 0;
+    document.getElementById('ms-total').textContent = money(total);
+    return total;
+  }
+
+  function renderServiceDetails() {
+    const sel = document.getElementById('ms-service');
+    const svc = manualServices.find(x => x.id === sel.value);
+    const card = document.getElementById('ms-details-card');
+    if (!svc) { card.classList.add('d-none'); document.getElementById('ms-submit').disabled = true; calcTotal(); return; }
+    document.getElementById('ms-price-per').textContent = money(svc.price);
+    document.getElementById('ms-desc').textContent = svc.description || 'No extra details provided.';
+    card.classList.remove('d-none');
+    document.getElementById('ms-submit').disabled = false;
+    calcTotal();
+  }
+
+  async function submitManualOrder(e, type) {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    const svc = manualServices.find(x => x.id === document.getElementById('ms-service').value);
+    const qty = parseInt(document.getElementById('ms-qty').value);
+    const details = document.getElementById('ms-details').value.trim();
+
+    if (!svc) return showToast('Select a service.', 'error');
+    if (!qty || qty < 1) return showToast('Qty must be 1+.', 'error');
+    if (!details) return showToast('Provide details.', 'error');
+
+    const total = parseFloat(svc.price || 0) * qty;
+    const btn = document.getElementById('ms-submit');
+    const sp = document.getElementById('ms-spinner');
+    isSubmitting = true; btn.disabled = true; btn.querySelector('.btn-text').classList.add('d-none'); sp.classList.remove('d-none');
+    const orderId = 'ORD-' + Math.floor(Math.random() * 100000000);
+
+    try {
+      const userRef = doc(db, 'users', currentUser.uid);
+      await runTransaction(db, async (tx) => {
+        const uSnap = await tx.get(userRef);
+        const balance = parseFloat(uSnap.data().wallet || 0);
+        if (balance < total) throw new Error('Insufficient balance.');
+        tx.update(userRef, { wallet: balance - total });
+        
+        tx.set(doc(collection(db, 'orders')), {
+          orderId, orderType: 'manual', serviceType: type, apiOrderId: null,
+          userId: currentUser.uid, userEmail: currentUser.email,
+          userName: displayNameOf(uSnap.data(), currentUser.email),
+          serviceId: svc.id, serviceName: svc.name, unitPrice: parseFloat(svc.price),
+          quantity: qty, price: total, targetDetails: details, status: 'Pending',
+          createdAt: fsTS(), updatedAt: fsTS()
+        });
+        
+        tx.set(doc(collection(db, 'walletTransactions')), {
+          transactionId: 'TRX-' + Math.floor(Math.random() * 100000000),
+          userId: currentUser.uid, type: 'order', amount: -total,
+          description: `Order placed (${type}): ` + orderId, createdAt: fsTS()
+        });
+      });
+
+      showToast('Order placed!');
+      e.target.reset(); document.getElementById('ms-details-card').classList.add('d-none');
+      document.getElementById('ms-total').textContent = 'Rs. 0.00'; document.getElementById('ms-submit').disabled = true;
+      const success = document.getElementById('ms-success');
+      document.getElementById('ms-success-id').textContent = orderId;
+      success.classList.remove('d-none'); success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      await loadCommonData();
+      document.getElementById('hero-wallet').textContent = money(currentUserData.wallet);
+    } catch (err) { showToast(err.message, 'error'); } 
+    finally { isSubmitting = false; btn.disabled = false; btn.querySelector('.btn-text').classList.remove('d-none'); sp.classList.add('d-none'); }
+  }
 }
 --- END OF FILE text/javascript ---
