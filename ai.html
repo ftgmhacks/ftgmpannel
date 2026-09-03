@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Buy WhatsApp virtual numbers from Pak Digital with instant wallet payment.">
-<title>WhatsApp Fake Numbers — Pak Digital</title>
+<meta name="description" content="Buy premium AI tool subscriptions from Pak Digital with instant wallet payment.">
+<title>AI Subscriptions — Pak Digital</title>
 <link rel="icon" href="https://i.postimg.cc/YCJ3NFXx/20260821-085028.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0bc15c">
@@ -210,6 +210,10 @@ select.form-control {
 .toast-success { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); }
 .toast-error { background: #d93838; }
 
+.spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+.spinner-primary { border-color: var(--primary-soft); border-top-color: var(--primary); width: 50px; height: 50px; border-width: 4px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 /* =========================================================
    ===== PERFECT MATH LOADER SCREEN (ZERO OVERLAP) ===== 
    ========================================================= */
@@ -236,7 +240,7 @@ select.form-control {
 .loader-logo-circle {
   position: absolute;
   z-index: 20;
-  width: 120px; height: 120px;
+  width: 120px; height: 120px; /* Increased size */
   border-radius: 50%;
   background: var(--bg-card);
   border: 4px solid var(--primary);
@@ -244,7 +248,7 @@ select.form-control {
   box-shadow: 0 8px 30px rgba(0,0,0,0.12);
 }
 .loader-logo-circle img {
-  width: 75px; height: 75px;
+  width: 75px; height: 75px; /* Increased size */
   object-fit: contain;
 }
 
@@ -252,9 +256,10 @@ select.form-control {
 .orbit-container {
   position: absolute;
   z-index: 10;
-  width: 290px; height: 290px;
-  border: 3px dashed rgba(11, 193, 92, 0.6);
+  width: 290px; height: 290px; /* Big orbit track */
+  border: 3px dashed rgba(11, 193, 92, 0.6); /* Visible rotating ring */
   border-radius: 50%;
+  /* Fast and smooth rotation */
   animation: spinOrbit 12s linear infinite; 
 }
 
@@ -267,10 +272,11 @@ select.form-control {
 /* Wrapper places the icon precisely on the dashed ring */
 .orbit-icon-wrapper {
   position: absolute;
-  top: -24px;
+  top: -24px; /* Half of 48px to center perfectly on the ring */
   left: 50%;
   margin-left: -24px;
-  width: 48px; height: 48px;
+  width: 48px; height: 48px; /* Bigger Icon Size */
+  /* Counter-spin so the icons don't go upside down */
   animation: counterSpinOrbit 12s linear infinite;
 }
 
@@ -279,7 +285,7 @@ select.form-control {
   width: 100%; height: 100%;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.35rem;
+  font-size: 1.35rem; /* Bigger font size inside */
   box-shadow: 0 4px 15px rgba(0,0,0,0.18);
   border: none !important;
 }
@@ -311,7 +317,6 @@ select.form-control {
 @media (max-width: 400px) {
   .loader-center-box { transform: scale(0.85); }
 }
-/* ========================================================= */
 
 @media (max-width: 860px) {
   .mobile-menu-btn { display: grid; place-items: center; }
@@ -328,7 +333,7 @@ select.form-control {
 .modal-overlay.active { display: flex !important; }
 </style>
 </head>
-<body data-service-type="fake_numbers">
+<body data-service-type="ai_subscription">
 <header>
   <div class="header-content">
     <div class="logo-area">
@@ -348,8 +353,8 @@ select.form-control {
   <div class="sidebar-menu">
       <a href="dashboard.html"><i class="fa-solid fa-bolt"></i> New Order</a>
       <a href="nadra.html"><i class="fa-solid fa-id-card"></i> NADRA Services</a>
-      <a href="numbers.html" class="active"><i class="fa-brands fa-whatsapp"></i> Fake Numbers</a>
-      <a href="ai.html"><i class="fa-solid fa-robot"></i> AI Subscriptions</a>
+      <a href="numbers.html"><i class="fa-brands fa-whatsapp"></i> Fake Numbers</a>
+      <a href="ai.html" class="active"><i class="fa-solid fa-robot"></i> AI Subscriptions</a>
       <a href="funds.html"><i class="fa-solid fa-wallet"></i> Add Funds</a>
       <a href="history.html"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
       <a href="profile.html"><i class="fa-solid fa-user"></i> My Profile</a>
@@ -368,6 +373,7 @@ select.form-control {
 <!-- ===== PERFECT MATHEMATICAL LOADER SCREEN ===== -->
 <div id="page-loader" class="loader-screen">
   <div class="loader-center-box">
+    
     <!-- Center Logo (Bigger) -->
     <div class="loader-logo-circle">
       <img src="https://i.postimg.cc/RVM4Fy0z/pak-digital-store.png" alt="Pak Digital">
@@ -375,18 +381,79 @@ select.form-control {
 
     <!-- The Spinning Orbit Container -->
     <div class="orbit-container">
-      <div class="orbit-spoke" style="transform: rotate(0deg);"><div class="orbit-icon-wrapper"><div class="social-icon instagram" style="transform: rotate(0deg);"><i class="fa-brands fa-instagram"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(30deg);"><div class="orbit-icon-wrapper"><div class="social-icon facebook" style="transform: rotate(-30deg);"><i class="fa-brands fa-facebook-f"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(60deg);"><div class="orbit-icon-wrapper"><div class="social-icon youtube" style="transform: rotate(-60deg);"><i class="fa-brands fa-youtube"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(90deg);"><div class="orbit-icon-wrapper"><div class="social-icon twitter" style="transform: rotate(-90deg);"><i class="fa-brands fa-x-twitter"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(120deg);"><div class="orbit-icon-wrapper"><div class="social-icon whatsapp" style="transform: rotate(-120deg);"><i class="fa-brands fa-whatsapp"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(150deg);"><div class="orbit-icon-wrapper"><div class="social-icon tiktok" style="transform: rotate(-150deg);"><i class="fa-brands fa-tiktok"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(180deg);"><div class="orbit-icon-wrapper"><div class="social-icon telegram" style="transform: rotate(-180deg);"><i class="fa-brands fa-telegram"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(210deg);"><div class="orbit-icon-wrapper"><div class="social-icon snapchat" style="transform: rotate(-210deg);"><i class="fa-brands fa-snapchat"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(240deg);"><div class="orbit-icon-wrapper"><div class="social-icon pinterest" style="transform: rotate(-240deg);"><i class="fa-brands fa-pinterest-p"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(270deg);"><div class="orbit-icon-wrapper"><div class="social-icon linkedin" style="transform: rotate(-270deg);"><i class="fa-brands fa-linkedin-in"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(300deg);"><div class="orbit-icon-wrapper"><div class="social-icon discord" style="transform: rotate(-300deg);"><i class="fa-brands fa-discord"></i></div></div></div>
-      <div class="orbit-spoke" style="transform: rotate(330deg);"><div class="orbit-icon-wrapper"><div class="social-icon reddit" style="transform: rotate(-330deg);"><i class="fa-brands fa-reddit-alien"></i></div></div></div>
+      
+      <div class="orbit-spoke" style="transform: rotate(0deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon instagram" style="transform: rotate(0deg);"><i class="fa-brands fa-instagram"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(30deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon facebook" style="transform: rotate(-30deg);"><i class="fa-brands fa-facebook-f"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(60deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon youtube" style="transform: rotate(-60deg);"><i class="fa-brands fa-youtube"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(90deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon twitter" style="transform: rotate(-90deg);"><i class="fa-brands fa-x-twitter"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(120deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon whatsapp" style="transform: rotate(-120deg);"><i class="fa-brands fa-whatsapp"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(150deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon tiktok" style="transform: rotate(-150deg);"><i class="fa-brands fa-tiktok"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(180deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon telegram" style="transform: rotate(-180deg);"><i class="fa-brands fa-telegram"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(210deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon snapchat" style="transform: rotate(-210deg);"><i class="fa-brands fa-snapchat"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(240deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon pinterest" style="transform: rotate(-240deg);"><i class="fa-brands fa-pinterest-p"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(270deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon linkedin" style="transform: rotate(-270deg);"><i class="fa-brands fa-linkedin-in"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(300deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon discord" style="transform: rotate(-300deg);"><i class="fa-brands fa-discord"></i></div>
+        </div>
+      </div>
+      
+      <div class="orbit-spoke" style="transform: rotate(330deg);">
+        <div class="orbit-icon-wrapper">
+          <div class="social-icon reddit" style="transform: rotate(-330deg);"><i class="fa-brands fa-reddit-alien"></i></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -399,7 +466,7 @@ select.form-control {
         <div>
           <div style="font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase; opacity:0.8">Wallet Balance</div>
           <div style="font-size:2rem; font-weight:800; letter-spacing:-0.02em; color: var(--primary);" id="hero-wallet">Rs. 0.00</div>
-          <p style="opacity:0.85; font-size:0.88rem; margin-top:0.25rem">Your wallet is used for every number order. Top up anytime.</p>
+          <p style="opacity:0.85; font-size:0.88rem; margin-top:0.25rem">Your wallet is used for every subscription. Top up anytime.</p>
         </div>
         <div style="display:flex; gap:0.6rem; flex-wrap:wrap">
           <a class="btn btn-primary" href="funds.html"><i class="fa-solid fa-plus"></i> Add Funds</a>
@@ -409,8 +476,8 @@ select.form-control {
     </div>
 
     <div class="page-head">
-      <h1><i class="fa-brands fa-whatsapp" style="color: var(--primary)"></i> WhatsApp Fake Numbers</h1>
-      <p>Pricing is per 1 number. Total = Quantity × Price per number.</p>
+      <h1><i class="fa-solid fa-robot" style="color: var(--primary)"></i> AI Subscriptions</h1>
+      <p>Pricing is per 1 subscription. Total = Quantity × Price per subscription.</p>
     </div>
 
     <form id="ms-form" class="card">
@@ -425,7 +492,7 @@ select.form-control {
 
       <div id="ms-details-card" class="d-none mb-3">
         <div class="detail-grid mb-3">
-          <div class="detail-box"><div class="k">Price / 1 Number</div><div class="v" id="ms-price-per">—</div></div>
+          <div class="detail-box"><div class="k">Price / 1 Subscription</div><div class="v" id="ms-price-per">—</div></div>
           <div class="detail-box"><div class="k">Billing</div><div class="v">Quantity × Price</div></div>
           <div class="detail-box"><div class="k">Delivery</div><div class="v">Manual</div></div>
         </div>
@@ -433,15 +500,15 @@ select.form-control {
       </div>
 
       <div class="form-group">
-        <label for="ms-qty">Quantity (Numbers)</label>
+        <label for="ms-qty">Quantity (Subscriptions)</label>
         <input type="number" id="ms-qty" class="form-control" placeholder="1" min="1" step="1" required>
-        <div class="form-hint">Total = Quantity × Price per 1 number.</div>
+        <div class="form-hint">Total = Quantity × Price per 1 subscription.</div>
       </div>
 
       <div class="form-group">
-        <label for="ms-details">Required Details (Country / Purpose / Contact)</label>
-        <textarea id="ms-details" class="form-control" placeholder="Enter preferred country, purpose, or your contact number" required></textarea>
-        <div class="form-hint">Provide accurate details. Admin delivers these orders manually.</div>
+        <label for="ms-details">Required Details (Email / Account / Plan)</label>
+        <textarea id="ms-details" class="form-control" placeholder="Enter the email or account where the subscription should be activated" required></textarea>
+        <div class="form-hint">Provide accurate details. Admin activates these subscriptions manually.</div>
       </div>
 
       <div class="total-bar">
