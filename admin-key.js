@@ -4,8 +4,10 @@
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { getApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 
-const db = getFirestore(getApp());
-const SEC_REF = () => doc(db, 'settings', 'security');
+// FIX: Lazily get Firestore instance so it doesn't execute before initializeApp in admin.html
+const getDb = () => getFirestore(getApp());
+const SEC_REF = () => doc(getDb(), 'settings', 'security');
+
 const UNLOCK_MS = 10 * 60 * 1000; // re-ask every 10 minutes
 let unlockedUntil = 0;
 
