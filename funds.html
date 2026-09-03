@@ -244,95 +244,7 @@ header {
   50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
 }
 
-/* ===== STEPS CARD ===== */
-.steps-card {
-  background: linear-gradient(135deg, rgba(11, 193, 92, 0.08) 0%, rgba(13, 191, 161, 0.05) 100%);
-  border: 1.5px solid rgba(11, 193, 92, 0.25);
-  border-radius: var(--radius);
-  padding: 1.25rem 1.5rem;
-  margin: 1rem 0 1.25rem;
-  box-shadow: 0 4px 15px rgba(11, 193, 92, 0.06);
-}
-.steps-card-title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--brand-900);
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.steps-card-title i { color: var(--primary); }
-.step-item {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px dashed rgba(11, 193, 92, 0.2);
-}
-.step-item:last-child { border-bottom: none; }
-.step-num {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--gradient);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 0.85rem;
-  flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(11, 193, 92, 0.3);
-}
-.step-text {
-  font-family: 'Noto Nastaliq Urdu', serif;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--brand-900);
-  line-height: 1.6;
-  direction: rtl;
-  width: 100%;
-}
-
-/* ===== LIMITS CARD ===== */
-.limits-card {
-  background: linear-gradient(135deg, rgba(11, 193, 92, 0.08) 0%, rgba(13, 191, 161, 0.05) 100%);
-  border: 1.5px solid rgba(11, 193, 92, 0.25);
-  border-radius: var(--radius-sm);
-  padding: 0.75rem 1.2rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.85rem;
-  box-shadow: 0 4px 15px rgba(11, 193, 92, 0.06);
-}
-.limits-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: var(--primary);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-size: 1rem;
-  box-shadow: 0 4px 10px rgba(11, 193, 92, 0.25);
-  flex-shrink: 0;
-}
-.limits-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  font-weight: 700;
-}
-.limits-text {
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--brand-900);
-  letter-spacing: -0.01em;
-}
-
-/* ===== CARDS ===== */
+/* ===== CARDS & FORM DESIGN ===== */
 .card {
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
   box-shadow: var(--shadow-sm); padding: 1.5rem; margin-bottom: 1.25rem;
@@ -353,12 +265,19 @@ label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4
 
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-  padding: 0.8rem 1.2rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem;
-  border: none; cursor: pointer; font-family: inherit; transition: all 0.18s; white-space: nowrap;
+  padding: 0.85rem 1.2rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 1rem;
+  border: none; cursor: pointer; font-family: inherit; transition: all 0.2s; white-space: nowrap;
 }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; }
-.btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 8px 24px rgba(11, 193, 92, 0.25); }
-.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(11, 193, 92, 0.35); }
+.btn-primary { 
+  background: var(--gradient); 
+  color: #fff; 
+  box-shadow: 0 10px 25px rgba(11, 193, 92, 0.35); 
+}
+.btn-primary:hover:not(:disabled) { 
+  transform: translateY(-2px); 
+  box-shadow: 0 14px 32px rgba(11, 193, 92, 0.45); 
+}
 .btn-block { width: 100%; }
 
 .detail-box { background: var(--bg-soft); border-radius: var(--radius); padding: 1.5rem; border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: transform 0.2s; }
@@ -391,8 +310,6 @@ label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   z-index: 500; gap: 1.5rem;
 }
-
-/* User Logo Image inside Loader */
 .loader-logo-img {
   max-width: 160px;
   height: auto;
@@ -404,7 +321,6 @@ label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4
   50% { transform: scale(1.05); }
 }
 
-/* Bank Transfer Fly Animation inside Loader */
 .loader-transfer-box {
   display: flex; align-items: center; gap: 1rem;
   background: #fff; padding: 1rem 1.5rem; border-radius: 16px;
@@ -539,42 +455,21 @@ label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4
       </div>
     </div>
 
-    <!-- Steps in Urdu -->
-    <div class="steps-card">
-      <div class="steps-card-title">
-        <i class="fa-solid fa-list-ol"></i>
-        Payment Steps
-      </div>
-      <div class="step-item">
-        <div class="step-num">۱</div>
-        <div class="step-text">اکاؤنٹ نمبر کاپی کریں اور رقم بھیجیں</div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">۲</div>
-        <div class="step-text">ٹرانزیکشن کا اسکرین شاٹ لیں</div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">۳</div>
-        <div class="step-text">ادائیگی کا اسکرین شاٹ اپ لوڈ کریں</div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">۴</div>
-        <div class="step-text">آپ کی ادائیگی منظور کر دی جائے گی</div>
-      </div>
-    </div>
-
-    <!-- Deposit Limits -->
-    <div class="limits-card mb-3">
-      <div class="limits-icon"><i class="fa-solid fa-sack-dollar"></i></div>
-      <div>
-        <div class="limits-label">Deposit Limits</div>
-        <div class="limits-text">Minimum 30 & Maximum 50,000</div>
-      </div>
-    </div>
-
     <div class="form-row" style="align-items:start">
+      
+      <!-- STEP 1: Yeh Number Copy Krain -->
       <div class="card">
-        <div class="card-title"><i class="fa-solid fa-building-columns"></i> Active Accounts</div>
+        <div class="card-title"><i class="fa-solid fa-list-ol text-primary"></i> 1. یہ نمبر کاپی کریں</div>
+        
+        <!-- Deposit Limits Info -->
+        <div class="limits-card mb-3 w-full" style="display: flex;">
+          <div class="limits-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+          <div>
+            <div class="limits-label">Deposit Limits</div>
+            <div class="limits-text">Minimum 30 & Maximum 50,000 PKR</div>
+          </div>
+        </div>
+
         <div id="payment-loading" class="text-center py-4">
           <div class="spinner spinner-primary" style="margin:0 auto"></div>
           <p class="text-muted mt-2" style="font-size:0.85rem">Loading active accounts...</p>
@@ -582,16 +477,12 @@ label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4
         <div id="payment-methods-list" class="d-none"></div>
       </div>
 
+      <!-- STEPS 2 & 3: Upload Screenshot & Amount with Submit Button -->
       <form id="add-funds-form" class="card">
-        <div class="card-title"><i class="fa-solid fa-receipt"></i> Submit Screenshot</div>
+        <div class="card-title"><i class="fa-solid fa-list-ol text-primary"></i> 2 & 3. Upload & Submit</div>
 
         <div class="form-group">
-          <label for="fund-amount">Amount (PKR)</label>
-          <input type="number" id="fund-amount" class="form-control" min="30" max="50000" step="any" placeholder="1000" required>
-        </div>
-
-        <div class="form-group">
-          <label>Payment Screenshot</label>
+          <label class="font-bold mb-2"><i class="fa-solid fa-image text-primary"></i> 2. Take That Payment Screenshot and upload here:</label>
           <div class="upload-area" onclick="if(!isUploading) document.getElementById('fund-screenshot').click()" id="drop-zone">
             <div id="upload-state-default" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
               <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.2rem; color: var(--primary); margin-bottom: 0.8rem;"></i>
@@ -614,8 +505,14 @@ label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4
           <input type="file" id="fund-screenshot" class="d-none" accept="image/*" required>
         </div>
 
-        <button type="submit" id="submit-funds-btn" class="btn btn-primary btn-block">
-          <span class="btn-text">Submit Details</span>
+        <div class="form-group mt-4">
+          <label for="fund-amount" class="font-bold mb-2"><i class="fa-solid fa-money-bill-wave text-primary"></i> 3. Amount Likho Jitni Send Ki (PKR)</label>
+          <input type="number" id="fund-amount" class="form-control" min="30" max="50000" step="any" placeholder="e.g. 1000" required>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="submit-funds-btn" class="btn btn-primary btn-block mt-4">
+          <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Submit Request Now</span>
           <span class="spinner d-none" id="funds-spinner"></span>
         </button>
       </form>
