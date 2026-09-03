@@ -1,0 +1,95 @@
+rules_version = '2';
+// PAK DIGITAL — HARDENED FIRESTORE RULES
+// Publish in Firebase Console -> Firestore Database -> Rules -> Publish.
+// This file is what actually stops a user from giving themselves free balance.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+    function isAdmin() { return isSignedIn() && uid() == 'Q0NoYuEprlW6SvvOrv7lnx5kSeg1'; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function changed(f) { return incoming()[f] != existing()[f]; }
+
+    // ---------- USERS ----------
+    match /users/{userId} {
+      allow read: if isAdmin() || (isSignedIn() && uid() == userId);
+
+      // A new account MUST start at zero balance, role 'user', status 'active'.
+      allow create: if isAdmin() || (
+        isSignedIn() && uid() == userId
+        && incoming().wallet == 0
+        && incoming().role == 'user'
+        && incoming().status == 'active'
+        && incoming().uid == userId
+        && incoming().email == request.auth.token.email
+      );
+
+      // Self update: profile fields only. Wallet may only go DOWN (spending).
+      // Role / status / email / uid can never be touched by the user.
+      allow update: if isAdmin() || (
+        isSignedIn() && uid() == userId
+        && !changed('role') && !changed('status') && !changed('uid') && !changed('email')
+        && incoming().wallet is number
+        && incoming().wallet >= 0
+        && incoming().wallet <= existing().wallet
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    // ---------- ORDERS ----------
+    match /orders/{orderId} {
+      allow read: if isAdmin() || (isSignedIn() && existing().userId == uid());
+      allow create: if isAdmin() || (
+        isSignedIn()
+        && incoming().userId == uid()
+        && incoming().price is number && incoming().price >= 0
+        && incoming().status in ['Pending', 'Pending (Manual)']
+      );
+      // Users may only let the status sync run on their own orders.
+      allow update: if isAdmin() || (
+        isSignedIn() && existing().userId == uid()
+        && !changed('userId') && !changed('price') && !changed('quantity') && !changed('serviceId')
+      );
+      allow delete: if isAdmin();
+    }
+
+    // ---------- WALLET TRANSACTIONS (audit log) ----------
+    match /walletTransactions/{trxId} {
+      allow read: if isAdmin() || (isSignedIn() && existing().userId == uid());
+      // A user may only log a DEBIT for himself. Credits are admin-only.
+      allow create: if isAdmin() || (
+        isSignedIn() && incoming().userId == uid()
+        && incoming().amount is number && incoming().amount <= 0
+      );
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------- PAYMENT SLIPS (top-up requests) ----------
+    match /payments/{payId} {
+      allow read: if isAdmin() || (isSignedIn() && existing().userId == uid());
+      allow create: if isSignedIn()
+        && incoming().userId == uid()
+        && incoming().status == 'Pending'
+        && incoming().amount is number && incoming().amount > 0;
+      // Only the admin can approve/reject — approval is what credits money.
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------- CATALOG (read-only for users) ----------
+    match /categories/{id}      { allow read: if true;  allow write: if isAdmin(); }
+    match /services/{id}        { allow read: if true;  allow write: if isAdmin(); }
+    match /manualServices/{id}  { allow read: if true;  allow write: if isAdmin(); }
+    match /paymentMethods/{id}  { allow read: if isSignedIn(); allow write: if isAdmin(); }
+
+    // ---------- SETTINGS ----------
+    // 'security' holds ONLY the salted hash of the admin secret key.
+    match /settings/security { allow read, write: if isAdmin(); }
+    match /settings/{docId}  { allow read: if isSignedIn(); allow write: if isAdmin(); }
+
+    // Everything not listed above is denied.
+    match /{document=**} { allow read, write: if false; }
+  }
+}
