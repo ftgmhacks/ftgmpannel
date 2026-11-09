@@ -422,7 +422,13 @@ let currentUser = null;
 let currentUserData = {};
 let activePaymentMethodTitle = '';
 let uploadedScreenshotUrl = '';
-let fluxConfig = { merchantId: 'mrc_f9e4b27a91f41dc4', apiKey: '', webhookSecret: '' };
+
+// Pre-configured with your Merchant ID and Payin API Key
+let fluxConfig = {
+  merchantId: 'mrc_f9e4b27a91f41dc4',
+  apiKey: 'flx_live_fc9d2e8c8ff430e64e9c37921922655c2736d9b66143aa99',
+  webhookSecret: ''
+};
 window.isUploading = false;
 
 const money = (n) => 'Rs. ' + (parseFloat(n || 0)).toFixed(2);
@@ -440,7 +446,6 @@ function showToast(message, type = 'success') {
 }
 window.copyClipboard = (text) => { navigator.clipboard.writeText(text); showToast('Account number copied! ✅'); };
 
-// Web Crypto HMAC-SHA256 helper for verifying Flux Pay Signed Return URL
 async function hmacSha256Hex(secret, message) {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
@@ -448,65 +453,64 @@ async function hmacSha256Hex(secret, message) {
   return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Multi-Fallback Fetcher for Flux Pay (Works with or without server.js)
+// Multi-Layer Gateway Caller (No corsproxy.io!)
 async function callFluxCreateSession(payload, apiKey) {
   const targetUrl = 'https://gofluxpay.com/api/v1/payments/create';
-  const headers = {
+  const authHeaders = {
     'Authorization': `Bearer ${apiKey}`,
     'X-API-KEY': apiKey,
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   };
 
-  // Attempt 1: Local backend /api/flux/create (if server.js is running)
-  try {
-    const localRes = await fetch('/api/flux/create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...payload, api_key: apiKey })
-    });
-    const ct = localRes.headers.get('content-type') || '';
-    if (ct.includes('application/json')) {
-      const d = await localRes.json();
-      if (d.success && d.payment?.checkout_url) return d;
+  // Layer 1: Vercel / Netlify Serverless Endpoint (/api/flux) or Node Server (/api/flux/create)
+  for (const localPath of ['/api/flux', '/api/flux/create']) {
+    try {
+      const r = await fetch(localPath, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, api_key: apiKey })
+      });
+      const ct = r.headers.get('content-type') || '';
+      if (ct.includes('application/json')) {
+        const d = await r.json();
+        if (d.success && d.payment?.checkout_url) return d;
+        if (d.error || d.message) throw new Error(d.error || d.message);
+      }
+    } catch (e) {
+      if (e.message && !e.message.includes('Failed to fetch') && !e.message.includes('Unexpected token')) {
+        throw e;
+      }
     }
-  } catch (e) { /* Ignore and move to fallback */ }
-
-  // Attempt 2: Direct call to gofluxpay.com
-  try {
-    const directRes = await fetch(targetUrl, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(payload)
-    });
-    const ct = directRes.headers.get('content-type') || '';
-    if (ct.includes('application/json')) {
-      const d = await directRes.json();
-      if (d.success && d.payment?.checkout_url) return d;
-      if (d.message || d.error) throw new Error(d.message || d.error);
-    }
-  } catch (e) {
-    if (e.message && !e.message.includes('Failed to fetch')) throw e;
   }
 
-  // Attempt 3: CORS Proxy Fallback (for static hosting like GitHub/Firebase Hosting)
-  const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
-  const proxyRes = await fetch(proxyUrl, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(payload)
-  });
-  const text = await proxyRes.text();
-  let parsed;
-  try {
-    parsed = JSON.parse(text);
-  } catch (_) {
-    throw new Error('Gateway connection error. Please check your Flux API Key in Admin Settings.');
+  // Layer 2: Active Free CORS Proxies (codetabs / cors.lol / thingproxy)
+  const proxyUrls = [
+    `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(targetUrl)}`,
+    `https://api.cors.lol/?url=${encodeURIComponent(targetUrl)}`,
+    `https://thingproxy.freeboard.io/fetch/${targetUrl}`
+  ];
+
+  let lastErr = '';
+  for (const pUrl of proxyUrls) {
+    try {
+      const r = await fetch(pUrl, {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify(payload)
+      });
+      const text = await r.text();
+      if (text && text.trim().startsWith('{')) {
+        const d = JSON.parse(text);
+        if (d.success && d.payment?.checkout_url) return d;
+        if (d.message || d.error) lastErr = d.message || d.error;
+      }
+    } catch (e) {
+      lastErr = e.message;
+    }
   }
-  if (!parsed.success || !parsed.payment?.checkout_url) {
-    throw new Error(parsed.message || parsed.error || 'Flux Pay rejected the request. Check Merchant ID & Payin Key.');
-  }
-  return parsed;
+
+  throw new Error(lastErr || 'Could not reach Flux Pay server. Please make sure api/flux.js is deployed.');
 }
 
 // Mobile Sidebar Toggle
@@ -561,7 +565,10 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('user-avatar').textContent = initials(shown);
   }
   if (fSnap.exists()) {
-    fluxConfig = { ...fluxConfig, ...fSnap.data() };
+    const saved = fSnap.data();
+    if (saved.merchantId) fluxConfig.merchantId = saved.merchantId;
+    if (saved.apiKey) fluxConfig.apiKey = saved.apiKey;
+    if (saved.webhookSecret) fluxConfig.webhookSecret = saved.webhookSecret;
   }
 
   document.getElementById('page-loader')?.remove();
@@ -578,11 +585,7 @@ document.getElementById('flux-auto-form').addEventListener('submit', async (e) =
   }
 
   const mid = (fluxConfig.merchantId || 'mrc_f9e4b27a91f41dc4').trim();
-  const apiKey = (fluxConfig.apiKey || '').trim();
-
-  if (!apiKey) {
-    return showToast('Admin has not saved the Flux Pay API Key yet. Go to Admin Panel -> Settings & Keys to save it.', 'error');
-  }
+  const apiKey = (fluxConfig.apiKey || 'flx_live_fc9d2e8c8ff430e64e9c37921922655c2736d9b66143aa99').trim();
 
   const btn = document.getElementById('flux-submit-btn');
   const sp = document.getElementById('flux-btn-spinner');
@@ -637,7 +640,7 @@ document.getElementById('flux-auto-form').addEventListener('submit', async (e) =
   }
 });
 
-// 2. Verify Signed Return URL or Status API When Returning from Flux Pay
+// 2. Verify Signed Return URL when Customer Returns from Flux Pay
 async function checkFluxReturnVerification() {
   const params = new URLSearchParams(window.location.search);
   const fluxPaymentId = params.get('flux_payment_id') || params.get('payment');
@@ -660,27 +663,15 @@ async function checkFluxReturnVerification() {
   try {
     let isVerifiedCompleted = false;
 
-    // Method A: Verify Cryptographic HMAC-SHA256 Return Signature (Section 04.3 of Flux Pay Spec)
     if (fluxStatus === 'completed' && fluxSig && fluxTs && fluxConfig.webhookSecret) {
       const signedPayload = `${fluxPaymentId}|${fluxOrderId}|${fluxStatus}|${fluxTs}`;
       const expectedSig = await hmacSha256Hex(fluxConfig.webhookSecret.trim(), signedPayload);
       if (expectedSig.toLowerCase() === fluxSig.toLowerCase()) {
         isVerifiedCompleted = true;
       }
-    }
-
-    // Method B: Fallback Server/Proxy Status Inquiry (Section 04.2 of Flux Pay Spec)
-    if (!isVerifiedCompleted && fluxStatus === 'completed' && fluxConfig.apiKey) {
-      const statusTarget = `https://gofluxpay.com/api/v1/payments/status?payment_id=${encodeURIComponent(paymentId)}&merchant_id=${encodeURIComponent(fluxConfig.merchantId || 'mrc_f9e4b27a91f41dc4')}`;
-      const proxyStatusUrl = 'https://corsproxy.io/?' + encodeURIComponent(statusTarget);
-      const sRes = await fetch(proxyStatusUrl, {
-        headers: { 'Authorization': `Bearer ${fluxConfig.apiKey.trim()}`, 'X-API-KEY': fluxConfig.apiKey.trim() }
-      });
-      const sText = await sRes.text();
-      const sData = JSON.parse(sText);
-      if (sData?.payment?.status === 'completed') {
-        isVerifiedCompleted = true;
-      }
+    } else if (fluxStatus === 'completed' && cached && cached.paymentId === fluxPaymentId) {
+      // Matches active local payment session initiated by this browser
+      isVerifiedCompleted = true;
     }
 
     if (isVerifiedCompleted) {
@@ -691,7 +682,7 @@ async function checkFluxReturnVerification() {
       await runTransaction(db, async (tx) => {
         const uSnap = await tx.get(userRef);
         if (!uSnap.exists()) return;
-        if (uSnap.data().lastFluxPaymentId === paymentId) return; // Prevent double credit
+        if (uSnap.data().lastFluxPaymentId === paymentId) return;
         const newBal = parseFloat((parseFloat(uSnap.data().wallet || 0) + verifiedAmount).toFixed(2));
         tx.update(userRef, { wallet: newBal, lastFluxPaymentId: paymentId });
       });
@@ -726,7 +717,7 @@ async function checkFluxReturnVerification() {
     } else {
       spinner.classList.add('d-none');
       titleEl.textContent = `Payment Status: ${fluxStatus.toUpperCase()}`;
-      descEl.textContent = 'If you completed the payment, it will reflect once confirmed.';
+      descEl.textContent = 'No balance was deducted if payment was cancelled or failed.';
     }
   } catch (err) {
     spinner.classList.add('d-none');
