@@ -109,7 +109,6 @@ header {
 .page-head { margin-bottom: 1.25rem; }
 .page-head h1 { font-size: 1.6rem; font-weight: 800; color: var(--brand-900); }
 
-/* Payment Mode Selector Cards */
 .mode-selector-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;
 }
@@ -176,7 +175,6 @@ header {
 }
 .upload-area:hover { border-color: var(--primary); background: var(--primary-soft); }
 
-/* Money Fly Loader */
 .loader-screen {
   position: fixed; inset: 0; background: var(--bg);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -270,7 +268,7 @@ header {
       <p class="text-muted">Choose Automatic Payment for instant balance or Manual Transfer.</p>
     </div>
 
-    <!-- Return Status Verification Banner (When returning from Flux Pay Checkout) -->
+    <!-- Return Status Verification Banner -->
     <div id="flux-return-banner" class="card d-none" style="border: 2px solid var(--primary); background: #f0fdf4; text-align: center;">
       <div class="spinner spinner-primary" id="flux-verify-spinner" style="margin: 0 auto 0.75rem;"></div>
       <h3 id="flux-verify-title" style="color: var(--brand-900); margin-bottom: 0.3rem;">Verifying Your Automatic Payment...</h3>
@@ -323,7 +321,7 @@ header {
         <form id="flux-auto-form">
           <div class="form-group">
             <label for="flux-amount" class="font-bold">Enter Deposit Amount (PKR)</label>
-            <input type="number" id="flux-amount" class="form-control" min="30" max="50000" step="1" placeholder="e.g. 500 (Min Rs. 30)" required>
+            <input type="number" id="flux-amount" class="form-control" min="1" max="50000" step="1" placeholder="e.g. 500 (Min Rs. 30)" required>
           </div>
           <div class="form-group">
             <label for="flux-phone" class="font-bold">Your Mobile Number (Optional)</label>
@@ -337,7 +335,7 @@ header {
       </div>
     </div>
 
-    <!-- SECTION 2: MANUAL PAYMENT (EXISTING FLOW PRESERVED) -->
+    <!-- SECTION 2: MANUAL PAYMENT -->
     <div id="section-manual-payment" class="d-none">
       <div class="limits-box">
         <div class="min-max">Manual Limits: Mini 30 & Max 50,000 PKR</div>
@@ -403,7 +401,7 @@ header {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, setDoc, updateDoc, runTransaction, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, updateDoc, runTransaction, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD6VSIGbUJqIMQb53k1mXAcGjNu9PFC1w0",
@@ -424,7 +422,7 @@ let currentUser = null;
 let currentUserData = {};
 let activePaymentMethodTitle = '';
 let uploadedScreenshotUrl = '';
-let fluxConfig = { merchantId: 'mrc_f9e4b27a91f41dc4', apiKey: '' };
+let fluxConfig = { merchantId: 'mrc_f9e4b27a91f41dc4', apiKey: '', webhookSecret: '' };
 window.isUploading = false;
 
 const money = (n) => 'Rs. ' + (parseFloat(n || 0)).toFixed(2);
@@ -432,15 +430,101 @@ const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '
 const initials = (name) => (name || 'U').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
 
 function showToast(message, type = 'success') {
-  let container = document.getElementById('toast-container');
+  const container = document.getElementById('toast-container');
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
   toast.innerHTML = (type === 'success' ? '<i class="fa-solid fa-check"></i> ' : '<i class="fa-solid fa-xmark"></i> ') + message;
   container.appendChild(toast);
   requestAnimationFrame(() => toast.classList.add('show'));
-  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 4000);
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 4500);
 }
 window.copyClipboard = (text) => { navigator.clipboard.writeText(text); showToast('Account number copied! ✅'); };
+
+// Web Crypto HMAC-SHA256 helper for verifying Flux Pay Signed Return URL
+async function hmacSha256Hex(secret, message) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(message));
+  return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Multi-Fallback Fetcher for Flux Pay (Works with or without server.js)
+async function callFluxCreateSession(payload, apiKey) {
+  const targetUrl = 'https://gofluxpay.com/api/v1/payments/create';
+  const headers = {
+    'Authorization': `Bearer ${apiKey}`,
+    'X-API-KEY': apiKey,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  };
+
+  // Attempt 1: Local backend /api/flux/create (if server.js is running)
+  try {
+    const localRes = await fetch('/api/flux/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...payload, api_key: apiKey })
+    });
+    const ct = localRes.headers.get('content-type') || '';
+    if (ct.includes('application/json')) {
+      const d = await localRes.json();
+      if (d.success && d.payment?.checkout_url) return d;
+    }
+  } catch (e) { /* Ignore and move to fallback */ }
+
+  // Attempt 2: Direct call to gofluxpay.com
+  try {
+    const directRes = await fetch(targetUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload)
+    });
+    const ct = directRes.headers.get('content-type') || '';
+    if (ct.includes('application/json')) {
+      const d = await directRes.json();
+      if (d.success && d.payment?.checkout_url) return d;
+      if (d.message || d.error) throw new Error(d.message || d.error);
+    }
+  } catch (e) {
+    if (e.message && !e.message.includes('Failed to fetch')) throw e;
+  }
+
+  // Attempt 3: CORS Proxy Fallback (for static hosting like GitHub/Firebase Hosting)
+  const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
+  const proxyRes = await fetch(proxyUrl, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(payload)
+  });
+  const text = await proxyRes.text();
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch (_) {
+    throw new Error('Gateway connection error. Please check your Flux API Key in Admin Settings.');
+  }
+  if (!parsed.success || !parsed.payment?.checkout_url) {
+    throw new Error(parsed.message || parsed.error || 'Flux Pay rejected the request. Check Merchant ID & Payin Key.');
+  }
+  return parsed;
+}
+
+// Mobile Sidebar Toggle
+const mobileBtn = document.getElementById('mobile-menu-btn');
+const sidebar = document.getElementById('sidebar');
+if (sidebar) {
+  const backdrop = document.createElement('div');
+  backdrop.className = 'sidebar-backdrop';
+  document.body.appendChild(backdrop);
+  mobileBtn?.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+    backdrop.classList.toggle('active', sidebar.classList.contains('active'));
+  });
+  backdrop.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    backdrop.classList.remove('active');
+  });
+}
 
 // Toggle Auto vs Manual UI
 const autoBtn = document.getElementById('mode-auto-btn');
@@ -449,16 +533,12 @@ const autoSec = document.getElementById('section-auto-payment');
 const manualSec = document.getElementById('section-manual-payment');
 
 autoBtn.addEventListener('click', () => {
-  autoBtn.classList.add('active');
-  manualBtn.classList.remove('active');
-  autoSec.classList.remove('d-none');
-  manualSec.classList.add('d-none');
+  autoBtn.classList.add('active'); manualBtn.classList.remove('active');
+  autoSec.classList.remove('d-none'); manualSec.classList.add('d-none');
 });
 manualBtn.addEventListener('click', () => {
-  manualBtn.classList.add('active');
-  autoBtn.classList.remove('active');
-  manualSec.classList.remove('d-none');
-  autoSec.classList.add('d-none');
+  manualBtn.classList.add('active'); autoBtn.classList.remove('active');
+  manualSec.classList.remove('d-none'); autoSec.classList.add('d-none');
 });
 
 onAuthStateChanged(auth, async (user) => {
@@ -489,12 +569,19 @@ onAuthStateChanged(auth, async (user) => {
   checkFluxReturnVerification();
 });
 
-// 1. Automatic Flux Pay Session Initiation
+// 1. Start Flux Pay Automatic Checkout
 document.getElementById('flux-auto-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const amount = parseFloat(document.getElementById('flux-amount').value);
-  if (isNaN(amount) || amount < 30 || amount > 50000) {
-    return showToast('Amount must be between Rs. 30 and Rs. 50,000', 'error');
+  if (isNaN(amount) || amount < 1 || amount > 50000) {
+    return showToast('Please enter a valid deposit amount.', 'error');
+  }
+
+  const mid = (fluxConfig.merchantId || 'mrc_f9e4b27a91f41dc4').trim();
+  const apiKey = (fluxConfig.apiKey || '').trim();
+
+  if (!apiKey) {
+    return showToast('Admin has not saved the Flux Pay API Key yet. Go to Admin Panel -> Settings & Keys to save it.', 'error');
   }
 
   const btn = document.getElementById('flux-submit-btn');
@@ -505,26 +592,20 @@ document.getElementById('flux-auto-form').addEventListener('submit', async (e) =
 
   try {
     const orderRef = `FLX-${currentUser.uid.slice(0, 6).toUpperCase()}-${Date.now()}`;
+    const returnUrl = `${window.location.origin}/funds.html`;
 
-    const res = await fetch('/api/flux/create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        merchant_id: fluxConfig.merchantId || 'mrc_f9e4b27a91f41dc4',
-        api_key: fluxConfig.apiKey || '',
-        amount: amount.toFixed(2),
-        order_id: orderRef,
-        payer_email: currentUser.email,
-        customer_name: currentUserData.name || currentUser.email.split('@')[0]
-      })
-    });
+    const payload = {
+      merchant_id: mid,
+      amount: amount.toFixed(2),
+      order_id: orderRef,
+      merchant_order_id: orderRef,
+      payer_email: currentUser.email || 'user@pak-digital.store',
+      customer_name: currentUserData.name || currentUserData.username || 'Pak Digital User',
+      return_url: returnUrl
+    };
 
-    const data = await res.json();
-    if (!data.success || !data.payment?.checkout_url) {
-      throw new Error(data.error || 'Could not start Flux Pay checkout.');
-    }
+    const data = await callFluxCreateSession(payload, apiKey);
 
-    // Create Pending Automatic Payment Record in Firestore
     const payDoc = await addDoc(collection(db, 'payments'), {
       paymentId: orderRef,
       fluxPaymentId: data.payment.payment_id,
@@ -549,21 +630,26 @@ document.getElementById('flux-auto-form').addEventListener('submit', async (e) =
 
     window.location.href = data.payment.checkout_url;
   } catch (err) {
-    showToast(err.message, 'error');
+    showToast(err.message || 'Could not start checkout.', 'error');
     btn.disabled = false;
     btn.querySelector('.btn-text').classList.remove('d-none');
     sp.classList.add('d-none');
   }
 });
 
-// 2. Verify Flux Pay Status when Customer Returns to funds.html
+// 2. Verify Signed Return URL or Status API When Returning from Flux Pay
 async function checkFluxReturnVerification() {
   const params = new URLSearchParams(window.location.search);
-  const urlPaymentId = params.get('flux_payment_id') || params.get('payment');
-  const cached = JSON.parse(localStorage.getItem('pending_flux_payment') || 'null');
-  const paymentId = urlPaymentId || cached?.paymentId;
+  const fluxPaymentId = params.get('flux_payment_id') || params.get('payment');
+  const fluxOrderId = params.get('flux_order_id');
+  const fluxStatus = params.get('flux_status') || params.get('payment_status');
+  const fluxTs = params.get('flux_return_ts');
+  const fluxSig = params.get('flux_return_sig');
 
-  if (!paymentId) return;
+  const cached = JSON.parse(localStorage.getItem('pending_flux_payment') || 'null');
+  const paymentId = fluxPaymentId || cached?.paymentId;
+
+  if (!paymentId || !fluxStatus) return;
 
   const banner = document.getElementById('flux-return-banner');
   const titleEl = document.getElementById('flux-verify-title');
@@ -572,40 +658,54 @@ async function checkFluxReturnVerification() {
   banner.classList.remove('d-none');
 
   try {
-    const res = await fetch(`/api/flux/status?payment_id=${encodeURIComponent(paymentId)}&merchant_id=${encodeURIComponent(fluxConfig.merchantId || 'mrc_f9e4b27a91f41dc4')}`, {
-      headers: { 'x-flux-key': fluxConfig.apiKey || '' }
-    });
-    const data = await res.json();
-    const status = data?.payment?.status;
+    let isVerifiedCompleted = false;
 
-    if (status === 'completed') {
-      const verifiedAmount = parseFloat(data.payment.amount || cached?.amount || 0);
+    // Method A: Verify Cryptographic HMAC-SHA256 Return Signature (Section 04.3 of Flux Pay Spec)
+    if (fluxStatus === 'completed' && fluxSig && fluxTs && fluxConfig.webhookSecret) {
+      const signedPayload = `${fluxPaymentId}|${fluxOrderId}|${fluxStatus}|${fluxTs}`;
+      const expectedSig = await hmacSha256Hex(fluxConfig.webhookSecret.trim(), signedPayload);
+      if (expectedSig.toLowerCase() === fluxSig.toLowerCase()) {
+        isVerifiedCompleted = true;
+      }
+    }
+
+    // Method B: Fallback Server/Proxy Status Inquiry (Section 04.2 of Flux Pay Spec)
+    if (!isVerifiedCompleted && fluxStatus === 'completed' && fluxConfig.apiKey) {
+      const statusTarget = `https://gofluxpay.com/api/v1/payments/status?payment_id=${encodeURIComponent(paymentId)}&merchant_id=${encodeURIComponent(fluxConfig.merchantId || 'mrc_f9e4b27a91f41dc4')}`;
+      const proxyStatusUrl = 'https://corsproxy.io/?' + encodeURIComponent(statusTarget);
+      const sRes = await fetch(proxyStatusUrl, {
+        headers: { 'Authorization': `Bearer ${fluxConfig.apiKey.trim()}`, 'X-API-KEY': fluxConfig.apiKey.trim() }
+      });
+      const sText = await sRes.text();
+      const sData = JSON.parse(sText);
+      if (sData?.payment?.status === 'completed') {
+        isVerifiedCompleted = true;
+      }
+    }
+
+    if (isVerifiedCompleted) {
+      const verifiedAmount = parseFloat(cached?.amount || 0);
+      if (verifiedAmount <= 0) throw new Error('Payment session amount not found.');
+
       const userRef = doc(db, 'users', currentUser.uid);
-
       await runTransaction(db, async (tx) => {
         const uSnap = await tx.get(userRef);
         if (!uSnap.exists()) return;
-        if (uSnap.data().lastFluxPaymentId === paymentId) {
-          return; // Already credited idempotently
-        }
+        if (uSnap.data().lastFluxPaymentId === paymentId) return; // Prevent double credit
         const newBal = parseFloat((parseFloat(uSnap.data().wallet || 0) + verifiedAmount).toFixed(2));
-        tx.update(userRef, {
-          wallet: newBal,
-          lastFluxPaymentId: paymentId
-        });
+        tx.update(userRef, { wallet: newBal, lastFluxPaymentId: paymentId });
       });
 
       if (cached?.docId) {
         await updateDoc(doc(db, 'payments', cached.docId), {
           status: 'Approved',
-          transactionId: data.payment.transaction_id || paymentId,
-          paymentMethod: `Flux Pay (${data.payment.payment_method || 'Auto'})`,
+          transactionId: paymentId,
           updatedAt: fsTS()
         });
       }
 
       await addDoc(collection(db, 'walletTransactions'), {
-        transactionId: data.payment.transaction_id || paymentId,
+        transactionId: paymentId,
         userId: currentUser.uid,
         type: 'flux_auto_deposit',
         amount: verifiedAmount,
@@ -614,6 +714,7 @@ async function checkFluxReturnVerification() {
       });
 
       localStorage.removeItem('pending_flux_payment');
+      window.history.replaceState({}, document.title, window.location.pathname);
       spinner.classList.add('d-none');
       titleEl.textContent = `Payment Approved! ${money(verifiedAmount)} Added Instantly ✅`;
       descEl.textContent = 'Your wallet balance has been updated automatically.';
@@ -622,19 +723,14 @@ async function checkFluxReturnVerification() {
         document.getElementById('header-wallet-balance').textContent = money(updatedUser.data().wallet);
       }
       showToast('Automatic payment credited to your wallet!');
-    } else if (status === 'failed' || status === 'cancelled' || status === 'expired') {
-      localStorage.removeItem('pending_flux_payment');
-      spinner.classList.add('d-none');
-      titleEl.textContent = `Payment ${status.toUpperCase()}`;
-      descEl.textContent = 'No funds were deducted. You can try again anytime.';
     } else {
       spinner.classList.add('d-none');
-      titleEl.textContent = 'Payment Pending Confirmation';
-      descEl.textContent = 'Refresh this page in a moment once your wallet transfer completes.';
+      titleEl.textContent = `Payment Status: ${fluxStatus.toUpperCase()}`;
+      descEl.textContent = 'If you completed the payment, it will reflect once confirmed.';
     }
   } catch (err) {
     spinner.classList.add('d-none');
-    titleEl.textContent = 'Verification Check';
+    titleEl.textContent = 'Payment Verification Note';
     descEl.textContent = err.message;
   }
 }
