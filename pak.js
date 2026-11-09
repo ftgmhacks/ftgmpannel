@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, updateDoc, setDoc, runTransaction, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, setDoc, runTransaction, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD6VSIGbUJqIMQb53k1mXAcGjNu9PFC1w0",
@@ -17,9 +17,18 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const SUPER_ADMIN_UID = "Q0NoYuEprlW6SvvOrv7lnx5kSeg1";
+const SMM_PROXY = 'https://project--0158a941-e1aa-495e-8f88-9b83a66f9bbe.lovable.app/api/public/smm';
+
 let currentUser = null;
-let currentUserData = {};
+let currentUserData = { wallet: 0 };
+let categories = [];
+let services = [];
+let selectedService = null;
 let siteSettings = {};
+
+const money = (n) => 'Rs. ' + (parseFloat(n || 0)).toFixed(2);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const initials = (name) => (name || 'G').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
 
 function showToast(message, type = 'success') {
   let container = document.getElementById('toast-container');
@@ -31,79 +40,14 @@ function showToast(message, type = 'success') {
   }
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
-  const icon = type === 'success' ? '<i class="fa-solid fa-check"></i> ' : '<i class="fa-solid fa-xmark"></i> ';
-  toast.innerHTML = icon + message;
+  toast.innerHTML = (type === 'success' ? '<i class="fa-solid fa-check"></i> ' : '<i class="fa-solid fa-xmark"></i> ') + message;
   container.appendChild(toast);
   requestAnimationFrame(() => toast.classList.add('show'));
-
   setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 300);
   }, 4000);
 }
-window.showToast = showToast;
-
-const SMM_PROXY = 'https://project--0158a941-e1aa-495e-8f88-9b83a66f9bbe.lovable.app/api/public/smm';
-async function smmApi(params) {
-  const res = await fetch(SMM_PROXY, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(params)
-  });
-  const text = await res.text();
-  let data;
-  try { data = JSON.parse(text); } catch (e) { throw new Error('Invalid provider response'); }
-  if (data && data.error) throw new Error(data.error);
-  return data;
-}
-window.smmApi = smmApi;
-
-async function syncOrderStatus(orderDocId, apiOrderId, API_URL, API_KEY) {
-  if (!apiOrderId || !API_URL || !API_KEY) return;
-  try {
-    const apiData = await smmApi({ url: API_URL, key: API_KEY, action: 'status', order: apiOrderId });
-    if (apiData && apiData.status) {
-      let localStatus = apiData.status;
-      if (localStatus === 'In progress') localStatus = 'In Progress';
-      const orderRef = doc(db, 'orders', orderDocId);
-      await updateDoc(orderRef, { 
-        status: localStatus,
-        start_count: apiData.start_count || 0,
-        remains: apiData.remains || 0,
-        updatedAt: fsTS()
-      });
-      return localStatus;
-    }
-  } catch (err) {
-    console.error('Status sync failed for', apiOrderId, err);
-  }
-}
-window.syncOrderStatus = syncOrderStatus;
-
-const money = (n) => 'Rs. ' + (parseFloat(n || 0)).toFixed(2);
-const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-window.copyClipboard = (text) => {
-  if (!text) return;
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('Link copied! 📋');
-  }).catch(() => {
-    const el = document.createElement('textarea');
-    el.value = text;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    showToast('Link copied! 📋');
-  });
-};
-const initials = (name) => (name || 'U').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
-const displayNameOf = (data, email) => {
-  const d = data || {};
-  const value = (d.username || d.name || '').toString().trim();
-  if (value && value.toLowerCase() !== 'user') return value;
-  const mail = (d.email || email || '').toString().trim();
-  return mail.includes('@') ? mail.split('@')[0] : (mail || 'User');
-};
 
 function initLayout() {
   const btn = document.getElementById('mobile-menu-btn');
@@ -122,305 +66,354 @@ function initLayout() {
     backdrop.classList.toggle('active', sidebar.classList.contains('active'));
   });
   backdrop.addEventListener('click', close);
-}
 
-async function loadCommonData() {
-  const [snap, s] = await Promise.all([
-    currentUser ? getDoc(doc(db, 'users', currentUser.uid)) : Promise.resolve(null),
-    getDoc(doc(db, 'settings', 'general'))
-  ]);
-  if (snap && snap.exists()) {
-    currentUserData = snap.data();
-    const w = document.getElementById('header-wallet-balance');
-    const n = document.getElementById('user-name-display');
-    const a = document.getElementById('user-avatar');
-    if (w) w.textContent = money(currentUserData.wallet);
-    const shownName = displayNameOf(currentUserData, currentUser.email);
-    if (n) n.textContent = shownName;
-    if (a) a.textContent = initials(shownName);
-  }
-  if (s.exists()) {
-    siteSettings = s.data();
-    const logo = document.getElementById('site-logo-header');
-    if (logo && siteSettings.logoUrl) logo.src = siteSettings.logoUrl;
-    if (siteSettings.dashboardVideo) {
-      const frame = document.getElementById('dashboard-video-frame');
-      const container = document.getElementById('dashboard-video-container');
-      if (frame) frame.src = siteSettings.dashboardVideo;
-      if (container) container.style.display = 'block';
-    }
-  }
-
-  document.getElementById('logout-btn')?.addEventListener('click', async (e) => {
-    e.preventDefault(); await signOut(auth); window.location.href = 'index.html';
+  // Intercept auth-protected links for guests
+  document.querySelectorAll('[data-requires-auth="true"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      if (!currentUser) {
+        e.preventDefault();
+        const targetHref = link.getAttribute('href') || 'dashboard.html';
+        showToast('Please login first to continue.', 'error');
+        setTimeout(() => {
+          window.location.href = `login.html?redirect=${encodeURIComponent(targetHref)}`;
+        }, 500);
+      }
+    });
   });
 }
 
-function guardUserPage(onReady) {
-  let handled = false;
-  onAuthStateChanged(auth, async (user) => {
-    if (handled) return;
-    handled = true;
-    if (!user) { window.location.replace('index.html'); return; }
-    currentUser = user;
-    try {
-      const userRef = doc(db, 'users', user.uid);
-      let snap = await getDoc(userRef);
-      if (!snap.exists()) {
-        // Never trust the client for money/role fields: always created at zero.
-        await setDoc(userRef, {
-          uid: user.uid,
-          name: user.displayName || displayNameOf({}, user.email),
-          username: user.displayName || displayNameOf({}, user.email),
-          email: user.email,
-          wallet: 0,
-          role: 'user',
-          status: 'active',
-          createdAt: fsTS()
-        });
-        snap = await getDoc(userRef);
+async function loadCatalogAndSettings() {
+  try {
+    const [cSnap, sSnap, setSnap] = await Promise.all([
+      getDocs(query(collection(db, 'categories'), where('status', '==', 'active'))),
+      getDocs(query(collection(db, 'services'), where('status', '==', 'active'))),
+      getDoc(doc(db, 'settings', 'general'))
+    ]);
+
+    categories = [];
+    cSnap.forEach(d => categories.push({ id: d.id, ...d.data() }));
+    categories.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+    services = [];
+    sSnap.forEach(d => services.push({ id: d.id, ...d.data() }));
+    services.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+    if (setSnap.exists()) {
+      siteSettings = setSnap.data();
+      if (siteSettings.logoUrl) {
+        const logoEl = document.getElementById('site-logo-header');
+        if (logoEl) logoEl.src = siteSettings.logoUrl;
       }
-      if (snap.exists() && snap.data().status === 'banned') {
-        await signOut(auth);
-        window.location.replace('index.html');
-        return;
+      if (siteSettings.dashboardVideo) {
+        const vc = document.getElementById('dashboard-video-container');
+        const vf = document.getElementById('dashboard-video-frame');
+        if (vc && vf) {
+          vf.src = siteSettings.dashboardVideo;
+          vc.style.display = 'flex';
+        }
       }
-      await loadCommonData();
-      initLayout();
-    } catch (err) {
-      console.error('Startup error:', err);
-      showToast(err.message || 'Failed to load your account.', 'error');
-    } finally {
-      // ALWAYS clear the loader, otherwise the page hangs on "Logging in..."
-      const l = document.getElementById('page-loader');
-      if (l) l.remove();
-      document.body.classList.remove('loading');
     }
-    try { await onReady(); } catch (err) { console.error(err); showToast(err.message, 'error'); }
-  });
+
+    renderCategoriesDropdown();
+  } catch (err) {
+    console.error('Catalog load error:', err);
+  }
 }
 
-let availableServices = [];
-
-guardUserPage(async () => {
-  const heroWallet = document.getElementById('hero-wallet');
-  if (heroWallet) heroWallet.textContent = money(currentUserData.wallet);
-
-  const catSelect = document.getElementById('order-category');
+function renderCategoriesDropdown() {
   const catOptions = document.getElementById('cat-options');
   const catTrigger = document.getElementById('cat-trigger');
-  const srvSelect = document.getElementById('order-service');
-  const srvOptions = document.getElementById('srv-options');
-  const srvTrigger = document.getElementById('srv-trigger');
+  const catSelect = document.getElementById('order-category');
+  if (!catOptions || !catTrigger) return;
 
-  function toggleDropdown(options) {
-    document.querySelectorAll('.custom-select-options').forEach(el => {
-      if (el !== options) el.classList.remove('show');
-    });
-    options.classList.toggle('show');
-  }
+  catOptions.innerHTML = '';
+  catSelect.innerHTML = '<option value="" disabled selected>Select a category...</option>';
 
-  window.addEventListener('click', (e) => {
-    if (!e.target.closest('.custom-select-wrap')) {
-      document.querySelectorAll('.custom-select-options').forEach(el => el.classList.remove('show'));
-    }
-  });
-
-  if (!catSelect || !catOptions || !catTrigger || !srvSelect || !srvOptions || !srvTrigger) return;
-
-  catTrigger.addEventListener('click', () => toggleDropdown(catOptions));
-  srvTrigger.addEventListener('click', () => {
-    if (catSelect.value) toggleDropdown(srvOptions);
-  });
-
-  const getIconColor = (iconClass) => {
-    if (iconClass.includes('instagram')) return '#e1306c';
-    if (iconClass.includes('facebook')) return '#1877f2';
-    if (iconClass.includes('youtube')) return '#ff0000';
-    if (iconClass.includes('tiktok')) return '#000000';
-    if (iconClass.includes('telegram')) return '#0088cc';
-    if (iconClass.includes('twitter')) return '#1da1f2';
-    return 'var(--primary)';
-  };
-
-  const [catSnap, srvSnap] = await Promise.all([
-    getDocs(query(collection(db, 'categories'), where('status', '==', 'active'))),
-    getDocs(query(collection(db, 'services'), where('status', '==', 'active')))
-  ]);
-  const categoriesList = [];
-  catSnap.forEach(d => categoriesList.push({ id: d.id, ...d.data() }));
-  categoriesList.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
-
-  categoriesList.forEach(c => {
-    const o = document.createElement('option');
-    o.value = c.id;
-    o.textContent = c.name;
-    catSelect.appendChild(o);
-
+  categories.forEach(c => {
+    const icon = c.icon || 'fa-solid fa-layer-group';
     const div = document.createElement('div');
     div.className = 'custom-option';
-    const iconColor = getIconColor(c.icon || '');
-    div.innerHTML = `<i class="${c.icon || 'fa-solid fa-layer-group'}" style="color:${iconColor}"></i> <span>${c.name}</span>`;
+    div.innerHTML = `<i class="${esc(icon)}" style="color:var(--primary)"></i> <span>${esc(c.name)}</span>`;
     div.addEventListener('click', () => {
+      catTrigger.innerHTML = `<span style="display:flex;align-items:center;gap:0.6rem;"><i class="${esc(icon)}" style="color:var(--primary)"></i> ${esc(c.name)}</span> <i class="fa-solid fa-chevron-down"></i>`;
       catSelect.value = c.id;
-      catTrigger.querySelector('span').innerHTML = div.innerHTML;
       catOptions.classList.remove('show');
-      catSelect.dispatchEvent(new Event('change'));
+      renderServicesForCategory(c.id);
     });
     catOptions.appendChild(div);
-  });
-  
-  if (!categoriesList.length) showToast('No categories available yet.', 'error');
 
-  srvSnap.forEach(d => availableServices.push({ id: d.id, ...d.data() }));
-  availableServices.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
-
-  catSelect.addEventListener('change', () => {
-    srvSelect.innerHTML = '<option value="" disabled selected>Select a service...</option>';
-    srvOptions.innerHTML = '';
-    srvTrigger.querySelector('span').textContent = 'Select a service...';
-    
-    availableServices.filter(s => s.category === catSelect.value).forEach(s => {
-      const o = document.createElement('option');
-      o.value = s.id;
-      o.textContent = s.name;
-      srvSelect.appendChild(o);
-
-      const div = document.createElement('div');
-      div.className = 'custom-option';
-      const iconColor = getIconColor(s.icon || '');
-      div.innerHTML = `<i class="${s.icon || 'fa-solid fa-circle-check'}" style="color:${iconColor}"></i> <span>${s.name}</span>`;
-      div.addEventListener('click', () => {
-        srvSelect.value = s.id;
-        srvTrigger.querySelector('span').innerHTML = div.innerHTML;
-        srvOptions.classList.remove('show');
-        srvSelect.dispatchEvent(new Event('change'));
-      });
-      srvOptions.appendChild(div);
-    });
-    document.getElementById('service-details-card').classList.add('d-none');
-    document.getElementById('submit-order-btn').disabled = true;
-    calcTotal();
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name;
+    catSelect.appendChild(opt);
   });
 
-  srvSelect.addEventListener('change', () => {
-    const s = availableServices.find(x => x.id === srvSelect.value);
-    if (!s) return;
-    document.getElementById('service-details-card').classList.remove('d-none');
-    document.getElementById('service-description').textContent = s.description || '';
-    document.getElementById('service-min-max').textContent = `${s.minQty} / ${s.maxQty}`;
-    document.getElementById('service-price-display').textContent = money(s.price);
-    document.getElementById('service-time-display').textContent = s.estimatedTime || '—';
-    document.getElementById('submit-order-btn').disabled = false;
-    calcTotal();
-  });
-
-  document.getElementById('order-quantity').addEventListener('input', calcTotal);
-  document.getElementById('new-order-form').addEventListener('submit', placeOrder);
-});
-
-function calcTotal() {
-  const s = availableServices.find(x => x.id === document.getElementById('order-service').value);
-  const qty = parseInt(document.getElementById('order-quantity').value) || 0;
-  document.getElementById('order-total-charge').textContent =
-    (s && qty > 0) ? money((s.price / 1000) * qty) : 'Rs. 0.00';
+  catTrigger.onclick = (e) => {
+    e.stopPropagation();
+    catOptions.classList.toggle('show');
+    document.getElementById('srv-options')?.classList.remove('show');
+  };
 }
 
-async function placeOrder(e) {
+function renderServicesForCategory(catId) {
+  const srvOptions = document.getElementById('srv-options');
+  const srvTrigger = document.getElementById('srv-trigger');
+  const srvSelect = document.getElementById('order-service');
+  if (!srvOptions || !srvTrigger) return;
+
+  const list = services.filter(s => s.category === catId);
+  srvOptions.innerHTML = '';
+  srvSelect.innerHTML = '<option value="" disabled selected>Select a service...</option>';
+  selectedService = null;
+  document.getElementById('service-details-card')?.classList.add('d-none');
+  document.getElementById('submit-order-btn').disabled = true;
+
+  if (!list.length) {
+    srvTrigger.innerHTML = `<span>No services in this category</span> <i class="fa-solid fa-chevron-down"></i>`;
+    return;
+  }
+
+  srvTrigger.innerHTML = `<span>Select a service...</span> <i class="fa-solid fa-chevron-down"></i>`;
+
+  list.forEach(s => {
+    const icon = s.icon || 'fa-solid fa-circle-check';
+    const div = document.createElement('div');
+    div.className = 'custom-option';
+    div.innerHTML = `<i class="${esc(icon)}" style="color:var(--primary)"></i> <div style="flex:1"><div style="font-weight:700">${esc(s.name)}</div><div style="font-size:0.78rem;color:var(--primary-dark);font-weight:700">${money(s.price)} per 1000</div></div>`;
+    div.addEventListener('click', () => {
+      srvTrigger.innerHTML = `<span style="display:flex;align-items:center;gap:0.6rem;"><i class="${esc(icon)}" style="color:var(--primary)"></i> ${esc(s.name)} — ${money(s.price)}</span> <i class="fa-solid fa-chevron-down"></i>`;
+      srvSelect.value = s.id;
+      srvOptions.classList.remove('show');
+      selectService(s);
+    });
+    srvOptions.appendChild(div);
+
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = s.name;
+    srvSelect.appendChild(opt);
+  });
+
+  srvTrigger.onclick = (e) => {
+    e.stopPropagation();
+    srvOptions.classList.toggle('show');
+    document.getElementById('cat-options')?.classList.remove('show');
+  };
+}
+
+document.addEventListener('click', () => {
+  document.getElementById('cat-options')?.classList.remove('show');
+  document.getElementById('srv-options')?.classList.remove('show');
+});
+
+function selectService(s) {
+  selectedService = s;
+  document.getElementById('service-price-display').textContent = money(s.price);
+  document.getElementById('service-min-max').textContent = `${s.minQty || 1} / ${s.maxQty || 100000}`;
+  document.getElementById('service-time-display').textContent = s.estimatedTime || 'Instant';
+  const descEl = document.getElementById('service-description');
+  if (descEl) {
+    descEl.textContent = s.description || 'High quality automated service.';
+    descEl.classList.toggle('d-none', !s.description);
+  }
+  document.getElementById('service-details-card')?.classList.remove('d-none');
+
+  const qtyInput = document.getElementById('order-quantity');
+  if (qtyInput) {
+    qtyInput.min = s.minQty || 1;
+    qtyInput.max = s.maxQty || 1000000;
+    if (!qtyInput.value) qtyInput.value = s.minQty || 100;
+  }
+  recalculateTotal();
+}
+
+function recalculateTotal() {
+  const qty = parseInt(document.getElementById('order-quantity')?.value || 0);
+  const btn = document.getElementById('submit-order-btn');
+  if (!selectedService || !qty || qty <= 0) {
+    document.getElementById('order-total-charge').textContent = money(0);
+    if (btn) btn.disabled = true;
+    return;
+  }
+  const total = (qty / 1000) * parseFloat(selectedService.price || 0);
+  document.getElementById('order-total-charge').textContent = money(total);
+  if (btn) btn.disabled = false;
+}
+
+document.getElementById('order-quantity')?.addEventListener('input', recalculateTotal);
+
+// Submit Order Handler (Prompts Login if Guest)
+document.getElementById('new-order-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const srv = availableServices.find(x => x.id === document.getElementById('order-service').value);
+
+  if (!currentUser) {
+    showToast('Please login or create an account to place your order.', 'error');
+    setTimeout(() => {
+      window.location.href = 'login.html?redirect=dashboard.html';
+    }, 600);
+    return;
+  }
+
+  if (!selectedService) return showToast('Please select a service.', 'error');
   const link = document.getElementById('order-link').value.trim();
   const qty = parseInt(document.getElementById('order-quantity').value);
-  if (!srv) return showToast('Please select a service.', 'error');
-  if (qty < srv.minQty || qty > srv.maxQty)
-    return showToast(`Quantity must be between ${srv.minQty} and ${srv.maxQty}.`, 'error');
 
-  const total = (srv.price / 1000) * qty;
-  const btn = document.getElementById('submit-order-btn'), sp = document.getElementById('order-spinner');
-  btn.disabled = true; btn.querySelector('.btn-text').classList.add('d-none'); sp.classList.remove('d-none');
+  if (qty < (selectedService.minQty || 1) || qty > (selectedService.maxQty || 10000000)) {
+    return showToast(`Quantity must be between ${selectedService.minQty} and ${selectedService.maxQty}.`, 'error');
+  }
+
+  const totalCharge = parseFloat(((qty / 1000) * parseFloat(selectedService.price || 0)).toFixed(2));
+  const btn = document.getElementById('submit-order-btn');
+  const sp = document.getElementById('order-spinner');
+
+  btn.disabled = true;
+  btn.querySelector('.btn-text')?.classList.add('d-none');
+  sp?.classList.remove('d-none');
 
   try {
     const userRef = doc(db, 'users', currentUser.uid);
-    const settingsSnap = await getDoc(doc(db, 'settings', 'general'));
-    const settings = settingsSnap.exists() ? settingsSnap.data() : {};
-    const API_URL = settings.apiUrl || '';
-    const API_KEY = settings.apiKey || '';
 
-    const preSnap = await getDoc(userRef);
-    if (!preSnap.exists()) throw new Error('Profile not found. Please log in again.');
-    if (parseFloat(preSnap.data().wallet || 0) < total) throw new Error('Insufficient balance. Please add funds to your wallet.');
+    // Atomic wallet deduction
+    await runTransaction(db, async (tx) => {
+      const uSnap = await tx.get(userRef);
+      if (!uSnap.exists()) throw new Error('User profile not found.');
+      const curBal = parseFloat(uSnap.data().wallet || 0);
+      if (curBal < totalCharge) {
+        throw new Error(`Insufficient balance (${money(curBal)}). Please add funds first.`);
+      }
+      tx.update(userRef, { wallet: parseFloat((curBal - totalCharge).toFixed(2)) });
+    });
 
-    let apiOrderId = null;
-    let apiError = null;
-
-    if (srv.externalId) {
-      if (!API_URL || !API_KEY) throw new Error('System API configuration is not set. Please contact admin.');
+    // Place provider API order if externalId is configured
+    let apiOrderId = '';
+    if (selectedService.externalId && siteSettings.apiUrl && siteSettings.apiKey) {
       try {
-        const apiData = await smmApi({
-          url: API_URL, key: API_KEY, action: 'add',
-          service: srv.externalId, link: link, quantity: qty
+        const res = await fetch(SMM_PROXY, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: siteSettings.apiUrl,
+            key: siteSettings.apiKey,
+            action: 'add',
+            service: selectedService.externalId,
+            link: link,
+            quantity: qty
+          })
         });
-        if (apiData.order) apiOrderId = apiData.order;
-        else if (apiData.error) throw new Error('API Error: ' + apiData.error);
-      } catch (err) {
-        console.error('API Automation Failure:', err);
-        apiError = err.message;
-        throw new Error('Automated ordering failed: ' + err.message);
+        const data = await res.json();
+        if (data && data.order) apiOrderId = String(data.order);
+      } catch (apiErr) {
+        console.warn('Provider API call fallback to manual queue:', apiErr);
       }
     }
 
-    const orderId = 'ORD-' + Math.floor(Math.random() * 100000000);
-    const orderRef = doc(collection(db, 'orders'));
-    const trxRef = doc(collection(db, 'walletTransactions'));
+    // Calculate provider cost & net profit (hidden from user, used in Admin Profit Analytics)
+    const providerRatePer1k = parseFloat(selectedService.providerRate ?? selectedService.costPrice ?? (selectedService.price * 0.7));
+    const providerCost = parseFloat(((qty / 1000) * providerRatePer1k).toFixed(2));
+    const netProfit = parseFloat((totalCharge - providerCost).toFixed(2));
 
-    // Atomic: balance check + debit + order in ONE transaction (no double spend).
-    await runTransaction(db, async (tx) => {
-      const uSnap = await tx.get(userRef);
-      if (!uSnap.exists()) throw new Error('Profile not found. Please log in again.');
-      const balance = parseFloat(uSnap.data().wallet || 0);
-      if (balance < total) throw new Error('Insufficient balance. Please add funds to your wallet.');
-      tx.update(userRef, { wallet: balance - total });
-      tx.set(orderRef, {
-        orderId,
-        orderType: 'smm',
-        apiOrderId: apiOrderId || null,
-        userId: currentUser.uid,
-        userEmail: currentUser.email,
-        userName: displayNameOf(currentUserData, currentUser.email),
-        serviceId: srv.id,
-        serviceName: srv.name,
-        category: srv.category,
-        targetLink: link,
-        quantity: qty,
-        price: total,
-        status: apiOrderId ? 'Pending' : 'Pending (Manual)',
-        apiError: apiError || null,
-        createdAt: fsTS(),
-        updatedAt: fsTS()
-      });
-      tx.set(trxRef, {
-        transactionId: 'TRX-' + Math.floor(Math.random() * 100000000),
-        userId: currentUser.uid, type: 'order', amount: -total,
-        description: 'Order placed: ' + orderId, createdAt: fsTS()
-      });
+    const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+    await addDoc(collection(db, 'orders'), {
+      orderId,
+      orderType: 'smm',
+      userId: currentUser.uid,
+      userEmail: currentUser.email,
+      userName: currentUserData.username || currentUserData.name || 'User',
+      serviceId: selectedService.id,
+      serviceName: selectedService.name,
+      targetLink: link,
+      quantity: qty,
+      price: totalCharge,
+      providerCost: providerCost,
+      netProfit: netProfit,
+      apiOrderId: apiOrderId,
+      status: 'Pending',
+      createdAt: fsTS(),
+      updatedAt: fsTS()
     });
 
-    showToast('Order placed successfully!');
-    e.target.reset();
-    document.getElementById('service-details-card').classList.add('d-none');
-    document.getElementById('order-total-charge').textContent = 'Rs. 0.00';
-    
-    const successAlert = document.getElementById('order-success-alert');
-    successAlert.classList.remove('d-none');
-    setTimeout(() => {
-      successAlert.classList.add('d-none');
-    }, 10000);
+    await addDoc(collection(db, 'walletTransactions'), {
+      transactionId: 'TRX-' + Math.floor(Math.random() * 100000000),
+      userId: currentUser.uid,
+      type: 'order_debit',
+      amount: -totalCharge,
+      description: `Order ${orderId}: ${selectedService.name}`,
+      createdAt: fsTS()
+    });
 
-    await loadCommonData();
-    document.getElementById('hero-wallet').textContent = money(currentUserData.wallet);
+    currentUserData.wallet = Math.max(0, parseFloat((currentUserData.wallet - totalCharge).toFixed(2)));
+    const hw = document.getElementById('hero-wallet');
+    if (hw) hw.textContent = money(currentUserData.wallet);
+
+    document.getElementById('order-success-alert')?.classList.remove('d-none');
+    showToast('Order placed successfully!');
   } catch (err) {
-    showToast(err.message, 'error');
+    showToast(err.message || 'Order failed.', 'error');
   } finally {
-    btn.disabled = false; btn.querySelector('.btn-text').classList.remove('d-none'); sp.classList.add('d-none');
+    btn.disabled = false;
+    btn.querySelector('.btn-text')?.classList.remove('d-none');
+    sp?.classList.add('d-none');
   }
-}
+});
+
+// Initialize Page for both Guest & Logged-In Users
+initLayout();
+loadCatalogAndSettings().finally(() => {
+  setTimeout(() => document.getElementById('page-loader')?.remove(), 400);
+});
+
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+  const loginHeaderBtn = document.getElementById('header-login-btn');
+  const sidebarLoginBtn = document.getElementById('sidebar-login-btn');
+  const logoutBtn = document.getElementById('logout-btn');
+  const nameEl = document.getElementById('user-name-display');
+  const avatarEl = document.getElementById('user-avatar');
+  const heroWallet = document.getElementById('hero-wallet');
+
+  if (!user) {
+    // Guest Mode
+    loginHeaderBtn?.classList.remove('d-none');
+    sidebarLoginBtn?.classList.remove('d-none');
+    logoutBtn?.classList.add('d-none');
+    if (nameEl) nameEl.textContent = 'Guest Mode';
+    if (avatarEl) avatarEl.textContent = 'G';
+    if (heroWallet) heroWallet.textContent = 'Rs. 0.00';
+    return;
+  }
+
+  loginHeaderBtn?.classList.add('d-none');
+  sidebarLoginBtn?.classList.add('d-none');
+  logoutBtn?.classList.remove('d-none');
+
+  try {
+    const userRef = doc(db, 'users', user.uid);
+    const snap = await getDoc(userRef);
+    if (snap.exists()) {
+      currentUserData = snap.data();
+    } else {
+      currentUserData = {
+        uid: user.uid,
+        name: user.displayName || 'User',
+        username: user.displayName || 'User',
+        email: user.email,
+        wallet: 0,
+        role: user.uid === SUPER_ADMIN_UID ? 'admin' : 'user',
+        status: 'active'
+      };
+      await setDoc(userRef, { ...currentUserData, createdAt: fsTS() });
+    }
+    const displayName = currentUserData.username || currentUserData.name || user.email.split('@')[0];
+    if (nameEl) nameEl.textContent = displayName;
+    if (avatarEl) avatarEl.textContent = initials(displayName);
+    if (heroWallet) heroWallet.textContent = money(currentUserData.wallet);
+  } catch (e) {
+    console.error('User load error:', e);
+  }
+});
+
+document.getElementById('logout-btn')?.addEventListener('click', async (e) => {
+  e.preventDefault();
+  await signOut(auth);
+  window.location.href = 'dashboard.html';
+});
