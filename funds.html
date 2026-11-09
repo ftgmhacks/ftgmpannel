@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Add Funds — Pak Digital</title>
+<link class="favicon" rel="icon" href="https://i.postimg.cc/YCJ3NFXx/20260821-085028.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0bc15c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root {
+  --primary: #0bc15c; --primary-dark: #099e4b; --primary-soft: rgba(11, 193, 92, 0.12);
+  --brand-900: #061f10; --brand-800: #0c331c; --brand-700: #124727;
+  --bg: #f3f8f5; --bg-card: #ffffff; --bg-soft: #eaf3ee; --text: #0d2115; --text-muted: #5e7366;
+  --border: #d7e5dd; --radius: 20px; --radius-sm: 12px;
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.04); --shadow: 0 14px 34px -10px rgba(11, 193, 92, 0.18);
+  --shadow-lg: 0 24px 60px -20px rgba(6, 31, 16, 0.22);
+  --gradient: linear-gradient(135deg, #0bc15c 0%, #0dbfa1 100%);
+  --sidebar-w: 264px; --header-h: 68px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; min-height: 100vh; overflow-x: hidden; }
+a { color: var(--primary); text-decoration: none; }
+img { max-width: 100%; display: block; }
+.d-none { display: none !important; }
+.text-center { text-align: center; } .text-muted { color: var(--text-muted); } .text-primary { color: var(--primary); }
+.text-danger { color: #d93838; } .font-bold { font-weight: 700; }
+.mt-2 { margin-top: 0.5rem; } .mt-3 { margin-top: 1rem; } .mt-4 { margin-top: 1.5rem; } .mb-3 { margin-bottom: 1rem; } .mb-4 { margin-bottom: 1.5rem; } .py-4 { padding: 1.5rem 0; }
+
+.urdu-text { font-family: 'Noto Nastaliq Urdu', serif !important; direction: rtl; text-align: right; display: block; width: 100%; line-height: 2.2; }
+.urdu-step-title { font-size: 1.25rem; color: var(--brand-900); margin-bottom: 1rem; line-height: 2; display: flex; align-items: center; gap: 10px; }
+
+#chooser-fullscreen {
+  position: fixed; inset: 0; z-index: 120;
+  background: radial-gradient(circle at top right, rgba(11, 193, 92, 0.15), transparent 55%),
+              radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.12), transparent 55%),
+              var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 1.5rem; overflow-y: auto;
+}
+.chooser-box { width: 100%; max-width: 680px; display: flex; flex-direction: column; gap: 1.35rem; animation: popIn 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes popIn { from { opacity: 0; transform: scale(0.95) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+.big-method-btn {
+  width: 100%; border: none; border-radius: 24px; padding: 2rem 1.75rem;
+  cursor: pointer; text-align: left; color: #fff; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: space-between; gap: 1.25rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease; font-family: inherit;
+}
+.big-method-btn:hover { transform: translateY(-5px) scale(1.01); }
+.big-method-btn:active { transform: scale(0.98); }
+
+.btn-auto-colorful {
+  background: linear-gradient(135deg, #059669 0%, #0bc15c 50%, #0dbfa1 100%);
+  box-shadow: 0 20px 45px -12px rgba(11, 193, 92, 0.5);
+}
+.btn-manual-colorful {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 55%, #db2777 100%);
+  box-shadow: 0 20px 45px -12px rgba(124, 58, 237, 0.45);
+}
+.big-method-btn::after {
+  content: ''; position: absolute; width: 220px; height: 220px; right: -60px; top: -60px;
+  background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 70%); border-radius: 50%; pointer-events: none;
+}
+.bm-left { display: flex; align-items: center; gap: 1.2rem; z-index: 1; }
+.bm-icon {
+  width: 68px; height: 68px; border-radius: 20px; background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px); display: grid; place-items: center; font-size: 1.9rem; color: #fff; flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.bm-tag {
+  display: inline-flex; align-items: center; gap: 0.35rem; background: rgba(255, 255, 255, 0.22);
+  padding: 0.28rem 0.75rem; border-radius: 99px; font-size: 0.72rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;
+}
+.bm-title { font-size: 1.45rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1.2; }
+.bm-sub { font-size: 0.88rem; opacity: 0.92; margin-top: 0.3rem; font-weight: 500; }
+.bm-arrow {
+  width: 46px; height: 46px; border-radius: 50%; background: rgba(255, 255, 255, 0.22);
+  display: grid; place-items: center; font-size: 1.15rem; flex-shrink: 0; z-index: 1;
+}
+
+header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-h); z-index: 60; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+.header-content { height: 100%; max-width: 1500px; margin: 0 auto; padding: 0 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.logo-area { display: flex; align-items: center; gap: 0.75rem; height: 100%; }
+.logo-area img { max-height: calc(var(--header-h) - 16px); width: auto; object-fit: contain; }
+.user-info { display: flex; align-items: center; gap: 0.6rem; }
+.wallet-badge { display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 700; font-size: 0.85rem; background: var(--primary-soft); color: var(--primary-dark); padding: 0.45rem 0.85rem; border-radius: 99px; white-space: nowrap; }
+.user-name-display { font-size: 0.85rem; color: var(--text-muted); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.avatar-chip { width: 36px; height: 36px; border-radius: 50%; background: var(--brand-800); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+.mobile-menu-btn { display: none; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); width: 40px; height: 40px; border-radius: 12px; font-size: 1.1rem; cursor: pointer; }
+
+.sidebar { position: fixed; top: var(--header-h); left: 0; bottom: 0; width: var(--sidebar-w); z-index: 55; background: var(--brand-900); color: #eef7f3; padding: 1.25rem 1rem; border-right: 1px solid rgba(255, 255, 255, 0.06); display: flex; flex-direction: column; transition: transform 0.3s ease; overflow-y: auto; }
+.sidebar-title { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(238, 247, 243, 0.45); margin: 0.25rem 0.75rem 0.75rem; }
+.sidebar-menu { display: flex; flex-direction: column; gap: 0.3rem; }
+.sidebar-menu a { display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 0.9rem; border-radius: var(--radius-sm); color: rgba(238, 247, 243, 0.78); font-weight: 600; font-size: 0.92rem; transition: 0.18s; }
+.sidebar-menu a i { width: 20px; text-align: center; font-size: 1rem; }
+.sidebar-menu a:hover { background: rgba(255, 255, 255, 0.07); color: #fff; transform: translateX(3px); }
+.sidebar-menu a.active { background: var(--gradient); color: #fff; box-shadow: 0 8px 20px rgba(11, 193, 92, 0.2); }
+.sidebar-menu a.text-danger { color: #ff9da2; }
+.sidebar-foot { margin-top: auto; padding: 0.9rem; border-radius: 14px; background: rgba(255, 255, 255, 0.05); font-size: 0.75rem; color: rgba(238, 247, 243, 0.6); text-align: center; }
+.sidebar-backdrop { position: fixed; inset: 0; background: rgba(6, 31, 16, 0.4); z-index: 54; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+.sidebar-backdrop.active { opacity: 1; pointer-events: auto; }
+
+.main-content { padding-top: calc(var(--header-h) + 1.5rem); padding-bottom: 3.5rem; margin-left: var(--sidebar-w); min-height: 100vh; animation: popIn 0.3s ease; }
+.container { max-width: 960px; margin: 0 auto; padding: 0 1rem; }
+
+.back-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; }
+.btn-back-method { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--bg-card); color: var(--brand-900); border: 1.5px solid var(--border); padding: 0.6rem 1.1rem; border-radius: 99px; font-weight: 700; font-size: 0.86rem; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm); }
+.btn-back-method:hover { border-color: var(--primary); color: var(--primary-dark); }
+.mode-badge { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.75rem; border-radius: 99px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; }
+.badge-instant { background: #dcfce7; color: #15803d; }
+.badge-wait { background: #fef3c7; color: #b45309; }
+
+.amount-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.65rem; }
+.amount-chip { background: var(--bg-soft); border: 1px solid var(--border); color: var(--brand-900); padding: 0.4rem 0.85rem; border-radius: 99px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.18s; }
+.amount-chip:hover, .amount-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.limits-box { background: #f0fdf4; border: 2px solid var(--primary); border-radius: var(--radius); padding: 1.2rem; text-align: center; margin-bottom: 1.5rem; }
+.limits-box .min-max { font-size: 1.2rem; font-weight: 900; color: var(--brand-900); margin-bottom: 0.35rem; }
+.limits-box .warning { display: inline-flex; align-items: center; gap: 0.5rem; background: #fee2e2; color: #b91c1c; padding: 0.35rem 0.9rem; border-radius: 99px; font-weight: 700; font-size: 0.84rem; }
+
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.6rem; margin-bottom: 1.25rem; }
+.form-group { margin-bottom: 1.35rem; }
+.form-control { width: 100%; padding: 0.9rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 0.95rem; font-family: inherit; color: var(--text); background: var(--bg-card); }
+.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 1.2rem; border-radius: var(--radius-sm); font-weight: 800; font-size: 1rem; border: none; cursor: pointer; font-family: inherit; transition: 0.2s; }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 10px 25px rgba(11, 193, 92, 0.32); }
+.btn-block { width: 100%; }
+
+.detail-box { background: var(--bg-soft); border-radius: var(--radius); padding: 1.35rem; border: 1px solid var(--border); }
+.detail-box .k { font-size: 0.82rem; color: var(--text-muted); font-weight: 600; }
+.detail-box .v { font-weight: 800; font-size: 1.3rem; color: var(--brand-900); margin-top: 0.25rem; }
+.copy-btn { background: var(--primary); color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; }
+
+.upload-area { border: 2px dashed var(--border); border-radius: var(--radius); padding: 2rem 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; background: var(--bg-soft); min-height: 165px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.upload-area:hover { border-color: var(--primary); background: var(--primary-soft); }
+
+.loader-screen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 500; gap: 1.5rem; }
+.loader-logo-img { max-width: 160px; height: auto; animation: logoPulse 1.8s ease-in-out infinite; }
+@keyframes logoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.loader-transfer-box { display: flex; align-items: center; gap: 1rem; background: #fff; padding: 1rem 1.5rem; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.06); border: 1px solid var(--border); }
+.lt-bank { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.1rem; }
+.lt-bank.from { background: linear-gradient(135deg, #0bc15c, #0dbfa1); }
+.lt-bank.to { background: linear-gradient(135deg, #0c331c, #124727); }
+.lt-path { position: relative; width: 90px; height: 4px; background: #d7e5dd; border-radius: 99px; }
+.lt-path::before { content: ''; position: absolute; top: 50%; left: 0; transform: translateY(-50%); width: 14px; height: 14px; background: #0bc15c; border-radius: 50%; animation: loaderCoinFly 1.4s ease-in-out infinite; }
+@keyframes loaderCoinFly { 0% { left: 0; opacity: 0; transform: translateY(-50%) scale(0.5); } 25% { opacity: 1; transform: translateY(-50%) scale(1.1); } 75% { opacity: 1; } 100% { left: 100%; opacity: 0; transform: translateY(-50%) scale(0.5); } }
+
+.toast-container { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); text-align: center; z-index: 400; display: flex; flex-direction: column; gap: 0.5rem; width: min(92vw, 380px); }
+.toast { padding: 0.85rem 1.1rem; border-radius: 12px; background: var(--brand-900); color: #fff; font-size: 0.88rem; box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(-12px); transition: 0.28s; }
+.toast.show { opacity: 1; transform: none; }
+.toast-success { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); }
+.toast-error { background: #d93838; }
+
+.spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+.spinner-primary { border-color: var(--primary-soft); border-top-color: var(--primary); width: 40px; height: 40px; border-width: 4px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 860px) {
+  .mobile-menu-btn { display: grid; place-items: center; }
+  .sidebar { transform: translateX(-100%); width: 72%; max-width: 300px; top: 0; padding-top: 1.25rem; }
+  .sidebar.active { transform: translateX(0); }
+  .main-content { margin-left: 0; }
+  .form-row { grid-template-columns: 1fr; }
+  .user-name-display { display: none; }
+  .big-method-btn { padding: 1.5rem 1.25rem; }
+  .bm-icon { width: 56px; height: 56px; font-size: 1.55rem; }
+  .bm-title { font-size: 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="page-loader" class="loader-screen">
+  <img src="https://i.postimg.cc/W44YdWnS/pak-digital-funds.png" alt="Pak Digital Funds" class="loader-logo-img">
+  <div class="loader-transfer-box">
+    <div class="lt-bank from"><i class="fa-solid fa-user"></i></div>
+    <div class="lt-path"></div>
+    <div class="lt-bank to"><i class="fa-solid fa-wallet"></i></div>
+  </div>
+  <div class="loader-text">Instant & Secure Wallet Top-Up</div>
+</div>
+
+<div id="chooser-fullscreen">
+  <div class="chooser-box">
+    <button type="button" class="big-method-btn btn-auto-colorful" id="choose-auto-card">
+      <div class="bm-left">
+        <div class="bm-icon"><i class="fa-solid fa-bolt"></i></div>
+        <div>
+          <span class="bm-tag"><i class="fa-solid fa-circle-check"></i> Instant — 0 Wait Time</span>
+          <div class="bm-title">Auto Pay (Instant)</div>
+          <div class="bm-sub">JazzCash • Easypaisa • Raast QR (Auto Added)</div>
+        </div>
+      </div>
+      <div class="bm-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    </button>
+
+    <button type="button" class="big-method-btn btn-manual-colorful" id="choose-manual-card">
+      <div class="bm-left">
+        <div class="bm-icon"><i class="fa-solid fa-receipt"></i></div>
+        <div>
+          <span class="bm-tag"><i class="fa-regular fa-clock"></i> 15–30 Mins Approval</span>
+          <div class="bm-title">Manual Pay (Upload Slip)</div>
+          <div class="bm-sub">Send money manually & upload payment screenshot</div>
+        </div>
+      </div>
+      <div class="bm-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    </button>
+  </div>
+</div>
+
+<div id="full-page-shell" class="d-none">
+  <header>
+    <div class="header-content">
+      <div class="logo-area">
+        <a href="dashboard.html"><img id="site-logo-header" src="https://i.postimg.cc/D0NthZgz/pak-digital.png" alt="Logo"></a>
+      </div>
+      <div class="user-info">
+        <span class="wallet-badge"><i class="fa-solid fa-wallet"></i> <span id="header-wallet-balance">Rs. 0.00</span></span>
+        <span id="user-name-display" class="user-name-display">Loading...</span>
+        <span class="avatar-chip" id="user-avatar">U</span>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-title">Menu</div>
+    <div class="sidebar-menu">
+        <a href="dashboard.html"><i class="fa-solid fa-bolt"></i> New Order</a>
+        <a href="other-services.html"><i class="fa-solid fa-toolbox"></i> Other Services</a>
+        <a href="funds.html" class="active"><i class="fa-solid fa-wallet"></i> Add Funds</a>
+        <a href="history.html"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+        <a href="profile.html"><i class="fa-solid fa-user"></i> My Profile</a>
+        <a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
+        <a href="#" id="logout-btn" class="text-danger mt-4"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+    <div class="sidebar-foot">&copy; 2026 Pak Digital</div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container">
+
+      <div id="flux-return-banner" class="card d-none" style="border: 2px solid var(--primary); background: #f0fdf4; text-align: center;">
+        <div class="spinner spinner-primary" id="flux-verify-spinner" style="margin: 0 auto 0.75rem;"></div>
+        <h3 id="flux-verify-title" style="color: var(--brand-900); margin-bottom: 0.3rem;">Verifying Your Automatic Payment...</h3>
+        <p id="flux-verify-desc" class="text-muted" style="font-size: 0.9rem;">Please wait while we confirm your transaction with Flux Pay.</p>
+      </div>
+
+      <div id="section-auto-payment" class="d-none">
+        <div class="back-bar" style="max-width: 600px; margin: 0 auto 1.1rem;">
+          <button type="button" class="btn-back-method" onclick="window.showMethodChooser()">
+            <i class="fa-solid fa-arrow-left"></i> Change Payment Method
+          </button>
+          <span class="mode-badge badge-instant">⚡ Instant Auto Deposit</span>
+        </div>
+
+        <div class="card" style="max-width: 600px; margin: 0 auto; border: 2px solid rgba(11, 193, 92, 0.35);">
+          <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom: 1.15rem;">
+            <span style="width:46px; height:46px; border-radius:14px; background:var(--gradient); color:#fff; display:grid; place-items:center; font-size:1.3rem; flex-shrink:0;">
+              <i class="fa-solid fa-bolt"></i>
+            </span>
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--brand-900);">Flux Pay Instant Checkout</h3>
+              <span style="font-size: 0.8rem; color: var(--primary-dark); font-weight: 700;">JazzCash • Easypaisa • Raast QR</span>
+            </div>
+          </div>
+
+          <div class="urdu-text mb-4" style="background: var(--bg-soft); padding: 0.85rem 1.1rem; border-radius: 12px; font-size: 1rem; color: var(--brand-900); border-right: 4px solid var(--primary);">
+            آٹومیٹک پیمنٹ کے ذریعے بھیجی گئی رقم بغیر کسی انتظار کے فوراً آپ کے والٹ میں جمع ہو جاتی ہے۔
+          </div>
+
+          <form id="flux-auto-form">
+            <div class="form-group">
+              <label for="flux-amount" class="font-bold">Enter Deposit Amount (PKR)</label>
+              <input type="number" id="flux-amount" class="form-control" min="1" max="50000" step="1" placeholder="Enter amount (e.g. 500)" required>
+              <div class="amount-chips">
+                <button type="button" class="amount-chip" onclick="window.setQuickAmount(100)">Rs. 100</button>
+                <button type="button" class="amount-chip" onclick="window.setQuickAmount(500)">Rs. 500</button>
+                <button type="button" class="amount-chip" onclick="window.setQuickAmount(1000)">Rs. 1,000</button>
+                <button type="button" class="amount-chip" onclick="window.setQuickAmount(2500)">Rs. 2,500</button>
+                <button type="button" class="amount-chip" onclick="window.setQuickAmount(5000)">Rs. 5,000</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="flux-phone" class="font-bold">Your Mobile Number (Optional)</label>
+              <input type="tel" id="flux-phone" class="form-control" placeholder="03001234567">
+            </div>
+
+            <button type="submit" id="flux-submit-btn" class="btn btn-primary btn-block">
+              <span class="btn-text"><i class="fa-solid fa-bolt"></i> Proceed to Instant Checkout</span>
+              <span class="spinner d-none" id="flux-btn-spinner"></span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div id="section-manual-payment" class="d-none">
+        <div class="back-bar">
+          <button type="button" class="btn-back-method" onclick="window.showMethodChooser()">
+            <i class="fa-solid fa-arrow-left"></i> Change Payment Method
+          </button>
+          <span class="mode-badge badge-wait">⏳ Manual Review (15–30 Mins)</span>
+        </div>
+
+        <div class="limits-box">
+          <div class="min-max">Manual Limits: Mini 30 & Max 50,000 PKR</div>
+          <div class="warning">
+            <i class="fa-solid fa-clock"></i> Manual payments require admin approval waiting time.
+          </div>
+        </div>
+
+        <div class="form-row" style="align-items:start">
+          <div class="card">
+            <div class="urdu-step-title urdu-text">
+              <i class="fa-solid fa-list-ol text-primary"></i> ۱۔ یہ نمبر کاپی کریں اور پیسے سینڈ کریں
+            </div>
+            <div id="payment-loading" class="text-center py-4">
+              <div class="spinner spinner-primary" style="margin:0 auto"></div>
+              <p class="text-muted mt-2" style="font-size:0.85rem;">Loading active accounts...</p>
+            </div>
+            <div id="payment-methods-list" class="d-none"></div>
+          </div>
+
+          <form id="add-funds-form" class="card">
+            <div class="form-group" style="margin-bottom: 1.8rem;">
+              <label class="urdu-step-title urdu-text mb-3">
+                <i class="fa-solid fa-image text-primary"></i> ۲۔ پیمنٹ کا اسکرین شاٹ لیں اور یہاں اپلوڈ کریں
+              </label>
+              <div class="upload-area" onclick="if(!window.isUploading) document.getElementById('fund-screenshot').click()" id="drop-zone">
+                <div id="upload-state-default">
+                  <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.4rem; color: var(--primary); margin-bottom: 0.7rem;"></i>
+                  <div class="font-bold">Click or tap to upload screenshot</div>
+                  <p class="text-muted" style="font-size:0.82rem; margin-top:0.25rem;">JPG, JPEG or PNG (Max 5MB)</p>
+                </div>
+                <div id="upload-state-loading" class="d-none">
+                  <div class="spinner spinner-primary" style="margin: 0.5rem auto 0.8rem;"></div>
+                  <div class="font-bold" style="color: var(--primary);">Uploading screenshot...</div>
+                </div>
+                <div id="upload-state-success" class="d-none">
+                  <i class="fa-solid fa-circle-check" style="font-size: 2.4rem; color: var(--primary); margin-bottom: 0.7rem;"></i>
+                  <div class="font-bold" style="color: var(--primary);">Screenshot uploaded! ✅</div>
+                </div>
+              </div>
+              <input type="file" id="fund-screenshot" class="d-none" accept="image/*" required>
+            </div>
+
+            <div class="form-group mt-3">
+              <label for="fund-amount" class="urdu-step-title urdu-text mb-3">
+                <i class="fa-solid fa-money-bill-wave text-primary"></i> ۳۔ وہ رقم لکھیں جو آپ نے بھیجی ہے
+              </label>
+              <input type="number" id="fund-amount" class="form-control" min="30" max="50000" step="any" placeholder="e.g. 1000" required>
+            </div>
+
+            <button type="submit" id="submit-funds-btn" class="btn btn-primary btn-block mt-4">
+              <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Submit Manual Request</span>
+              <span class="spinner d-none" id="funds-spinner"></span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, runTransaction, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD6VSIGbUJqIMQb53k1mXAcGjNu9PFC1w0",
+  authDomain: "new-smm02.firebaseapp.com",
+  databaseURL: "https://new-smm02-default-rtdb.firebaseio.com",
+  projectId: "new-smm02",
+  storageBucket: "new-smm02.firebasestorage.app",
+  messagingSenderId: "2203224901",
+  appId: "1:2203224901:web:7b328bb0ea4c381afe0c2c"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const WORKER_BASE_URL = "https://pak-digital-autopay.ftgmhacks.workers.dev";
+const IMGBB_API_KEY = "15215380e1407f437cdfe654a8a507d5";
+
+let currentUser = null;
+let currentUserData = {};
+let activePaymentMethodTitle = '';
+let uploadedScreenshotUrl = '';
+window.isUploading = false;
+
+const money = (n) => 'Rs. ' + (parseFloat(n || 0)).toFixed(2);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const initials = (name) => (name || 'U').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+
+function showToast(message, type = 'success') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = (type === 'success' ? '<i class="fa-solid fa-check"></i> ' : '<i class="fa-solid fa-xmark"></i> ') + message;
+  container.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 4500);
+}
+window.copyClipboard = (text) => { navigator.clipboard.writeText(text); showToast('Account number copied! ✅'); };
+
+const chooserScreen = document.getElementById('chooser-fullscreen');
+const fullPageShell = document.getElementById('full-page-shell');
+const autoSec = document.getElementById('section-auto-payment');
+const manualSec = document.getElementById('section-manual-payment');
+
+window.showMethodChooser = () => {
+  fullPageShell.classList.add('d-none');
+  autoSec.classList.add('d-none');
+  manualSec.classList.add('d-none');
+  chooserScreen.classList.remove('d-none');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+document.getElementById('choose-auto-card').addEventListener('click', () => {
+  chooserScreen.classList.add('d-none');
+  fullPageShell.classList.remove('d-none');
+  manualSec.classList.add('d-none');
+  autoSec.classList.remove('d-none');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+document.getElementById('choose-manual-card').addEventListener('click', () => {
+  chooserScreen.classList.add('d-none');
+  fullPageShell.classList.remove('d-none');
+  autoSec.classList.add('d-none');
+  manualSec.classList.remove('d-none');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+window.setQuickAmount = (val) => {
+  document.getElementById('flux-amount').value = val;
+  document.querySelectorAll('.amount-chip').forEach(c => {
+    c.classList.toggle('active', c.textContent.replace(/\D/g, '') === String(val));
+  });
+};
+
+const mobileBtn = document.getElementById('mobile-menu-btn');
+const sidebar = document.getElementById('sidebar');
+if (sidebar) {
+  const backdrop = document.createElement('div');
+  backdrop.className = 'sidebar-backdrop';
+  document.body.appendChild(backdrop);
+  mobileBtn?.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+    backdrop.classList.toggle('active', sidebar.classList.contains('active'));
+  });
+  backdrop.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    backdrop.classList.remove('active');
+  });
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.replace('login.html?redirect=funds.html');
+    return;
+  }
+  currentUser = user;
+
+  const uSnap = await getDoc(doc(db, 'users', user.uid));
+  if (uSnap.exists()) {
+    currentUserData = uSnap.data();
+    document.getElementById('header-wallet-balance').textContent = money(currentUserData.wallet);
+    const shown = currentUserData.username || currentUserData.name || user.email.split('@')[0];
+    document.getElementById('user-name-display').textContent = shown;
+    document.getElementById('user-avatar').textContent = initials(shown);
+  }
+
+  document.getElementById('page-loader')?.remove();
+  loadManualMethods();
+  checkFluxReturnVerification();
+});
+
+document.getElementById('flux-auto-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const amount = parseFloat(document.getElementById('flux-amount').value);
+  if (isNaN(amount) || amount < 1 || amount > 50000) {
+    return showToast('Please enter a valid deposit amount.', 'error');
+  }
+
+  const btn = document.getElementById('flux-submit-btn');
+  const sp = document.getElementById('flux-btn-spinner');
+  btn.disabled = true;
+  btn.querySelector('.btn-text').classList.add('d-none');
+  sp.classList.remove('d-none');
+
+  try {
+    const orderRef = `FLX-${currentUser.uid.slice(0, 6).toUpperCase()}-${Date.now()}`;
+    const returnUrl = `${window.location.origin}/funds.html`;
+
+    const res = await fetch(`${WORKER_BASE_URL}/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: amount.toFixed(2),
+        order_id: orderRef,
+        payer_email: currentUser.email || 'user@pak-digital.store',
+        customer_name: currentUserData.name || currentUserData.username || 'Pak Digital User',
+        return_url: returnUrl
+      })
+    });
+
+    const data = await res.json();
+    if (!data.success || !data.payment?.checkout_url) {
+      throw new Error(data.error || data.message || 'Could not start Flux Pay checkout.');
+    }
+
+    localStorage.setItem('pending_flux_payment', JSON.stringify({
+      paymentId: data.payment.payment_id,
+      orderId: orderRef,
+      amount: amount
+    }));
+
+    window.location.href = data.payment.checkout_url;
+  } catch (err) {
+    showToast(err.message || 'Payment initiation failed.', 'error');
+    btn.disabled = false;
+    btn.querySelector('.btn-text').classList.remove('d-none');
+    sp.classList.add('d-none');
+  }
+});
+
+async function checkFluxReturnVerification() {
+  const params = new URLSearchParams(window.location.search);
+  const fluxPaymentId = params.get('flux_payment_id') || params.get('payment') || '';
+  const fluxOrderId = params.get('flux_order_id') || '';
+  const fluxStatus = params.get('flux_status') || params.get('payment_status') || '';
+  const fluxTs = params.get('flux_return_ts') || '';
+  const fluxSig = params.get('flux_return_sig') || '';
+
+  const cached = JSON.parse(localStorage.getItem('pending_flux_payment') || 'null');
+  const paymentId = fluxPaymentId || cached?.paymentId;
+
+  if (!paymentId || (!fluxStatus && !cached)) return;
+
+  chooserScreen.classList.add('d-none');
+  fullPageShell.classList.remove('d-none');
+  autoSec.classList.remove('d-none');
+
+  const banner = document.getElementById('flux-return-banner');
+  const titleEl = document.getElementById('flux-verify-title');
+  const descEl = document.getElementById('flux-verify-desc');
+  const spinner = document.getElementById('flux-verify-spinner');
+  banner.classList.remove('d-none');
+
+  try {
+    const verifyUrl = `${WORKER_BASE_URL}/status?payment_id=${encodeURIComponent(paymentId)}&order_id=${encodeURIComponent(fluxOrderId)}&flux_status=${encodeURIComponent(fluxStatus)}&flux_return_ts=${encodeURIComponent(fluxTs)}&flux_return_sig=${encodeURIComponent(fluxSig)}`;
+    const res = await fetch(verifyUrl);
+    const data = await res.json();
+
+    const apiCompleted = data?.payment?.status === 'completed';
+    const sigCompleted = data?.signature_verified === true;
+
+    if (apiCompleted || sigCompleted) {
+      const verifiedAmount = parseFloat(data?.payment?.amount || cached?.amount || 0);
+      if (verifiedAmount <= 0) throw new Error('Verified payment amount could not be determined.');
+
+      const userRef = doc(db, 'users', currentUser.uid);
+      let alreadyCredited = false;
+
+      await runTransaction(db, async (tx) => {
+        const uSnap = await tx.get(userRef);
+        if (!uSnap.exists()) return;
+        if (uSnap.data().lastFluxPaymentId === paymentId) {
+          alreadyCredited = true;
+          return;
+        }
+        const newBal = parseFloat((parseFloat(uSnap.data().wallet || 0) + verifiedAmount).toFixed(2));
+        tx.update(userRef, { wallet: newBal, lastFluxPaymentId: paymentId });
+      });
+
+      if (!alreadyCredited) {
+        await addDoc(collection(db, 'payments'), {
+          paymentId: cached?.orderId || fluxOrderId || paymentId,
+          fluxPaymentId: paymentId,
+          userId: currentUser.uid,
+          userEmail: currentUser.email,
+          amount: verifiedAmount,
+          transactionId: data?.payment?.transaction_id || paymentId,
+          paymentMethod: `Flux Pay (${data?.payment?.payment_method || 'Auto'})`,
+          gateway: 'flux_pay',
+          paymentType: 'auto',
+          status: 'Approved',
+          createdAt: fsTS(),
+          updatedAt: fsTS()
+        });
+
+        await addDoc(collection(db, 'walletTransactions'), {
+          transactionId: data?.payment?.transaction_id || paymentId,
+          userId: currentUser.uid,
+          type: 'flux_auto_deposit',
+          amount: verifiedAmount,
+          description: `Flux Pay Instant Deposit (${paymentId})`,
+          createdAt: fsTS()
+        });
+      }
+
+      localStorage.removeItem('pending_flux_payment');
+      window.history.replaceState({}, document.title, window.location.pathname);
+      spinner.classList.add('d-none');
+      titleEl.textContent = `Payment Approved! ${money(verifiedAmount)} Added Instantly ✅`;
+      descEl.textContent = 'Your wallet balance has been updated automatically.';
+      const updatedUser = await getDoc(userRef);
+      if (updatedUser.exists()) {
+        document.getElementById('header-wallet-balance').textContent = money(updatedUser.data().wallet);
+      }
+      showToast('Automatic payment credited to your wallet!');
+    } else {
+      localStorage.removeItem('pending_flux_payment');
+      window.history.replaceState({}, document.title, window.location.pathname);
+      banner.classList.add('d-none');
+      if (fluxStatus) showToast(`Payment ${fluxStatus}: No funds deducted.`, 'error');
+    }
+  } catch (err) {
+    spinner.classList.add('d-none');
+    titleEl.textContent = 'Verification Status';
+    descEl.textContent = err.message;
+  }
+}
+
+async function loadManualMethods() {
+  const snap = await getDocs(query(collection(db, 'paymentMethods'), where('status', '==', 'active')));
+  const list = document.getElementById('payment-methods-list');
+  const loading = document.getElementById('payment-loading');
+
+  if (snap.empty) {
+    loading.innerHTML = '<p class="text-danger font-bold text-center">No manual accounts active.</p>';
+    return;
+  }
+
+  let html = '';
+  snap.forEach(d => {
+    const m = d.data();
+    if (!activePaymentMethodTitle) activePaymentMethodTitle = m.title;
+    html += `
+      <div class="detail-box mb-4">
+        <div style="display:flex; align-items:center; gap:0.8rem; font-size: 1.2rem; font-weight:800; color: var(--brand-900); margin-bottom: 1rem;">
+          <div style="width:40px; height:40px; border-radius:10px; background:var(--primary-soft); color:var(--primary); display:grid; place-items:center;">
+            <i class="${esc(m.icon || 'fa-solid fa-building-columns')}"></i>
+          </div>
+          ${esc(m.title)}
+        </div>
+        <div class="k">Account Number</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:0.4rem;">
+          <div class="v">${esc(m.accountNumber)}</div>
+          <button type="button" class="copy-btn" onclick="window.copyClipboard('${esc(m.accountNumber)}')"><i class="fa-solid fa-copy"></i> Copy</button>
+        </div>
+        <div class="mt-4">
+          <div class="k">Account Name</div>
+          <div class="v" style="color:var(--primary)">${esc(m.accountName)}</div>
+        </div>
+      </div>`;
+  });
+  list.innerHTML = html;
+  loading.classList.add('d-none');
+  list.classList.remove('d-none');
+}
+
+document.getElementById('fund-screenshot').addEventListener('change', async function() {
+  const file = this.files[0];
+  if (!file) return;
+  window.isUploading = true;
+  document.getElementById('upload-state-default').classList.add('d-none');
+  document.getElementById('upload-state-loading').classList.remove('d-none');
+  document.getElementById('submit-funds-btn').disabled = true;
+
+  try {
+    const fd = new FormData();
+    fd.append('image', file);
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: fd });
+    const data = await res.json();
+    if (!data.success) throw new Error('Failed to upload screenshot.');
+    uploadedScreenshotUrl = data.data.url;
+    document.getElementById('upload-state-loading').classList.add('d-none');
+    document.getElementById('upload-state-success').classList.remove('d-none');
+    showToast('Screenshot uploaded! ✅');
+  } catch (err) {
+    showToast(err.message, 'error');
+    document.getElementById('upload-state-loading').classList.add('d-none');
+    document.getElementById('upload-state-default').classList.remove('d-none');
+  } finally {
+    window.isUploading = false;
+    document.getElementById('submit-funds-btn').disabled = false;
+  }
+});
+
+document.getElementById('add-funds-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const amount = parseFloat(document.getElementById('fund-amount').value);
+  if (amount < 30 || amount > 50000) return showToast('Amount must be between Rs. 30 and 50,000.', 'error');
+  if (!uploadedScreenshotUrl) return showToast('Please upload a payment screenshot first.', 'error');
+
+  const btn = document.getElementById('submit-funds-btn');
+  const sp = document.getElementById('funds-spinner');
+  btn.disabled = true; sp.classList.remove('d-none');
+
+  try {
+    await addDoc(collection(db, 'payments'), {
+      paymentId: 'PAY-' + Math.floor(Math.random() * 100000000),
+      userId: currentUser.uid,
+      userEmail: currentUser.email,
+      amount: amount,
+      transactionId: 'Manual Slip',
+      screenshotUrl: uploadedScreenshotUrl,
+      paymentMethod: activePaymentMethodTitle || 'Manual Transfer',
+      paymentType: 'manual',
+      status: 'Pending',
+      createdAt: fsTS(),
+      updatedAt: fsTS()
+    });
+    showToast('Manual payment request submitted!');
+    e.target.reset();
+    uploadedScreenshotUrl = '';
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    btn.disabled = false; sp.classList.add('d-none');
+  }
+});
+
+document.getElementById('logout-btn')?.addEventListener('click', async (e) => {
+  e.preventDefault(); await signOut(auth); window.location.href = 'dashboard.html';
+});
+</script>
+</body>
+</html>
