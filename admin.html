@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Pak Digital</title>
+<link class="favicon" rel="icon" href="https://i.postimg.cc/QCwPKNnp/20260815-000023.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root {
+  --primary: #0bc15c; --primary-dark: #099e4b; --primary-soft: rgba(11, 193, 92, 0.12);
+  --bg: #f4f7f9; --bg-card: #ffffff; --bg-soft: #eef2f6; --text: #0f172a; --text-muted: #64748b;
+  --border: #e2e8f0; --sidebar-bg: #0b1510; --header-bg: rgba(255, 255, 255, 0.88);
+  --radius: 16px; --radius-sm: 10px; --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+  --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06); --shadow-lg: 0 24px 48px -12px rgba(15, 23, 42, 0.18);
+  --gradient: linear-gradient(135deg, #0bc15c 0%, #0dbfa1 100%); --sidebar-w: 270px; --header-h: 68px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #090f0c; --bg-card: #111c16; --bg-soft: #17261e; --text: #f1f5f9; --text-muted: #94a3b8;
+    --border: #1f3328; --sidebar-bg: #070d0a; --header-bg: rgba(17, 28, 22, 0.88);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.3); --shadow: 0 10px 25px -5px rgba(0,0,0,0.45);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #090f0c; --bg-card: #111c16; --bg-soft: #17261e; --text: #f1f5f9; --text-muted: #94a3b8;
+  --border: #1f3328; --sidebar-bg: #070d0a; --header-bg: rgba(17, 28, 22, 0.88);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3); --shadow: 0 10px 25px -5px rgba(0,0,0,0.45);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; overflow-x: hidden; }
+#admin-app { display: none; }
+.d-none { display: none !important; }
+.text-center { text-align: center; } .text-muted { color: var(--text-muted); } .text-primary { color: var(--primary); }
+.text-danger { color: #ef4444; } .text-success { color: #10b981; } .text-warning { color: #f59e0b; } .font-bold { font-weight: 700; }
+.mt-2 { margin-top: 0.5rem; } .mt-4 { margin-top: 1.5rem; } .mb-3 { margin-bottom: 1rem; }
+
+.brand-icon-chip {
+  width: 38px; height: 38px; border-radius: 11px; display: inline-grid; place-items: center;
+  font-size: 1.15rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+.fa-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.fa-facebook, .fa-facebook-f { color: #1877F2 !important; }
+.fa-youtube { color: #FF0000 !important; }
+.fa-whatsapp { color: #25D366 !important; }
+.fa-telegram { color: #0088CC !important; }
+.fa-tiktok { color: #ff0050 !important; filter: drop-shadow(-1.5px -1px 0 #00f2fe); }
+.fa-x-twitter, .fa-twitter { color: #1DA1F2 !important; }
+.fa-snapchat { color: #eab308 !important; }
+.fa-discord { color: #5865F2 !important; }
+.fa-linkedin, .fa-linkedin-in { color: #0A66C2 !important; }
+.fa-pinterest, .fa-pinterest-p { color: #E60023 !important; }
+.fa-spotify { color: #1DB954 !important; }
+.fa-twitch { color: #9146FF !important; }
+.fa-reddit, .fa-reddit-alien { color: #FF4500 !important; }
+.fa-crown { color: #f59e0b !important; }
+.fa-fire { color: #f97316 !important; }
+.fa-bolt { color: #eab308 !important; }
+.fa-robot { color: #8b5cf6 !important; }
+.fa-code, .fa-laptop-code { color: #3b82f6 !important; }
+.fa-cloud-arrow-down { color: #06b6d4 !important; }
+.fa-wand-magic-sparkles { color: #ec4899 !important; }
+.fa-key { color: #f59e0b !important; }
+.fa-globe { color: #0ea5e9 !important; }
+.fa-toolbox { color: #10b981 !important; }
+.fa-building-columns { color: #6366f1 !important; }
+
+header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-h); z-index: 60; background: var(--header-bg); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+.header-content { height: 100%; max-width: 1600px; margin: 0 auto; padding: 0 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.brand-mark { display: flex; align-items: center; gap: 0.75rem; font-weight: 800; font-size: 1.12rem; color: var(--text); }
+.wallet-badge { display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 700; font-size: 0.8rem; background: var(--primary-soft); color: var(--primary); padding: 0.45rem 0.9rem; border-radius: 99px; }
+.icon-btn { background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); width: 40px; height: 40px; border-radius: 12px; font-size: 1rem; cursor: pointer; display: inline-grid; place-items: center; }
+.icon-btn:hover { border-color: var(--primary); color: var(--primary); }
+.mobile-menu-btn { display: none; }
+.sidebar { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: var(--sidebar-w); z-index: 55; background: var(--sidebar-bg); color: #f8fafc; padding: 1.25rem 0.9rem; border-left: 1px solid var(--border); display: flex; flex-direction: column; transition: transform 0.3s ease; overflow-y: auto; }
+.sidebar-title { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: #64748b; margin: 0.3rem 0.8rem 0.75rem; font-weight: 800; }
+.sidebar-menu { display: flex; flex-direction: column; gap: 0.25rem; }
+.sidebar-menu button.nav-link { display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 0.95rem; border-radius: var(--radius-sm); color: #94a3b8; font-weight: 600; font-size: 0.9rem; border: none; background: transparent; cursor: pointer; width: 100%; text-align: left; font-family: inherit; transition: 0.2s; }
+.sidebar-menu button.nav-link i { width: 20px; text-align: center; }
+.sidebar-menu button.nav-link:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.sidebar-menu button.nav-link.active { background: var(--gradient); color: #fff; box-shadow: 0 8px 20px rgba(11, 193, 92, 0.25); }
+.sidebar-menu button.nav-link.active i { color: #fff !important; -webkit-text-fill-color: #fff !important; filter: none !important; }
+.sidebar-menu a.text-danger { color: #fca5a5; display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 0.95rem; font-weight: 600; text-decoration: none; }
+.main-content { padding-top: calc(var(--header-h) + 1.5rem); padding-bottom: 4rem; margin-right: var(--sidebar-w); min-height: 100vh; }
+.container { max-width: 1320px; margin: 0 auto; padding: 0 1.25rem; }
+.page-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.4rem; }
+.page-head h1 { font-size: 1.55rem; font-weight: 800; color: var(--text); }
+.page-head p { color: var(--text-muted); font-size: 0.88rem; margin-top: 0.15rem; }
+.card { border-radius: var(--radius); box-shadow: var(--shadow); background: var(--bg-card); border: 1px solid var(--border); padding: 1.4rem; margin-bottom: 1.4rem; }
+.card-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; color: var(--text); }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem; display: flex; align-items: center; gap: 0.95rem; box-shadow: var(--shadow-sm); transition: 0.2s; }
+.stat-card:hover { transform: translateY(-2px); border-color: var(--primary); }
+.stat-icon { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); font-size: 1.25rem; flex-shrink: 0; }
+.stat-card .label { font-size: 0.71rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+.stat-card .value { font-size: 1.32rem; font-weight: 800; color: var(--text); margin-top: 0.15rem; }
+.toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
+.search-box { position: relative; flex: 1; min-width: 240px; max-width: 420px; }
+.search-box i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem; }
+.search-box input { width: 100%; padding: 0.7rem 1rem 0.7rem 2.5rem; border-radius: 99px; border: 1.5px solid var(--border); background: var(--bg-card); color: var(--text); font-size: 0.88rem; font-family: inherit; }
+.search-box input:focus { outline: none; border-color: var(--primary); }
+.form-group { margin-bottom: 1.15rem; }
+label { display: block; font-size: 0.83rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text); }
+.form-control, select.form-control, textarea.form-control { width: 100%; padding: 0.78rem 0.95rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 0.9rem; font-family: inherit; color: var(--text); background: var(--bg-soft); }
+.form-control:focus { outline: none; border-color: var(--primary); background: var(--bg-card); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem; padding: 0.7rem 1.15rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.86rem; border: none; cursor: pointer; font-family: inherit; transition: 0.2s; white-space: nowrap; }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 6px 18px rgba(11, 193, 92, 0.25); }
+.btn-secondary { background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); }
+.btn-success { background: #10b981; color: #fff; }
+.btn-danger { background: rgba(239, 68, 68, 0.14); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); }
+.btn-danger:hover { background: #ef4444; color: #fff; }
+.btn-sm { padding: 0.38rem 0.7rem; font-size: 0.76rem; border-radius: 8px; }
+.btn-block { width: 100%; }
+.badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.65rem; border-radius: 99px; font-size: 0.72rem; font-weight: 700; background: var(--bg-soft); color: var(--text-muted); }
+.badge-pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+.badge-completed, .badge-approved, .badge-active { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.badge-cancelled, .badge-rejected, .badge-inactive { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+.badge-auto { background: rgba(11, 193, 92, 0.18); color: var(--primary); }
+.table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-card); }
+table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 720px; }
+thead th { background: var(--bg-soft); text-align: left; padding: 0.85rem 1rem; font-size: 0.71rem; text-transform: uppercase; color: var(--text-muted); font-weight: 800; border-bottom: 1px solid var(--border); }
+tbody td { padding: 0.85rem 1rem; border-top: 1px solid var(--border); vertical-align: middle; color: var(--text); }
+tbody tr:hover { background: rgba(11, 193, 92, 0.03); }
+.tabs { display: flex; gap: 0.4rem; background: var(--bg-soft); padding: 0.35rem; border-radius: 12px; margin-bottom: 1.25rem; overflow-x: auto; border: 1px solid var(--border); }
+.tab-btn { flex: 1 1 auto; padding: 0.6rem 1rem; border-radius: 9px; border: none; background: transparent; cursor: pointer; font-weight: 700; font-size: 0.84rem; color: var(--text-muted); white-space: nowrap; }
+.tab-btn.active { background: var(--bg-card); color: var(--primary); box-shadow: var(--shadow-sm); }
+.icon-picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 8px; max-height: 175px; overflow-y: auto; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-soft); }
+.icon-option { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 10px; cursor: pointer; background: var(--bg-card); font-size: 1.2rem; border: 1.5px solid var(--border); transition: 0.18s; }
+.icon-option:hover { transform: scale(1.08); border-color: var(--primary); }
+.icon-option.selected { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); transform: scale(1.08); }
+.modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(5px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem; }
+.modal.active { display: flex; }
+.modal-box { background: var(--bg-card); color: var(--text); border: 1px solid var(--border); border-radius: 20px; width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+.modal-head { padding: 1.15rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-close { background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); width: 34px; height: 34px; border-radius: 10px; cursor: pointer; }
+.modal-body { padding: 1.5rem; }
+.toast-container { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 400; display: flex; flex-direction: column; gap: 0.5rem; width: min(92vw, 390px); }
+.toast { padding: 0.85rem 1.1rem; border-radius: 12px; background: #0f172a; color: #fff; font-size: 0.88rem; font-weight: 600; opacity: 0; transform: translateY(12px); transition: 0.25s; box-shadow: var(--shadow-lg); }
+.toast.show { opacity: 1; transform: none; }
+.toast-success { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); }
+.toast-error { background: #ef4444; }
+.loader-screen { position: fixed; inset: 0; background: var(--bg); display: grid; place-items: center; z-index: 500; }
+.spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+.spinner-primary { border-color: var(--primary-soft); border-top-color: var(--primary); width: 46px; height: 46px; border-width: 4px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 1024px) {
+  .mobile-menu-btn { display: inline-grid; }
+  .sidebar { transform: translateX(100%); top: 0; padding-top: 1.25rem; }
+  .sidebar.active { transform: translateX(0); }
+  .main-content { margin-right: 0; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="admin-auth-loading" class="loader-screen"><div class="spinner spinner-primary"></div></div>
+
+<div id="admin-app">
+  <header>
+    <div class="header-content">
+      <span class="brand-mark">
+        <span style="width:36px; height:36px; border-radius:11px; background:var(--gradient); color:#fff; display:grid; place-items:center;"><i class="fa-solid fa-shield-halved"></i></span>
+        <span>Pak Digital Admin</span>
+      </span>
+      <div style="display:flex; align-items:center; gap:0.55rem;">
+        <button id="theme-toggle-btn" class="icon-btn" title="Toggle Dark/Light Theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
+        <button id="refresh-all-btn" class="icon-btn" title="Refresh Data"><i class="fa-solid fa-arrows-rotate"></i></button>
+        <span class="wallet-badge"><i class="fa-solid fa-user-shield"></i> Super Admin</span>
+        <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-title">Command Center</div>
+    <div class="sidebar-menu" id="admin-nav">
+      <button class="nav-link active" data-section="dashboard"><i class="fa-solid fa-gauge-high"></i> Dashboard & Quick Actions</button>
+      <button class="nav-link" data-section="analytics"><i class="fa-solid fa-chart-line"></i> Profit Analytics</button>
+      <button class="nav-link" data-section="orders"><i class="fa-solid fa-box"></i> Orders</button>
+      <button class="nav-link" data-section="payments"><i class="fa-solid fa-money-bill-transfer"></i> Payments</button>
+      <button class="nav-link" data-section="users"><i class="fa-solid fa-users"></i> Users</button>
+      <button class="nav-link" data-section="categories"><i class="fa-solid fa-layer-group"></i> Categories</button>
+      <button class="nav-link" data-section="services"><i class="fa-solid fa-list-check"></i> SMM Services</button>
+      <button class="nav-link" data-section="manual"><i class="fa-solid fa-toolbox"></i> Other Services</button>
+      <button class="nav-link" data-section="methods"><i class="fa-solid fa-building-columns"></i> Payment Methods</button>
+      <button class="nav-link" data-section="broadcast"><i class="fa-solid fa-bullhorn"></i> Broadcast</button>
+      <button class="nav-link" data-section="settings"><i class="fa-solid fa-gear"></i> Settings & Keys</button>
+      <a href="#" id="admin-logout-btn" class="text-danger mt-4"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container">
+
+      <section data-panel="dashboard">
+        <div class="page-head">
+          <div>
+            <h1>Dashboard & Quick Actions</h1>
+            <p>Complete overview of orders, payments, users, and instant pending actions.</p>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(59,130,246,0.12);color:#3b82f6;"><i class="fa-solid fa-users"></i></div><div><div class="label">Total Users</div><div class="value" id="stat-users">0</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(16,185,129,0.12);color:#10b981;"><i class="fa-solid fa-wallet"></i></div><div><div class="label">Users Wallet Balance</div><div class="value" id="stat-total-wallet">Rs. 0.00</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(139,92,246,0.12);color:#8b5cf6;"><i class="fa-solid fa-cart-shopping"></i></div><div><div class="label">Total Orders</div><div class="value" id="stat-total-orders">0</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(16,185,129,0.12);color:#10b981;"><i class="fa-solid fa-circle-check"></i></div><div><div class="label">Successful Orders</div><div class="value text-success" id="stat-success-orders">0</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(6,182,212,0.12);color:#06b6d4;"><i class="fa-solid fa-receipt"></i></div><div><div class="label">Approved Payments</div><div class="value" id="stat-total-payments-count">0</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(99,102,241,0.12);color:#6366f1;"><i class="fa-solid fa-building-columns"></i></div><div><div class="label">Total Funds Added</div><div class="value text-primary" id="stat-total-deposits">Rs. 0.00</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(245,158,11,0.12);color:#f59e0b;"><i class="fa-solid fa-sack-dollar"></i></div><div><div class="label">Tracked Net Profit</div><div class="value text-primary" id="stat-net-profit">Rs. 0.00</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(239,68,68,0.12);color:#ef4444;"><i class="fa-solid fa-clock"></i></div><div><div class="label">Pending Actions</div><div class="value text-warning" id="stat-pending-actions">0</div></div></div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #f59e0b;">
+          <div class="card-title">
+            <span><i class="fa-solid fa-bolt"></i> Pending Manual Payments (Quick Approve / Reject)</span>
+            <span class="badge badge-pending" id="quick-pay-count">0 Pending</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>User Email</th><th>Amount</th><th>Method</th><th>Screenshot</th><th>Quick Actions</th></tr>
+              </thead>
+              <tbody id="quick-payments-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--primary);">
+          <div class="card-title">
+            <span><i class="fa-solid fa-clock" style="color:var(--primary)"></i> Pending Orders (Quick Complete / Cancel)</span>
+            <span class="badge badge-pending" id="quick-ord-count">0 Pending</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Order ID</th><th>User</th><th>Service</th><th>Link / Info</th><th>Price / Profit</th><th>Quick Actions</th></tr>
+              </thead>
+              <tbody id="quick-orders-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section data-panel="analytics" class="d-none">
+        <div class="page-head">
+          <div>
+            <h1>Financial & Profit Analytics (PKR)</h1>
+            <p>Only orders from services where API Cost is configured are counted here. Old untagged services are ignored.</p>
+          </div>
+        </div>
+
+        <div class="tabs" id="profit-filter-tabs">
+          <button class="tab-btn active" data-range="today">Today's Profit</button>
+          <button class="tab-btn" data-range="7d">Last 7 Days Profit</button>
+          <button class="tab-btn" data-range="30d">Last 1 Month Profit</button>
+          <button class="tab-btn" data-range="all">All Tracked Profit</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(59,130,246,0.12);color:#3b82f6;"><i class="fa-solid fa-coins"></i></div><div><div class="label">Tracked Order Revenue</div><div class="value" id="an-revenue">Rs. 0.00</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(239,68,68,0.12);color:#ef4444;"><i class="fa-solid fa-server"></i></div><div><div class="label">Source API Cost (PKR)</div><div class="value text-danger" id="an-cost">Rs. 0.00</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(16,185,129,0.12);color:#10b981;"><i class="fa-solid fa-sack-dollar"></i></div><div><div class="label">Net Profit Earned</div><div class="value text-primary" id="an-profit">Rs. 0.00</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(245,158,11,0.12);color:#f59e0b;"><i class="fa-solid fa-bolt"></i></div><div><div class="label">Period Deposits (Auto+Manual)</div><div class="value" id="an-deposits">Rs. 0.00</div></div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span><i class="fa-solid fa-table-list" style="color:var(--primary)"></i> Tracked Orders Profit Breakdown (Hidden from Users)</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Order ID</th><th>Service</th><th>Qty</th><th>Charged to User</th><th>Source API Cost</th><th>Net Profit</th><th>Date</th></tr>
+              </thead>
+              <tbody id="analytics-orders-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section data-panel="orders" class="d-none">
+        <div class="page-head"><div><h1>All Orders</h1><p>Search, update status, or delete unwanted order records.</p></div></div>
+        <div class="toolbar">
+          <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="search-orders" placeholder="Search by Order ID, email, service, link..."></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Order ID</th><th>User</th><th>Service</th><th>Target / Link</th><th>Qty</th><th>User Paid</th><th>API Cost</th><th>Net Profit</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="orders-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section data-panel="payments" class="d-none">
+        <div class="page-head"><div><h1>Payments History</h1><p>Auto payments appear only when Approved. Manual payments can be Approved, Rejected, or Deleted.</p></div></div>
+        <div class="toolbar">
+          <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="search-payments" placeholder="Search by Payment ID, email, method..."></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>User</th><th>Amount</th><th>Gateway / Method</th><th>Proof / Ref</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="payments-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section data-panel="users" class="d-none">
+        <div class="page-head"><div><h1>Registered Users</h1><p>Search users, edit wallet balances, or remove spam accounts.</p></div></div>
+        <div class="toolbar">
+          <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="search-users" placeholder="Search by name, username, or email..."></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name / Username</th><th>Email</th><th>Wallet Balance</th><th>Actions</th></tr></thead>
+            <tbody id="users-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section data-panel="categories" class="d-none">
+        <div class="page-head">
+          <div><h1>SMM Categories</h1><p>All your existing and new categories with brand-colored social icons.</p></div>
+          <button class="btn btn-primary" id="add-cat-btn"><i class="fa-solid fa-plus"></i> Add Category</button>
+        </div>
+        <div class="toolbar">
+          <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="search-categories" placeholder="Search categories..."></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Icon</th><th>Category Name</th><th>Sort Order</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="categories-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section data-panel="services" class="d-none">
+        <div class="page-head">
+          <div><h1>SMM Services & PKR API Costs</h1><p>Sync API costs directly in PKR (USD × Conversion Rate) and recalculate order profits automatically.</p></div>
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <button class="btn btn-secondary" id="sync-api-costs-btn"><i class="fa-solid fa-cloud-arrow-down"></i> Sync All Costs in PKR</button>
+            <button class="btn btn-primary" id="add-srv-btn"><i class="fa-solid fa-plus"></i> Add SMM Service</button>
+          </div>
+        </div>
+        <div class="toolbar">
+          <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="search-services" placeholder="Search by service name, API ID, or category..."></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Service Name</th><th>Category</th><th>Provider API ID</th><th>Sell Rate / 1K</th><th>API Cost / 1K (PKR)</th><th>Net Profit / 1K</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="services-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section data-panel="manual" class="d-none">
+        <div class="page-head">
+          <div><h1>Other Services (Fixed Price)</h1><p>Configure fixed-price services with colorful icons and Instant Download or WhatsApp Delivery.</p></div>
+          <button class="btn btn-primary" id="add-ms-btn"><i class="fa-solid fa-plus"></i> Add Other Service</button>
+        </div>
+        <div class="toolbar">
+          <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="search-manual" placeholder="Search other services..."></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Icon</th><th>Service Name</th><th>Sell Price</th><th>Cost Price</th><th>Profit</th><th>Delivery Mode</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="manual-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section data-panel="methods" class="d-none">
+        <div class="page-head">
+          <div><h1>Manual Payment Methods</h1><p>Manage EasyPaisa, JazzCash, and Bank accounts shown in Manual Deposit.</p></div>
+          <button class="btn btn-primary" id="add-pm-btn"><i class="fa-solid fa-plus"></i> Add Payment Method</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Icon</th><th>Title</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="methods-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section data-panel="broadcast" class="d-none">
+        <div class="page-head"><div><h1>Broadcast Announcement</h1><p>Display a popup announcement on the user dashboard.</p></div></div>
+        <form id="broadcast-form" class="card" style="max-width:640px;">
+          <div class="form-group"><label>Title</label><input type="text" id="bc-title" class="form-control" required></div>
+          <div class="form-group"><label>Message (Urdu / English)</label><textarea id="bc-message" class="form-control" rows="4" required></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label>Button Label (Optional)</label><input type="text" id="bc-btn-label" class="form-control"></div>
+            <div class="form-group"><label>Button URL (Optional)</label><input type="url" id="bc-btn-url" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="bc-active" class="form-control"><option value="true">Active</option><option value="false">Disabled</option></select>
+          </div>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Save Broadcast</button>
+        </form>
+      </section>
+
+      <section data-panel="settings" class="d-none">
+        <div class="page-head"><div><h1>Settings & Secure Keys</h1><p>All API keys and payment credentials are masked to prevent unauthorized access.</p></div></div>
+
+        <form id="settings-form" class="card" style="max-width:720px;">
+          <div class="card-title"><span><i class="fa-solid fa-plug" style="color:var(--primary)"></i> SMM Provider API & Currency Settings</span></div>
+          <div class="form-group"><label>Provider API URL</label><input type="url" id="set-api-url" class="form-control" placeholder="https://pakfollowers.com/api/v2"></div>
+          <div class="form-group">
+            <label>Provider API Key (Masked)</label>
+            <div style="display:flex; gap:0.5rem;">
+              <input type="password" id="set-api-key" class="form-control" placeholder="••••••••••••••••••••••••">
+              <button type="button" class="btn btn-secondary" onclick="const i=document.getElementById('set-api-key'); i.type=i.type==='password'?'text':'password';"><i class="fa-solid fa-eye"></i></button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Provider Currency Conversion Rate (USD to PKR — e.g. 280, or 1 if already PKR)</label>
+            <input type="number" id="set-usd-rate" class="form-control" step="any" min="1" value="280" placeholder="280">
+          </div>
+          <div class="form-group"><label>Dashboard Tutorial Video Embed URL</label><input type="url" id="set-video" class="form-control" placeholder="https://www.youtube.com/embed/..."></div>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Provider Settings</button>
+        </form>
+
+        <form id="sec-key-form" class="card" style="max-width:720px;">
+          <div class="card-title"><span><i class="fa-solid fa-key"></i> Balance Secret Key (Saved in Local Storage)</span></div>
+          <div class="form-group"><label>Current Secret Key (Leave blank if first time)</label><input type="password" id="sec-old-key" class="form-control"></div>
+          <div class="form-group"><label>New Secret Key (Min 8 chars)</label><input type="password" id="sec-new-key" class="form-control" minlength="8" required></div>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-shield-halved"></i> Save & Remember Key</button>
+        </form>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div class="modal" id="cat-modal">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Add / Edit Category</h3><button type="button" class="modal-close" onclick="document.getElementById('cat-modal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="cat-modal-form" class="modal-body">
+      <input type="hidden" id="cat-id">
+      <div class="form-group"><label>Category Name</label><input type="text" id="cat-name" class="form-control" required></div>
+      <div class="form-group"><label>Select Category Icon (Real Brand Colors)</label><input type="hidden" id="cat-icon" value="fa-brands fa-tiktok"><div class="icon-picker-grid" id="cat-icon-picker"></div></div>
+      <div class="form-row">
+        <div class="form-group"><label>Sort Order</label><input type="number" id="cat-sort" class="form-control" value="1"></div>
+        <div class="form-group"><label>Status</label><select id="cat-status" class="form-control"><option value="active">Active</option><option value="inactive">Disabled</option></select></div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Save Category</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="srv-modal">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Add / Edit SMM Service</h3><button type="button" class="modal-close" onclick="document.getElementById('srv-modal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="srv-modal-form" class="modal-body">
+      <input type="hidden" id="srv-id">
+      <div class="form-group"><label>Category</label><select id="srv-category" class="form-control" required></select></div>
+      <div class="form-group"><label>Service Name</label><input type="text" id="srv-name" class="form-control" required></div>
+      <div class="form-group">
+        <label>Provider API Service ID (External ID)</label>
+        <div style="display:flex; gap:0.5rem;">
+          <input type="text" id="srv-ext-id" class="form-control" placeholder="e.g. 1425">
+          <button type="button" class="btn btn-secondary" id="fetch-single-api-btn"><i class="fa-solid fa-bolt"></i> Fetch Price in PKR</button>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Your Sell Price / 1000 (PKR)</label><input type="number" id="srv-price" class="form-control" step="any" min="0" required></div>
+        <div class="form-group"><label>Source API Cost / 1000 (PKR)</label><input type="number" id="srv-cost" class="form-control" step="any" min="0" placeholder="Fetched in PKR or manual"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Min Quantity</label><input type="number" id="srv-min" class="form-control" value="100" required></div>
+        <div class="form-group"><label>Max Quantity</label><input type="number" id="srv-max" class="form-control" value="100000" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Estimated Delivery Time</label><input type="text" id="srv-time" class="form-control" value="15 - 30 Minutes"></div>
+        <div class="form-group"><label>Status</label><select id="srv-status" class="form-control"><option value="active">Active</option><option value="inactive">Disabled</option></select></div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="srv-desc" class="form-control" rows="3"></textarea></div>
+      <button type="submit" class="btn btn-primary btn-block">Save SMM Service</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="ms-modal">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Add / Edit Other Service</h3><button type="button" class="modal-close" onclick="document.getElementById('ms-modal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="ms-modal-form" class="modal-body">
+      <input type="hidden" id="ms-id">
+      <div class="form-group"><label>Service Name</label><input type="text" id="ms-name" class="form-control" required></div>
+      <div class="form-row">
+        <div class="form-group"><label>Sell Price (PKR - Fixed)</label><input type="number" id="ms-price" class="form-control" step="any" min="0" required></div>
+        <div class="form-group"><label>Your Cost Price (PKR - Optional)</label><input type="number" id="ms-cost" class="form-control" step="any" min="0"></div>
+      </div>
+      <div class="form-group"><label>Select Service Icon (Real Brand Colors)</label><input type="hidden" id="ms-icon" value="fa-solid fa-toolbox"><div class="icon-picker-grid" id="ms-icon-picker"></div></div>
+      <div class="form-group">
+        <label>Delivery Mode After Purchase</label>
+        <select id="ms-delivery-type" class="form-control">
+          <option value="whatsapp">WhatsApp Button ("Get this service via WhatsApp")</option>
+          <option value="direct">Instant Direct File / API Download Link</option>
+        </select>
+      </div>
+      <div class="form-group d-none" id="ms-direct-wrap">
+        <label>Direct Download / API URL</label><input type="url" id="ms-delivery-url" class="form-control">
+        <label class="mt-2">Download Button Text</label><input type="text" id="ms-delivery-label" class="form-control" value="Download File / Access API Now">
+      </div>
+      <div class="form-group" id="ms-wa-wrap"><label>WhatsApp Number</label><input type="text" id="ms-wa-number" class="form-control" value="923104882921"></div>
+      <div class="form-group"><label>Description</label><textarea id="ms-desc-input" class="form-control" rows="3"></textarea></div>
+      <div class="form-group"><label>Status</label><select id="ms-status" class="form-control"><option value="active">Active</option><option value="inactive">Disabled</option></select></div>
+      <button type="submit" class="btn btn-primary btn-block">Save Other Service</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="pm-modal">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Add / Edit Manual Payment Method</h3><button type="button" class="modal-close" onclick="document.getElementById('pm-modal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="pm-modal-form" class="modal-body">
+      <input type="hidden" id="pm-id">
+      <div class="form-group"><label>Method Title (e.g. EasyPaisa / JazzCash)</label><input type="text" id="pm-title" class="form-control" required></div>
+      <div class="form-group"><label>Account Holder Name</label><input type="text" id="pm-acc-name" class="form-control" required></div>
+      <div class="form-group"><label>Account Number / IBAN</label><input type="text" id="pm-acc-num" class="form-control" required></div>
+      <div class="form-group"><label>Status</label><select id="pm-status" class="form-control"><option value="active">Active</option><option value="inactive">Disabled</option></select></div>
+      <button type="submit" class="btn btn-primary btn-block">Save Payment Method</button>
+    </form>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, runTransaction, serverTimestamp as fsTS } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { requireAdminKey, setAdminKey } from "./admin-key.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD6VSIGbUJqIMQb53k1mXAcGjNu9PFC1w0",
+  authDomain: "new-smm02.firebaseapp.com",
+  databaseURL: "https://new-smm02-default-rtdb.firebaseio.com",
+  projectId: "new-smm02",
+  storageBucket: "new-smm02.firebasestorage.app",
+  messagingSenderId: "2203224901",
+  appId: "1:2203224901:web:7b328bb0ea4c381afe0c2c"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const SUPER_ADMIN_UID = "Q0NoYuEprlW6SvvOrv7lnx5kSeg1";
+const SMM_PROXY = "https://project--0158a941-e1aa-495e-8f88-9b83a66f9bbe.lovable.app/api/public/smm";
+
+let allUsers = [], allOrders = [], allPayments = [], allCategories = [], allServices = [], allManual = [], allMethods = [];
+let siteSettings = {}, providerServicesCache = null, currentProfitRange = 'today';
+
+const money = (n) => 'Rs. ' + (parseFloat(n || 0)).toFixed(2);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function showToast(msg, type = 'success') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.textContent = msg;
+  c.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3500);
+}
+
+const savedTheme = localStorage.getItem('pak_admin_theme');
+if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+document.getElementById('theme-toggle-btn')?.addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const isDark = cur ? cur === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const next = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('pak_admin_theme', next);
+});
+
+const ICONS_LIST = [
+  'fa-brands fa-tiktok', 'fa-brands fa-instagram', 'fa-brands fa-youtube', 'fa-brands fa-facebook',
+  'fa-brands fa-whatsapp', 'fa-brands fa-telegram', 'fa-brands fa-x-twitter', 'fa-brands fa-snapchat',
+  'fa-brands fa-discord', 'fa-brands fa-spotify', 'fa-brands fa-linkedin', 'fa-brands fa-pinterest',
+  'fa-solid fa-toolbox', 'fa-solid fa-robot', 'fa-solid fa-code', 'fa-solid fa-cloud-arrow-down',
+  'fa-solid fa-bolt', 'fa-solid fa-key', 'fa-solid fa-crown', 'fa-solid fa-wand-magic-sparkles',
+  'fa-solid fa-laptop-code', 'fa-solid fa-globe', 'fa-solid fa-fire'
+];
+
+function getIconBadgeHtml(iconClass) {
+  const ic = iconClass || 'fa-solid fa-layer-group';
+  let bg = 'rgba(11, 193, 92, 0.12)';
+  if (ic.includes('instagram')) bg = 'rgba(225, 48, 108, 0.14)';
+  else if (ic.includes('youtube')) bg = 'rgba(255, 0, 0, 0.12)';
+  else if (ic.includes('facebook') || ic.includes('linkedin')) bg = 'rgba(24, 119, 242, 0.14)';
+  else if (ic.includes('whatsapp') || ic.includes('spotify')) bg = 'rgba(37, 211, 102, 0.14)';
+  else if (ic.includes('telegram') || ic.includes('twitter') || ic.includes('globe')) bg = 'rgba(0, 136, 204, 0.14)';
+  else if (ic.includes('tiktok')) bg = 'rgba(255, 0, 80, 0.12)';
+  else if (ic.includes('snapchat') || ic.includes('crown') || ic.includes('bolt') || ic.includes('key')) bg = 'rgba(234, 179, 8, 0.15)';
+  else if (ic.includes('discord') || ic.includes('robot')) bg = 'rgba(139, 92, 246, 0.14)';
+  else if (ic.includes('fire') || ic.includes('reddit')) bg = 'rgba(249, 115, 22, 0.14)';
+  else if (ic.includes('wand') || ic.includes('pinterest')) bg = 'rgba(236, 72, 153, 0.14)';
+  return `<span class="brand-icon-chip" style="background:${bg};"><i class="${esc(ic)}"></i></span>`;
+}
+
+function setupIconPicker(gridId, inputId, selectedIcon) {
+  const grid = document.getElementById(gridId);
+  const input = document.getElementById(inputId);
+  if (!grid || !input) return;
+  input.value = selectedIcon;
+  grid.innerHTML = ICONS_LIST.map(ic => `<div class="icon-option ${ic === selectedIcon ? 'selected' : ''}" data-icon="${ic}"><i class="${ic}"></i></div>`).join('');
+  grid.querySelectorAll('.icon-option').forEach(el => {
+    el.addEventListener('click', () => {
+      grid.querySelectorAll('.icon-option').forEach(x => x.classList.remove('selected'));
+      el.classList.add('selected');
+      input.value = el.dataset.icon;
+    });
+  });
+}
+
+document.querySelectorAll('#admin-nav .nav-link').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#admin-nav .nav-link').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const sec = btn.dataset.section;
+    document.querySelectorAll('main section[data-panel]').forEach(p => p.classList.toggle('d-none', p.dataset.panel !== sec));
+    document.getElementById('sidebar')?.classList.remove('active');
+  });
+});
+
+document.getElementById('mobile-menu-btn')?.addEventListener('click', () => document.getElementById('sidebar')?.classList.toggle('active'));
+document.getElementById('refresh-all-btn')?.addEventListener('click', () => { loadAllAdminData(); showToast('Data refreshed!'); });
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user || user.uid !== SUPER_ADMIN_UID) { window.location.replace('login.html'); return; }
+  document.getElementById('admin-auth-loading')?.remove();
+  document.getElementById('admin-app').style.display = 'block';
+  await loadAllAdminData();
+});
+
+async function loadAllAdminData() {
+  const [uSnap, oSnap, pSnap, cSnap, sSnap, mSnap, pmSnap, setSnap, bcSnap] = await Promise.all([
+    getDocs(collection(db, 'users')), getDocs(collection(db, 'orders')), getDocs(collection(db, 'payments')),
+    getDocs(collection(db, 'categories')), getDocs(collection(db, 'services')), getDocs(collection(db, 'manualServices')),
+    getDocs(collection(db, 'paymentMethods')), getDoc(doc(db, 'settings', 'general')), getDoc(doc(db, 'settings', 'broadcast'))
+  ]);
+
+  allUsers = []; uSnap.forEach(d => allUsers.push({ id: d.id, ...d.data() }));
+  allOrders = []; oSnap.forEach(d => allOrders.push({ id: d.id, ...d.data() }));
+  allPayments = []; pSnap.forEach(d => allPayments.push({ id: d.id, ...d.data() }));
+  allCategories = []; cSnap.forEach(d => allCategories.push({ id: d.id, ...d.data() }));
+  allServices = []; sSnap.forEach(d => allServices.push({ id: d.id, ...d.data() }));
+  allManual = []; mSnap.forEach(d => allManual.push({ id: d.id, ...d.data() }));
+  allMethods = []; pmSnap.forEach(d => allMethods.push({ id: d.id, ...d.data() }));
+
+  allOrders.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  allPayments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  allCategories.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+  if (setSnap.exists()) {
+    siteSettings = setSnap.data();
+    document.getElementById('set-api-url').value = siteSettings.apiUrl || '';
+    document.getElementById('set-api-key').value = siteSettings.apiKey || '';
+    document.getElementById('set-usd-rate').value = siteSettings.usdToPkrRate || 280;
+    document.getElementById('set-video').value = siteSettings.dashboardVideo || '';
+  }
+  if (bcSnap.exists()) {
+    const b = bcSnap.data();
+    document.getElementById('bc-title').value = b.title || '';
+    document.getElementById('bc-message').value = b.message || '';
+    document.getElementById('bc-btn-label').value = b.actionLabel || '';
+    document.getElementById('bc-btn-url').value = b.actionUrl || '';
+    document.getElementById('bc-active').value = String(!!b.active);
+  }
+
+  renderDashboardAndQuickActions();
+  renderProfitAnalytics();
+  renderOrdersTable();
+  renderPaymentsTable();
+  renderUsersTable();
+  renderCategoriesTable();
+  renderServicesTable();
+  renderManualServicesTable();
+  renderMethodsTable();
+}
+
+function getOrderCostAndProfit(o) {
+  const srv = allServices.find(s => s.id === o.serviceId);
+  const man = allManual.find(m => m.id === o.serviceId);
+  let cost = 0;
+
+  if (srv && parseFloat(srv.providerRate) > 0) {
+    cost = (parseFloat(o.quantity || 0) / 1000) * parseFloat(srv.providerRate);
+  } else if (man && parseFloat(man.costPrice) > 0) {
+    cost = parseFloat(o.quantity || 1) * parseFloat(man.costPrice);
+  } else if (parseFloat(o.providerCost) > 0) {
+    cost = parseFloat(o.providerCost);
+  } else {
+    return { tracked: false, cost: 0, profit: 0 };
+  }
+
+  const price = parseFloat(o.price || 0);
+  return { tracked: true, cost: parseFloat(cost.toFixed(2)), profit: parseFloat((price - cost).toFixed(2)) };
+}
+
+function getVisiblePayments() {
+  return allPayments.filter(p => {
+    const isAuto = p.gateway === 'flux_pay' || p.paymentType === 'auto' || String(p.paymentMethod || '').includes('Flux Pay');
+    return isAuto ? p.status === 'Approved' : true;
+  });
+}
+
+function renderDashboardAndQuickActions() {
+  const visiblePayments = getVisiblePayments();
+  const approvedPayments = visiblePayments.filter(p => p.status === 'Approved');
+  const successOrders = allOrders.filter(o => o.status === 'Completed');
+
+  document.getElementById('stat-users').textContent = allUsers.length;
+  document.getElementById('stat-total-wallet').textContent = money(allUsers.reduce((a, u) => a + parseFloat(u.wallet || 0), 0));
+  document.getElementById('stat-total-orders').textContent = allOrders.length;
+  document.getElementById('stat-success-orders').textContent = successOrders.length;
+  document.getElementById('stat-total-payments-count').textContent = approvedPayments.length;
+  document.getElementById('stat-total-deposits').textContent = money(approvedPayments.reduce((a, p) => a + parseFloat(p.amount || 0), 0));
+
+  let totalNetProfit = 0;
+  allOrders.forEach(o => {
+    if (o.status === 'Cancelled' || o.status === 'Canceled') return;
+    const info = getOrderCostAndProfit(o);
+    if (info.tracked) totalNetProfit += info.profit;
+  });
+  document.getElementById('stat-net-profit').textContent = money(totalNetProfit);
+
+  const pendingManualPays = visiblePayments.filter(p => p.status === 'Pending' && p.gateway !== 'flux_pay' && p.paymentType !== 'auto');
+  const pendingOrds = allOrders.filter(o => o.status === 'Pending' || o.status === 'Pending (Manual)');
+
+  document.getElementById('stat-pending-actions').textContent = pendingManualPays.length + pendingOrds.length;
+  document.getElementById('quick-pay-count').textContent = `${pendingManualPays.length} Pending`;
+  document.getElementById('quick-ord-count').textContent = `${pendingOrds.length} Pending`;
+
+  document.getElementById('quick-payments-tbody').innerHTML = pendingManualPays.length ? pendingManualPays.map(p => `
+    <tr>
+      <td>${esc(p.userEmail)}</td>
+      <td class="font-bold text-primary">${money(p.amount)}</td>
+      <td><span class="badge">${esc(p.paymentMethod || 'Manual')}</span></td>
+      <td>${p.screenshotUrl ? `<a href="${esc(p.screenshotUrl)}" target="_blank" class="text-primary font-bold">View Slip</a>` : '—'}</td>
+      <td>
+        <button class="btn btn-success btn-sm" onclick="window.quickApprovePayment('${p.id}')"><i class="fa-solid fa-check"></i> Approve</button>
+        <button class="btn btn-danger btn-sm" onclick="window.quickRejectPayment('${p.id}')"><i class="fa-solid fa-xmark"></i> Reject</button>
+        <button class="btn btn-danger btn-sm" onclick="window.deleteRecord('payments','${p.id}')"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('') : '<tr><td colspan="5" class="text-center text-muted">No pending manual payments 🎉</td></tr>';
+
+  document.getElementById('quick-orders-tbody').innerHTML = pendingOrds.length ? pendingOrds.map(o => {
+    const info = getOrderCostAndProfit(o);
+    return `
+      <tr>
+        <td class="font-bold">${esc(o.orderId)}</td>
+        <td>${esc(o.userEmail)}</td>
+        <td>${esc(o.serviceName)}</td>
+        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;">${esc(o.targetLink)}</td>
+        <td>${money(o.price)} ${info.tracked ? `<small class="text-primary font-bold">(+${money(info.profit)})</small>` : '<small class="text-muted">(Untracked)</small>'}</td>
+        <td>
+          <button class="btn btn-success btn-sm" onclick="window.quickUpdateOrder('${o.id}', 'Completed')"><i class="fa-solid fa-check"></i> Complete</button>
+          <button class="btn btn-danger btn-sm" onclick="window.quickUpdateOrder('${o.id}', 'Cancelled')"><i class="fa-solid fa-ban"></i> Cancel</button>
+          <button class="btn btn-danger btn-sm" onclick="window.deleteRecord('orders','${o.id}')"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>
+    `;
+  }).join('') : '<tr><td colspan="6" class="text-center text-muted">No pending orders 🎉</td></tr>';
+}
+
+document.querySelectorAll('#profit-filter-tabs .tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#profit-filter-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentProfitRange = btn.dataset.range;
+    renderProfitAnalytics();
+  });
+});
+
+function renderProfitAnalytics() {
+  const now = Date.now();
+  const startOfToday = new Date(); startOfToday.setHours(0, 0, 0, 0);
+  const inRange = (ts) => {
+    if (currentProfitRange === 'all') return true;
+    const ms = (ts || 0) * 1000;
+    if (!ms) return false;
+    if (currentProfitRange === 'today') return ms >= startOfToday.getTime();
+    if (currentProfitRange === '7d') return ms >= now - 7 * 86400000;
+    if (currentProfitRange === '30d') return ms >= now - 30 * 86400000;
+    return true;
+  };
+
+  const trackedOrders = [];
+  let rev = 0, cost = 0, prof = 0;
+
+  allOrders.forEach(o => {
+    if (o.status === 'Cancelled' || o.status === 'Canceled' || !inRange(o.createdAt?.seconds)) return;
+    const info = getOrderCostAndProfit(o);
+    if (!info.tracked) return;
+    rev += parseFloat(o.price || 0);
+    cost += info.cost;
+    prof += info.profit;
+    trackedOrders.push({ ...o, _cost: info.cost, _profit: info.profit });
+  });
+
+  const approvedDeposits = getVisiblePayments().filter(p => p.status === 'Approved' && inRange(p.createdAt?.seconds));
+  const depSum = approvedDeposits.reduce((a, p) => a + parseFloat(p.amount || 0), 0);
+
+  document.getElementById('an-revenue').textContent = money(rev);
+  document.getElementById('an-cost').textContent = money(cost);
+  document.getElementById('an-profit').textContent = money(prof);
+  document.getElementById('an-deposits').textContent = money(depSum);
+
+  document.getElementById('analytics-orders-tbody').innerHTML = trackedOrders.length ? trackedOrders.map(o => {
+    const dt = o.createdAt?.seconds ? new Date(o.createdAt.seconds * 1000).toLocaleDateString() : '—';
+    return `
+      <tr>
+        <td class="font-bold">${esc(o.orderId)}</td>
+        <td>${esc(o.serviceName)}</td>
+        <td>${o.quantity || 1}</td>
+        <td>${money(o.price)}</td>
+        <td class="text-danger">${money(o._cost)}</td>
+        <td class="font-bold text-primary">+${money(o._profit)}</td>
+        <td>${dt}</td>
+      </tr>
+    `;
+  }).join('') : '<tr><td colspan="7" class="text-center text-muted">No tracked orders in this period. Sync API Cost in SMM Services to track profit.</td></tr>';
+}
+
+function renderOrdersTable() {
+  const q = (document.getElementById('search-orders')?.value || '').toLowerCase().trim();
+  const list = allOrders.filter(o => !q || [o.orderId, o.userEmail, o.serviceName, o.targetLink].some(v => String(v || '').toLowerCase().includes(q)));
+
+  document.getElementById('orders-tbody').innerHTML = list.map(o => {
+    const info = getOrderCostAndProfit(o);
+    return `
+      <tr>
+        <td class="font-bold">${esc(o.orderId)}</td>
+        <td>${esc(o.userEmail)}</td>
+        <td>${esc(o.serviceName)}</td>
+        <td style="max-width:170px;overflow:hidden;text-overflow:ellipsis;">${esc(o.targetLink)}</td>
+        <td>${o.quantity || 1}</td>
+        <td>${money(o.price)}</td>
+        <td>${info.tracked ? `<span class="text-danger">${money(info.cost)}</span>` : '<span class="text-muted">—</span>'}</td>
+        <td>${info.tracked ? `<span class="font-bold text-primary">+${money(info.profit)}</span>` : '<span class="text-muted">Untracked</span>'}</td>
+        <td><span class="badge badge-${(o.status||'pending').toLowerCase()}">${esc(o.status)}</span></td>
+        <td style="display:flex; gap:0.4rem; align-items:center;">
+          <select onchange="window.quickUpdateOrder('${o.id}', this.value)" class="form-control" style="padding:0.32rem;font-size:0.76rem;width:auto;">
+            <option value="Pending" ${o.status==='Pending'?'selected':''}>Pending</option>
+            <option value="Completed" ${o.status==='Completed'?'selected':''}>Completed</option>
+            <option value="Cancelled" ${o.status==='Cancelled'?'selected':''}>Cancelled</option>
+          </select>
+          <button class="btn btn-danger btn-sm" onclick="window.deleteRecord('orders','${o.id}')"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="10" class="text-center text-muted">No matching orders found</td></tr>';
+}
+document.getElementById('search-orders')?.addEventListener('input', renderOrdersTable);
+
+function renderPaymentsTable() {
+  const q = (document.getElementById('search-payments')?.value || '').toLowerCase().trim();
+  const visible = getVisiblePayments().filter(p => !q || [p.paymentId, p.userEmail, p.paymentMethod].some(v => String(v || '').toLowerCase().includes(q)));
+
+  document.getElementById('payments-tbody').innerHTML = visible.map(p => {
+    const isAuto = p.gateway === 'flux_pay' || p.paymentType === 'auto' || String(p.paymentMethod || '').includes('Flux Pay');
+    return `
+      <tr>
+        <td class="font-bold">${esc(p.paymentId)}</td>
+        <td>${esc(p.userEmail)}</td>
+        <td class="font-bold text-primary">${money(p.amount)}</td>
+        <td><span class="badge ${isAuto ? 'badge-auto' : ''}">${esc(p.paymentMethod || 'Manual')}</span></td>
+        <td>${p.screenshotUrl ? `<a href="${esc(p.screenshotUrl)}" target="_blank" class="text-primary font-bold">View Slip</a>` : esc(p.transactionId || 'Auto Verified')}</td>
+        <td><span class="badge badge-${(p.status||'approved').toLowerCase()}">${esc(p.status)}</span></td>
+        <td>
+          ${(!isAuto && p.status === 'Pending') ? `
+            <button class="btn btn-success btn-sm" onclick="window.quickApprovePayment('${p.id}')">Approve</button>
+            <button class="btn btn-danger btn-sm" onclick="window.quickRejectPayment('${p.id}')">Reject</button>
+          ` : ''}
+          <button class="btn btn-danger btn-sm" onclick="window.deleteRecord('payments','${p.id}')"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="7" class="text-center text-muted">No payments found</td></tr>';
+}
+document.getElementById('search-payments')?.addEventListener('input', renderPaymentsTable);
+
+function renderUsersTable() {
+  const q = (document.getElementById('search-users')?.value || '').toLowerCase().trim();
+  const list = allUsers.filter(u => !q || [u.name, u.username, u.email].some(v => String(v || '').toLowerCase().includes(q)));
+
+  document.getElementById('users-tbody').innerHTML = list.map(u => `
+    <tr>
+      <td class="font-bold">${esc(u.username || u.name || 'User')}</td>
+      <td>${esc(u.email)}</td>
+      <td class="font-bold text-primary">${money(u.wallet)}</td>
+      <td>
+        <button class="btn btn-secondary btn-sm" onclick="window.adjustUserBalance('${u.id}', '${esc(u.email)}', ${parseFloat(u.wallet||0)})"><i class="fa-solid fa-sliders"></i> Edit Balance</button>
+        <button class="btn btn-danger btn-sm" onclick="window.deleteRecord('users','${u.id}')"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="4" class="text-center text-muted">No users found</td></tr>';
+}
+document.getElementById('search-users')?.addEventListener('input', renderUsersTable);
+
+function renderCategoriesTable() {
+  const q = (document.getElementById('search-categories')?.value || '').toLowerCase().trim();
+  const list = allCategories.filter(c => !q || String(c.name || '').toLowerCase().includes(q));
+
+  document.getElementById('categories-tbody').innerHTML = list.map(c => `
+    <tr>
+      <td>${getIconBadgeHtml(c.icon)}</td>
+      <td class="font-bold">${esc(c.name)}</td>
+      <td>${c.sortOrder ?? 1}</td>
+      <td><span class="badge badge-${c.status || 'active'}">${esc(c.status || 'active')}</span></td>
+      <td>
+        <button class="btn btn-secondary btn-sm" onclick="window.editCategory('${c.id}')"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-danger btn-sm" onclick="window.deleteRecord('categories','${c.id}')"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="5" class="text-center text-muted">No categories found</td></tr>';
+}
+document.getElementById('search-categories')?.addEventListener('input', renderCategoriesTable);
+
+document.getElementById('add-cat-btn')?.addEventListener('click', () => {
+  document.getElementById('cat-modal-form').reset();
+  document.getElementById('cat-id').value = '';
+  setupIconPicker('cat-icon-picker', 'cat-icon', 'fa-brands fa-tiktok');
+  document.getElementById('cat-modal').classList.add('active');
+});
+
+window.editCategory = (id) => {
+  const c = allCategories.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('cat-id').value = c.id;
+  document.getElementById('cat-name').value = c.name || '';
+  document.getElementById('cat-sort').value = c.sortOrder ?? 1;
+  document.getElementById('cat-status').value = c.status || 'active';
+  setupIconPicker('cat-icon-picker', 'cat-icon', c.icon || 'fa-brands fa-tiktok');
+  document.getElementById('cat-modal').classList.add('active');
+};
+
+document.getElementById('cat-modal-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('cat-id').value;
+  const payload = {
+    name: document.getElementById('cat-name').value.trim(),
+    icon: document.getElementById('cat-icon').value || 'fa-solid fa-layer-group',
+    sortOrder: parseInt(document.getElementById('cat-sort').value || 1),
+    status: document.getElementById('cat-status').value,
+    updatedAt: fsTS()
+  };
+  if (id) await updateDoc(doc(db, 'categories', id), payload);
+  else await addDoc(collection(db, 'categories'), { ...payload, createdAt: fsTS() });
+  document.getElementById('cat-modal').classList.remove('active');
+  showToast('Category saved!');
+  await loadAllAdminData();
+});
+
+function renderServicesTable() {
+  const q = (document.getElementById('search-services')?.value || '').toLowerCase().trim();
+  const catMap = Object.fromEntries(allCategories.map(c => [c.id, c]));
+  const list = allServices.filter(s => !q || [s.name, s.externalId, catMap[s.category]?.name].some(v => String(v || '').toLowerCase().includes(q)));
+
+  document.getElementById('services-tbody').innerHTML = list.map(s => {
+    const sell = parseFloat(s.price || 0);
+    const apiCost = parseFloat(s.providerRate || 0);
+    const hasCost = !isNaN(apiCost) && apiCost > 0;
+    const catObj = catMap[s.category];
+    return `
+      <tr>
+        <td style="display:flex;align-items:center;gap:0.65rem;">
+          ${getIconBadgeHtml(s.icon || catObj?.icon || 'fa-solid fa-bolt')}
+          <span class="font-bold">${esc(s.name)}</span>
+        </td>
+        <td><span class="badge">${esc(catObj?.name || 'Uncategorized')}</span></td>
+        <td class="font-bold">${esc(s.externalId || '—')}</td>
+        <td>${money(sell)}</td>
+        <td>${hasCost ? `<span class="text-danger font-bold">${money(apiCost)}</span>` : '<span class="text-muted">Not Set</span>'}</td>
+        <td>${hasCost ? `<span class="text-primary font-bold">+${money(sell - apiCost)}</span>` : '<span class="text-muted">—</span>'}</td>
+        <td><span class="badge badge-${s.status || 'active'}">${esc(s.status || 'active')}</span></td>
+        <td>
+          <button class="btn btn-secondary btn-sm" onclick="window.editService('${s.id}')"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="window.deleteRecord('services','${s.id}')"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="8" class="text-center text-muted">No SMM services found</td></tr>';
+}
+document.getElementById('search-services')?.addEventListener('input', renderServicesTable);
+
+function populateCategorySelect(selectedCatId = '') {
+  document.getElementById('srv-category').innerHTML = allCategories.map(c => `<option value="${c.id}" ${c.id === selectedCatId ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
+}
+
+document.getElementById('add-srv-btn')?.addEventListener('click', () => {
+  document.getElementById('srv-modal-form').reset();
+  document.getElementById('srv-id').value = '';
+  populateCategorySelect();
+  document.getElementById('srv-modal').classList.add('active');
+});
+
+window.editService = (id) => {
+  const s = allServices.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('srv-id').value = s.id;
+  populateCategorySelect(s.category);
+  document.getElementById('srv-name').value = s.name || '';
+  document.getElementById('srv-ext-id').value = s.externalId || '';
+  document.getElementById('srv-price').value = s.price || 0;
+  document.getElementById('srv-cost').value = s.providerRate || '';
+  document.getElementById('srv-min').value = s.minQty || 100;
+  document.getElementById('srv-max').value = s.maxQty || 100000;
+  document.getElementById('srv-time').value = s.estimatedTime || '15 - 30 Minutes';
+  document.getElementById('srv-status').value = s.status || 'active';
+  document.getElementById('srv-desc').value = s.description || '';
+  document.getElementById('srv-modal').classList.add('active');
+};
+
+async function fetchProviderServicesList() {
+  if (providerServicesCache) return providerServicesCache;
+  if (!siteSettings.apiUrl || !siteSettings.apiKey) throw new Error('Configure Provider API URL & Key in Settings first.');
+  const res = await fetch(SMM_PROXY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: siteSettings.apiUrl, key: siteSettings.apiKey, action: 'services' })
+  });
+  const data = await res.json();
+  if (!Array.isArray(data)) throw new Error('Could not fetch services from Provider API.');
+  providerServicesCache = data;
+  return data;
+}
+
+document.getElementById('fetch-single-api-btn')?.addEventListener('click', async () => {
+  const extId = document.getElementById('srv-ext-id').value.trim();
+  if (!extId) return showToast('Enter Provider API Service ID first.', 'error');
+  const btn = document.getElementById('fetch-single-api-btn');
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+  try {
+    const usdRate = parseFloat(siteSettings.usdToPkrRate || document.getElementById('set-usd-rate')?.value || 280);
+    const list = await fetchProviderServicesList();
+    const match = list.find(item => String(item.service) === String(extId));
+    if (!match) throw new Error(`Service ID #${extId} not found on Provider API.`);
+    const rawUsd = parseFloat(match.rate || 0);
+    const pkrCost = parseFloat((rawUsd * usdRate).toFixed(2));
+    document.getElementById('srv-cost').value = pkrCost;
+    if (!document.getElementById('srv-name').value) document.getElementById('srv-name').value = match.name || '';
+    if (match.min) document.getElementById('srv-min').value = match.min;
+    if (match.max) document.getElementById('srv-max').value = match.max;
+    showToast(`Fetched: $${rawUsd} × ${usdRate} = Rs. ${pkrCost} / 1K ✅`);
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Fetch Price in PKR';
+  }
+});
+
+document.getElementById('sync-api-costs-btn')?.addEventListener('click', async () => {
+  const defaultRate = parseFloat(siteSettings.usdToPkrRate || document.getElementById('set-usd-rate')?.value || 280);
+  const inputRate = prompt('Enter USD to PKR conversion rate (e.g. 280). Enter 1 if your API already returns PKR:', defaultRate);
+  if (inputRate === null) return;
+  const usdRate = parseFloat(inputRate);
+  if (isNaN(usdRate) || usdRate <= 0) return showToast('Invalid conversion rate!', 'error');
+
+  const btn = document.getElementById('sync-api-costs-btn');
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Syncing PKR...';
+  try {
+    await setDoc(doc(db, 'settings', 'general'), { usdToPkrRate: usdRate }, { merge: true });
+    siteSettings.usdToPkrRate = usdRate;
+
+    const list = await fetchProviderServicesList();
+    const rateMap = new Map(list.map(i => [String(i.service), parseFloat(i.rate || 0)]));
+    const servicePkrMap = new Map();
+    let updatedServices = 0;
+
+    for (const s of allServices) {
+      if (s.externalId && rateMap.has(String(s.externalId))) {
+        const rawUsd = rateMap.get(String(s.externalId));
+        if (rawUsd > 0) {
+          const pkrRate = parseFloat((rawUsd * usdRate).toFixed(2));
+          await updateDoc(doc(db, 'services', s.id), { providerRate: pkrRate, updatedAt: fsTS() });
+          servicePkrMap.set(s.id, pkrRate);
+          updatedServices++;
+        }
+      }
+    }
+
+    let updatedOrders = 0;
+    for (const o of allOrders) {
+      if (o.serviceId && servicePkrMap.has(o.serviceId)) {
+        const pkrRatePer1k = servicePkrMap.get(o.serviceId);
+        const qty = parseFloat(o.quantity || 0);
+        const sellPrice = parseFloat(o.price || 0);
+        const newCost = parseFloat(((qty / 1000) * pkrRatePer1k).toFixed(2));
+        const newProfit = parseFloat((sellPrice - newCost).toFixed(2));
+        await updateDoc(doc(db, 'orders', o.id), { providerCost: newCost, netProfit: newProfit });
+        updatedOrders++;
+      }
+    }
+
+    showToast(`Synced ${updatedServices} services & recalculated ${updatedOrders} orders in PKR! ✅`);
+    await loadAllAdminData();
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i> Sync All Costs in PKR';
+  }
+});
+
+document.getElementById('srv-modal-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('srv-id').value;
+  const costVal = parseFloat(document.getElementById('srv-cost').value);
+  const payload = {
+    category: document.getElementById('srv-category').value,
+    name: document.getElementById('srv-name').value.trim(),
+    externalId: document.getElementById('srv-ext-id').value.trim(),
+    price: parseFloat(document.getElementById('srv-price').value || 0),
+    providerRate: !isNaN(costVal) && costVal > 0 ? costVal : 0,
+    minQty: parseInt(document.getElementById('srv-min').value || 100),
+    maxQty: parseInt(document.getElementById('srv-max').value || 100000),
+    estimatedTime: document.getElementById('srv-time').value.trim(),
+    status: document.getElementById('srv-status').value,
+    description: document.getElementById('srv-desc').value.trim(),
+    updatedAt: fsTS()
+  };
+  if (id) await updateDoc(doc(db, 'services', id), payload);
+  else await addDoc(collection(db, 'services'), { ...payload, createdAt: fsTS() });
+  document.getElementById('srv-modal').classList.remove('active');
+  showToast('SMM Service saved!');
+  await loadAllAdminData();
+});
+
+function renderManualServicesTable() {
+  const q = (document.getElementById('search-manual')?.value || '').toLowerCase().trim();
+  const list = allManual.filter(m => !q || String(m.name || '').toLowerCase().includes(q));
+
+  document.getElementById('manual-tbody').innerHTML = list.map(m => {
+    const sell = parseFloat(m.price || 0);
+    const cost = parseFloat(m.costPrice || 0);
+    const hasCost = cost > 0;
+    return `
+      <tr>
+        <td>${getIconBadgeHtml(m.icon || 'fa-solid fa-toolbox')}</td>
+        <td class="font-bold">${esc(m.name)}</td>
+        <td>${money(sell)}</td>
+        <td>${hasCost ? money(cost) : '<span class="text-muted">Not Set</span>'}</td>
+        <td>${hasCost ? `<span class="text-primary font-bold">+${money(sell - cost)}</span>` : '<span class="text-muted">—</span>'}</td>
+        <td><span class="badge">${m.deliveryType === 'direct' ? '⚡ Instant Download' : '💬 WhatsApp'}</span></td>
+        <td><span class="badge badge-${m.status || 'active'}">${esc(m.status || 'active')}</span></td>
+        <td>
+          <button class="btn btn-secondary btn-sm" onclick="window.editOtherService('${m.id}')"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="window.deleteRecord('manualServices','${m.id}')"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="8" class="text-center text-muted">No Other Services found</td></tr>';
+}
+document.getElementById('search-manual')?.addEventListener('input', renderManualServicesTable);
+
+document.getElementById('ms-delivery-type')?.addEventListener('change', (e) => {
+  const isDirect = e.target.value === 'direct';
+  document.getElementById('ms-direct-wrap').classList.toggle('d-none', !isDirect);
+  document.getElementById('ms-wa-wrap').classList.toggle('d-none', isDirect);
+});
+
+document.getElementById('add-ms-btn')?.addEventListener('click', () => {
+  document.getElementById('ms-modal-form').reset();
+  document.getElementById('ms-id').value = '';
+  setupIconPicker('ms-icon-picker', 'ms-icon', 'fa-solid fa-toolbox');
+  document.getElementById('ms-direct-wrap').classList.add('d-none');
+  document.getElementById('ms-wa-wrap').classList.remove('d-none');
+  document.getElementById('ms-modal').classList.add('active');
+});
+
+window.editOtherService = (id) => {
+  const m = allManual.find(x => x.id === id);
+  if (!m) return;
+  document.getElementById('ms-id').value = m.id;
+  document.getElementById('ms-name').value = m.name || '';
+  document.getElementById('ms-price').value = m.price || 0;
+  document.getElementById('ms-cost').value = m.costPrice || '';
+  document.getElementById('ms-delivery-type').value = m.deliveryType || 'whatsapp';
+  document.getElementById('ms-delivery-url').value = m.deliveryUrl || '';
+  document.getElementById('ms-delivery-label').value = m.deliveryLabel || 'Download File / Access API Now';
+  document.getElementById('ms-wa-number').value = m.whatsappNumber || '923104882921';
+  document.getElementById('ms-desc-input').value = m.description || '';
+  document.getElementById('ms-status').value = m.status || 'active';
+  const isDirect = m.deliveryType === 'direct';
+  document.getElementById('ms-direct-wrap').classList.toggle('d-none', !isDirect);
+  document.getElementById('ms-wa-wrap').classList.toggle('d-none', isDirect);
+  setupIconPicker('ms-icon-picker', 'ms-icon', m.icon || 'fa-solid fa-toolbox');
+  document.getElementById('ms-modal').classList.add('active');
+};
+
+document.getElementById('ms-modal-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('ms-id').value;
+  const costVal = parseFloat(document.getElementById('ms-cost').value);
+  const payload = {
+    name: document.getElementById('ms-name').value.trim(),
+    type: 'other_services',
+    price: parseFloat(document.getElementById('ms-price').value || 0),
+    costPrice: !isNaN(costVal) && costVal > 0 ? costVal : 0,
+    icon: document.getElementById('ms-icon').value || 'fa-solid fa-toolbox',
+    deliveryType: document.getElementById('ms-delivery-type').value,
+    deliveryUrl: document.getElementById('ms-delivery-url').value.trim(),
+    deliveryLabel: document.getElementById('ms-delivery-label').value.trim(),
+    whatsappNumber: document.getElementById('ms-wa-number').value.trim(),
+    description: document.getElementById('ms-desc-input').value.trim(),
+    status: document.getElementById('ms-status').value,
+    updatedAt: fsTS()
+  };
+  if (id) await updateDoc(doc(db, 'manualServices', id), payload);
+  else await addDoc(collection(db, 'manualServices'), { ...payload, createdAt: fsTS() });
+  document.getElementById('ms-modal').classList.remove('active');
+  showToast('Other Service saved!');
+  await loadAllAdminData();
+});
+
+function renderMethodsTable() {
+  document.getElementById('methods-tbody').innerHTML = allMethods.map(m => `
+    <tr>
+      <td>${getIconBadgeHtml(m.icon || 'fa-solid fa-building-columns')}</td>
+      <td class="font-bold">${esc(m.title)}</td>
+      <td>${esc(m.accountName)}</td>
+      <td class="font-bold">${esc(m.accountNumber)}</td>
+      <td><span class="badge badge-${m.status || 'active'}">${esc(m.status || 'active')}</span></td>
+      <td>
+        <button class="btn btn-secondary btn-sm" onclick="window.editPaymentMethod('${m.id}')"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-danger btn-sm" onclick="window.deleteRecord('paymentMethods','${m.id}')"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="6" class="text-center text-muted">No manual payment methods found</td></tr>';
+}
+
+document.getElementById('add-pm-btn')?.addEventListener('click', () => {
+  document.getElementById('pm-modal-form').reset();
+  document.getElementById('pm-id').value = '';
+  document.getElementById('pm-modal').classList.add('active');
+});
+
+window.editPaymentMethod = (id) => {
+  const m = allMethods.find(x => x.id === id);
+  if (!m) return;
+  document.getElementById('pm-id').value = m.id;
+  document.getElementById('pm-title').value = m.title || '';
+  document.getElementById('pm-acc-name').value = m.accountName || '';
+  document.getElementById('pm-acc-num').value = m.accountNumber || '';
+  document.getElementById('pm-status').value = m.status || 'active';
+  document.getElementById('pm-modal').classList.add('active');
+};
+
+document.getElementById('pm-modal-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('pm-id').value;
+  const payload = {
+    title: document.getElementById('pm-title').value.trim(),
+    accountName: document.getElementById('pm-acc-name').value.trim(),
+    accountNumber: document.getElementById('pm-acc-num').value.trim(),
+    icon: 'fa-solid fa-building-columns',
+    status: document.getElementById('pm-status').value,
+    updatedAt: fsTS()
+  };
+  if (id) await updateDoc(doc(db, 'paymentMethods', id), payload);
+  else await addDoc(collection(db, 'paymentMethods'), { ...payload, createdAt: fsTS() });
+  document.getElementById('pm-modal').classList.remove('active');
+  showToast('Payment method saved!');
+  await loadAllAdminData();
+});
+
+window.deleteRecord = async (colName, docId) => {
+  if (!confirm('Permanently delete this record?')) return;
+  try {
+    await deleteDoc(doc(db, colName, docId));
+    showToast('Deleted successfully!');
+    await loadAllAdminData();
+  } catch (err) { showToast(err.message, 'error'); }
+};
+
+window.quickApprovePayment = async (payDocId) => {
+  try {
+    await requireAdminKey();
+    const p = allPayments.find(x => x.id === payDocId);
+    if (!p || p.status === 'Approved') return;
+    const userRef = doc(db, 'users', p.userId);
+    await runTransaction(db, async (tx) => {
+      const uSnap = await tx.get(userRef);
+      if (!uSnap.exists()) throw new Error('User not found');
+      const newBal = parseFloat((parseFloat(uSnap.data().wallet || 0) + parseFloat(p.amount || 0)).toFixed(2));
+      tx.update(userRef, { wallet: newBal });
+      tx.update(doc(db, 'payments', payDocId), { status: 'Approved', updatedAt: fsTS() });
+    });
+    showToast('Payment approved & credited!');
+    await loadAllAdminData();
+  } catch (err) { showToast(err.message, 'error'); }
+};
+
+window.quickRejectPayment = async (payDocId) => {
+  try {
+    await updateDoc(doc(db, 'payments', payDocId), { status: 'Rejected', updatedAt: fsTS() });
+    showToast('Payment rejected.');
+    await loadAllAdminData();
+  } catch (err) { showToast(err.message, 'error'); }
+};
+
+window.quickUpdateOrder = async (ordDocId, newStatus) => {
+  try {
+    await updateDoc(doc(db, 'orders', ordDocId), { status: newStatus, updatedAt: fsTS() });
+    showToast(`Order marked ${newStatus}`);
+    await loadAllAdminData();
+  } catch (err) { showToast(err.message, 'error'); }
+};
+
+window.adjustUserBalance = async (uid, email, curWallet) => {
+  try {
+    await requireAdminKey();
+    const input = prompt(`Enter new wallet balance for ${email}:`, curWallet);
+    if (input === null) return;
+    const newBal = parseFloat(input);
+    if (isNaN(newBal) || newBal < 0) return showToast('Invalid amount', 'error');
+    await updateDoc(doc(db, 'users', uid), { wallet: newBal });
+    showToast('User balance updated!');
+    await loadAllAdminData();
+  } catch (err) { showToast(err.message, 'error'); }
+};
+
+document.getElementById('settings-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  providerServicesCache = null;
+  await setDoc(doc(db, 'settings', 'general'), {
+    apiUrl: document.getElementById('set-api-url').value.trim(),
+    apiKey: document.getElementById('set-api-key').value.trim(),
+    usdToPkrRate: parseFloat(document.getElementById('set-usd-rate')?.value || 280),
+    dashboardVideo: document.getElementById('set-video').value.trim(),
+    updatedAt: fsTS()
+  }, { merge: true });
+  showToast('Provider settings & USD rate saved!');
+  await loadAllAdminData();
+});
+
+document.getElementById('broadcast-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  await setDoc(doc(db, 'settings', 'broadcast'), {
+    title: document.getElementById('bc-title').value.trim(),
+    message: document.getElementById('bc-message').value.trim(),
+    actionLabel: document.getElementById('bc-btn-label').value.trim(),
+    actionUrl: document.getElementById('bc-btn-url').value.trim(),
+    active: document.getElementById('bc-active').value === 'true',
+    updatedAt: fsTS()
+  }, { merge: true });
+  showToast('Broadcast updated!');
+});
+
+document.getElementById('sec-key-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    await setAdminKey(document.getElementById('sec-new-key').value, document.getElementById('sec-old-key').value);
+    showToast('Secret Key saved & remembered on this device!');
+    e.target.reset();
+  } catch (err) { showToast(err.message, 'error'); }
+});
+
+document.getElementById('admin-logout-btn')?.addEventListener('click', async (e) => {
+  e.preventDefault();
+  await signOut(auth);
+  window.location.href = 'dashboard.html';
+});
+</script>
+</body>
+</html>
