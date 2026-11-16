@@ -30,6 +30,22 @@ const money = (n) => 'Rs. ' + (parseFloat(n || 0)).toFixed(2);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const initials = (name) => (name || 'G').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
 
+function getIconBadgeHtml(iconClass) {
+  const ic = iconClass || 'fa-solid fa-layer-group';
+  let bg = 'rgba(11, 193, 92, 0.12)';
+  if (ic.includes('instagram')) bg = 'rgba(225, 48, 108, 0.14)';
+  else if (ic.includes('youtube') || ic.includes('heart') || ic.includes('thumbs-up')) bg = 'rgba(255, 0, 0, 0.12)';
+  else if (ic.includes('facebook') || ic.includes('linkedin') || ic.includes('eye')) bg = 'rgba(24, 119, 242, 0.14)';
+  else if (ic.includes('whatsapp') || ic.includes('spotify') || ic.includes('user-plus')) bg = 'rgba(37, 211, 102, 0.14)';
+  else if (ic.includes('telegram') || ic.includes('twitter') || ic.includes('globe')) bg = 'rgba(0, 136, 204, 0.14)';
+  else if (ic.includes('tiktok')) bg = 'rgba(255, 0, 80, 0.12)';
+  else if (ic.includes('snapchat') || ic.includes('crown') || ic.includes('bolt') || ic.includes('key')) bg = 'rgba(234, 179, 8, 0.15)';
+  else if (ic.includes('discord') || ic.includes('robot')) bg = 'rgba(139, 92, 246, 0.14)';
+  else if (ic.includes('fire') || ic.includes('reddit')) bg = 'rgba(249, 115, 22, 0.14)';
+  else if (ic.includes('wand') || ic.includes('pinterest')) bg = 'rgba(236, 72, 153, 0.14)';
+  return `<span class="brand-icon-chip" style="background:${bg};"><i class="${esc(ic)}"></i></span>`;
+}
+
 function showToast(message, type = 'success') {
   let container = document.getElementById('toast-container');
   if (!container) {
@@ -67,7 +83,6 @@ function initLayout() {
   });
   backdrop.addEventListener('click', close);
 
-  // Intercept auth-protected links for guests
   document.querySelectorAll('[data-requires-auth="true"]').forEach(link => {
     link.addEventListener('click', (e) => {
       if (!currentUser) {
@@ -131,14 +146,15 @@ function renderCategoriesDropdown() {
 
   categories.forEach(c => {
     const icon = c.icon || 'fa-solid fa-layer-group';
+    const badgeHtml = getIconBadgeHtml(icon);
     const div = document.createElement('div');
     div.className = 'custom-option';
-    div.innerHTML = `<i class="${esc(icon)}" style="color:var(--primary)"></i> <span>${esc(c.name)}</span>`;
+    div.innerHTML = `${badgeHtml} <span style="font-weight:700">${esc(c.name)}</span>`;
     div.addEventListener('click', () => {
-      catTrigger.innerHTML = `<span style="display:flex;align-items:center;gap:0.6rem;"><i class="${esc(icon)}" style="color:var(--primary)"></i> ${esc(c.name)}</span> <i class="fa-solid fa-chevron-down"></i>`;
+      catTrigger.innerHTML = `<span style="display:flex;align-items:center;gap:0.7rem;">${badgeHtml} <span>${esc(c.name)}</span></span> <i class="fa-solid fa-chevron-down"></i>`;
       catSelect.value = c.id;
       catOptions.classList.remove('show');
-      renderServicesForCategory(c.id);
+      renderServicesForCategory(c.id, icon);
     });
     catOptions.appendChild(div);
 
@@ -155,7 +171,7 @@ function renderCategoriesDropdown() {
   };
 }
 
-function renderServicesForCategory(catId) {
+function renderServicesForCategory(catId, catFallbackIcon) {
   const srvOptions = document.getElementById('srv-options');
   const srvTrigger = document.getElementById('srv-trigger');
   const srvSelect = document.getElementById('order-service');
@@ -176,12 +192,13 @@ function renderServicesForCategory(catId) {
   srvTrigger.innerHTML = `<span>Select a service...</span> <i class="fa-solid fa-chevron-down"></i>`;
 
   list.forEach(s => {
-    const icon = s.icon || 'fa-solid fa-circle-check';
+    const icon = s.icon || catFallbackIcon || 'fa-solid fa-bolt';
+    const badgeHtml = getIconBadgeHtml(icon);
     const div = document.createElement('div');
     div.className = 'custom-option';
-    div.innerHTML = `<i class="${esc(icon)}" style="color:var(--primary)"></i> <div style="flex:1"><div style="font-weight:700">${esc(s.name)}</div><div style="font-size:0.78rem;color:var(--primary-dark);font-weight:700">${money(s.price)} per 1000</div></div>`;
+    div.innerHTML = `${badgeHtml} <div style="flex:1"><div style="font-weight:700">${esc(s.name)}</div><div style="font-size:0.78rem;color:var(--primary-dark);font-weight:800">${money(s.price)} per 1000</div></div>`;
     div.addEventListener('click', () => {
-      srvTrigger.innerHTML = `<span style="display:flex;align-items:center;gap:0.6rem;"><i class="${esc(icon)}" style="color:var(--primary)"></i> ${esc(s.name)} — ${money(s.price)}</span> <i class="fa-solid fa-chevron-down"></i>`;
+      srvTrigger.innerHTML = `<span style="display:flex;align-items:center;gap:0.7rem;">${badgeHtml} <span>${esc(s.name)} — ${money(s.price)}</span></span> <i class="fa-solid fa-chevron-down"></i>`;
       srvSelect.value = s.id;
       srvOptions.classList.remove('show');
       selectService(s);
@@ -242,7 +259,6 @@ function recalculateTotal() {
 
 document.getElementById('order-quantity')?.addEventListener('input', recalculateTotal);
 
-// Submit Order Handler (Prompts Login if Guest)
 document.getElementById('new-order-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -273,7 +289,6 @@ document.getElementById('new-order-form')?.addEventListener('submit', async (e) 
   try {
     const userRef = doc(db, 'users', currentUser.uid);
 
-    // Atomic wallet deduction
     await runTransaction(db, async (tx) => {
       const uSnap = await tx.get(userRef);
       if (!uSnap.exists()) throw new Error('User profile not found.');
@@ -284,7 +299,6 @@ document.getElementById('new-order-form')?.addEventListener('submit', async (e) 
       tx.update(userRef, { wallet: parseFloat((curBal - totalCharge).toFixed(2)) });
     });
 
-    // Place provider API order if externalId is configured
     let apiOrderId = '';
     if (selectedService.externalId && siteSettings.apiUrl && siteSettings.apiKey) {
       try {
@@ -307,10 +321,10 @@ document.getElementById('new-order-form')?.addEventListener('submit', async (e) 
       }
     }
 
-    // Calculate provider cost & net profit (hidden from user, used in Admin Profit Analytics)
-    const providerRatePer1k = parseFloat(selectedService.providerRate ?? selectedService.costPrice ?? (selectedService.price * 0.7));
-    const providerCost = parseFloat(((qty / 1000) * providerRatePer1k).toFixed(2));
-    const netProfit = parseFloat((totalCharge - providerCost).toFixed(2));
+    const rawRate = parseFloat(selectedService.providerRate ?? selectedService.costPrice ?? 0);
+    const hasValidCost = !isNaN(rawRate) && rawRate > 0;
+    const providerCost = hasValidCost ? parseFloat(((qty / 1000) * rawRate).toFixed(2)) : 0;
+    const netProfit = hasValidCost ? parseFloat((totalCharge - providerCost).toFixed(2)) : 0;
 
     const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
     await addDoc(collection(db, 'orders'), {
@@ -356,7 +370,6 @@ document.getElementById('new-order-form')?.addEventListener('submit', async (e) 
   }
 });
 
-// Initialize Page for both Guest & Logged-In Users
 initLayout();
 loadCatalogAndSettings().finally(() => {
   setTimeout(() => document.getElementById('page-loader')?.remove(), 400);
@@ -372,7 +385,6 @@ onAuthStateChanged(auth, async (user) => {
   const heroWallet = document.getElementById('hero-wallet');
 
   if (!user) {
-    // Guest Mode
     loginHeaderBtn?.classList.remove('d-none');
     sidebarLoginBtn?.classList.remove('d-none');
     logoutBtn?.classList.add('d-none');
