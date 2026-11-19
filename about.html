@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="About Pak Digital — what we offer, how to use the panel, how to add funds, order guide, policies, WhatsApp channel and admin contact.">
+<title>About Us — Pak Digital</title>
+<link rel="icon" href="pakdigital.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0bc15c">
+<link rel="apple-touch-icon" href="https://i.postimg.cc/YCJ3NFXx/20260821-085028.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root {
+  --primary: #0bc15c;
+  --primary-dark: #099e4b;
+  --primary-soft: rgba(11, 193, 92, 0.12);
+  --brand-900: #061f10;
+  --brand-800: #0c331c;
+  --brand-700: #124727;
+  --bg: #f3f8f5;
+  --bg-card: #ffffff;
+  --bg-soft: #eaf3ee;
+  --text: #0d2115;
+  --text-muted: #5e7366;
+  --border: #d7e5dd;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 24px 60px -20px rgba(6, 31, 16, 0.22);
+  --gradient: linear-gradient(135deg, var(--primary) 0%, #0dbfa1 100%);
+  --sidebar-w: 264px;
+  --header-h: 68px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background:
+    radial-gradient(900px 480px at 100% -4%, rgba(11, 193, 92, 0.10), transparent 60%),
+    radial-gradient(720px 420px at 0% 38%, rgba(13, 191, 161, 0.07), transparent 60%),
+    radial-gradient(700px 400px at 100% 78%, rgba(99, 102, 241, 0.05), transparent 60%),
+    var(--bg);
+  color: var(--text); line-height: 1.6; min-height: 100vh; -webkit-font-smoothing: antialiased;
+  width: 100%; max-width: 100%; overflow-x: hidden;
+}
+a { color: var(--primary); text-decoration: none; }
+img { max-width: 100%; display: block; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #b8cfc2; border-radius: 99px; }
+.d-none { display: none !important; }
+.text-danger { color: #d93838; }
+.mt-4 { margin-top: 1.5rem; }
+
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+@keyframes spinY { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+@keyframes counterY { from { transform: rotateY(0deg); } to { transform: rotateY(-360deg); } }
+@keyframes marq { to { transform: translateX(-50%); } }
+@keyframes shine { 0% { transform: translateX(-130%) skewX(-20deg); } 100% { transform: translateX(260%) skewX(-20deg); } }
+@keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.55); } 100% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); } }
+@keyframes drift { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(18px, -14px) scale(1.08); } }
+@keyframes gradMove { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+
+/* ============ HEADER (same as dashboard) ============ */
+header {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--header-h); z-index: 60;
+  background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.header-content { height: 100%; max-width: 1500px; margin: 0 auto; padding: 0 0.8rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.logo-area { display: flex; align-items: center; gap: 0.75rem; height: 100%; }
+.logo-area img { max-height: calc(var(--header-h) - 16px); width: auto; object-fit: contain; }
+.user-info { display: flex; align-items: center; gap: 0.6rem; }
+.user-name-display { font-size: 0.85rem; color: var(--text-muted); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.avatar-chip { width: 36px; height: 36px; border-radius: 50%; background: var(--brand-800); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+.mobile-menu-btn { display: none; background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); width: 40px; height: 40px; border-radius: 12px; font-size: 1.1rem; cursor: pointer; }
+
+/* ============ SIDEBAR (same as dashboard) ============ */
+.sidebar {
+  position: fixed; top: var(--header-h); right: 0; bottom: 0; width: var(--sidebar-w); z-index: 55;
+  background: var(--brand-900); color: #eef7f3; padding: 1.25rem 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto;
+}
+.sidebar-title { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(238, 247, 243, 0.45); margin: 0.25rem 0.75rem 0.75rem; }
+.sidebar-menu { display: flex; flex-direction: column; gap: 0.3rem; }
+.sidebar-menu a { display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 0.9rem; border-radius: 11px; color: rgba(238, 247, 243, 0.78); font-weight: 600; font-size: 0.92rem; transition: all 0.18s ease; }
+.sidebar-menu a i { width: 20px; text-align: center; font-size: 1rem; }
+.sidebar-menu a:hover { background: rgba(255, 255, 255, 0.07); color: #fff; transform: translateX(-3px); }
+.sidebar-menu a.active { background: var(--gradient); color: #fff; box-shadow: 0 8px 20px rgba(11, 193, 92, 0.25); }
+.sidebar-menu a.active i { color: #fff !important; -webkit-text-fill-color: #fff !important; }
+.sidebar-menu a.text-danger { color: #ff9da2; }
+.sidebar .fa-bolt { color: #eab308; }
+.sidebar .fa-wand-magic-sparkles { color: #ec4899; }
+.sidebar-foot { margin-top: auto; padding: 1.1rem; border-radius: 14px; background: rgba(255, 255, 255, 0.05); font-size: 0.8rem; color: rgba(238, 247, 243, 0.7); text-align: center; }
+.sidebar-backdrop { position: fixed; inset: 0; background: rgba(6, 31, 16, 0.4); z-index: 54; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+.sidebar-backdrop.active { opacity: 1; pointer-events: auto; }
+
+.main-content { padding-top: calc(var(--header-h) + 1.8rem); padding-bottom: 2rem; margin-right: var(--sidebar-w); min-height: 100vh; }
+.container { max-width: 1080px; margin: 0 auto; padding: 0 1rem; }
+
+.btn {
+  position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.85rem 1.3rem; border-radius: 12px; font-weight: 800; font-size: 0.92rem; border: none; cursor: pointer;
+  font-family: inherit; transition: transform 0.2s ease, box-shadow 0.2s ease; white-space: nowrap;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 10px 26px -8px rgba(11, 193, 92, 0.6); }
+.btn-primary::after, .btn-wa::after { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 35%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.38), transparent); transform: translateX(-130%) skewX(-20deg); }
+.btn-primary:hover::after, .btn-wa:hover::after { animation: shine 0.9s ease; }
+.btn-ghost { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1.5px solid rgba(255, 255, 255, 0.28); backdrop-filter: blur(6px); }
+.btn-wa { background: linear-gradient(135deg, #25d366, #128c4a); color: #fff; box-shadow: 0 14px 28px -10px rgba(37, 211, 102, 0.7); }
+.btn-white { background: #fff; color: #128c4a; box-shadow: 0 14px 28px -12px rgba(0, 0, 0, 0.45); }
+
+/* ============ LOADER (gif, background auto-matched) ============ */
+.loader-screen { position: fixed; inset: 0; background: #f6f6f6; display: flex; align-items: center; justify-content: center; z-index: 5000; overflow: hidden; }
+.loader-gif { width: 100%; height: 100%; max-width: 100vw; max-height: 100vh; object-fit: contain; opacity: 0; transition: opacity 0.15s ease; }
+
+/* ============ REVEAL ============ */
+.js .reveal { opacity: 0; translate: 0 28px; transition: opacity 0.7s ease, translate 0.7s cubic-bezier(0.22, 1, 0.36, 1); transition-delay: var(--d, 0s); }
+.js .reveal.in { opacity: 1; translate: 0 0; }
+
+/* ============ 3D TILE + TILT ============ */
+.tile3d {
+  position: relative; width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; flex-shrink: 0;
+  background: linear-gradient(145deg, var(--c1, #34d399), var(--c2, #059669)); font-size: 1.4rem;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.45), inset 0 -9px 13px rgba(0,0,0,0.2), 0 16px 24px -10px var(--c2, #059669);
+}
+.tile3d::before { content: ''; position: absolute; inset: 3px 3px auto 3px; height: 46%; border-radius: 15px 15px 40px 40px; background: linear-gradient(180deg, rgba(255,255,255,0.38), rgba(255,255,255,0)); pointer-events: none; }
+.tile3d i { position: relative; color: #fff !important; -webkit-text-fill-color: #fff !important; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.28)); }
+.tilt { transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.3s ease; will-change: transform; }
+
+/* ============ HERO ============ */
+.hero {
+  position: relative; overflow: hidden; border-radius: 30px; padding: 2.6rem 2.2rem; color: #fff;
+  display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 1rem; align-items: center;
+  background:
+    radial-gradient(520px 320px at 85% 20%, rgba(11, 193, 92, 0.38), transparent 65%),
+    radial-gradient(420px 280px at 0% 100%, rgba(13, 191, 161, 0.25), transparent 65%),
+    linear-gradient(135deg, #061f10 0%, #0c331c 55%, #0f4a2a 100%);
+  box-shadow: 0 30px 60px -26px rgba(6, 31, 16, 0.7); border: 1px solid rgba(11, 193, 92, 0.28);
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0; opacity: 0.5; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 38px 38px; mask-image: radial-gradient(circle at 70% 50%, #000, transparent 75%); -webkit-mask-image: radial-gradient(circle at 70% 50%, #000, transparent 75%);
+}
+.hero > * { position: relative; z-index: 1; }
+.hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.9rem; border-radius: 99px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.22); font-size: 0.74rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; backdrop-filter: blur(6px); }
+.hero-badge i { color: #3ee88a; }
+.hero h1 { font-size: clamp(2rem, 4.4vw, 3.1rem); font-weight: 900; letter-spacing: -0.035em; line-height: 1.1; margin: 1rem 0 0.85rem; }
+.grad-text { background: linear-gradient(90deg, #3ee88a, #22d3ee, #a3e635, #3ee88a); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gradMove 5s linear infinite; }
+.hero p.lead { font-size: 1rem; color: rgba(238, 247, 243, 0.82); max-width: 520px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.5rem; }
+.hero-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.4rem; }
+.hero-pill { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0.8rem; border-radius: 99px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); font-size: 0.76rem; font-weight: 700; color: rgba(255,255,255,0.9); }
+.hero-pill i { color: #3ee88a; }
+
+/* 3D scene */
+.scene { --r: 150px; --tilt: -20deg; position: relative; height: 360px; perspective: 1000px; }
+.scene-inner { position: absolute; inset: 0; transform-style: preserve-3d; }
+.core {
+  position: absolute; left: 50%; top: 50%; width: 118px; height: 118px; margin: -59px 0 0 -59px; border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #ffffff, #d9f5e5 45%, #9fe7bd 100%);
+  display: grid; place-items: center; animation: bob 4s ease-in-out infinite;
+  box-shadow: 0 0 0 8px rgba(255,255,255,0.1), 0 0 60px 8px rgba(62, 232, 138, 0.55), inset -10px -14px 22px rgba(11, 193, 92, 0.35);
+}
+.core img { width: 66px; height: 66px; object-fit: contain; position: relative; z-index: 1; }
+.core .core-fallback { position: absolute; font-size: 2.2rem; color: var(--primary-dark); }
+.ring-tilt { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; transform: rotateX(var(--tilt)); }
+.ring { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; animation: spinY 26s linear infinite; }
+.orbit { position: absolute; left: 50%; top: 50%; border-radius: 50%; border: 1.5px dashed rgba(62, 232, 138, 0.4); transform: rotateX(90deg); pointer-events: none; }
+.orbit.o1 { width: calc(var(--r) * 2); height: calc(var(--r) * 2); margin: calc(var(--r) * -1) 0 0 calc(var(--r) * -1); }
+.orbit.o2 { width: calc(var(--r) * 2.7); height: calc(var(--r) * 2.7); margin: calc(var(--r) * -1.35) 0 0 calc(var(--r) * -1.35); border-color: rgba(255, 255, 255, 0.12); }
+.chip3d { position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; transform-style: preserve-3d; transform: rotateY(calc(var(--i) * 45deg)) translateZ(var(--r)); }
+.chip3d .c1 { width: 52px; height: 52px; transform-style: preserve-3d; animation: counterY 26s linear infinite; }
+.chip3d .c2 {
+  width: 52px; height: 52px; border-radius: 17px; display: grid; place-items: center; font-size: 1.45rem; color: #fff;
+  transform: rotateY(calc(var(--i) * -45deg)) rotateX(calc(var(--tilt) * -1));
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.45), inset 0 -9px 13px rgba(0,0,0,0.22), 0 20px 28px -10px rgba(0,0,0,0.7);
+}
+.float-bubble { position: absolute; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 1.05rem; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.28); backdrop-filter: blur(8px); animation: floaty 4.5s ease-in-out infinite; z-index: 5; }
+.float-bubble.b1 { left: 4%; top: 12%; color: #ff6b81; }
+.float-bubble.b2 { right: 6%; top: 6%; color: #7dd3fc; animation-delay: -1.5s; }
+.float-bubble.b3 { right: 12%; bottom: 8%; color: #86efac; animation-delay: -3s; }
+.float-bubble.b4 { left: 10%; bottom: 14%; color: #fde68a; animation-delay: -2.2s; }
+
+/* ============ MARQUEE ============ */
+.marquee { margin: 1.6rem 0 0.4rem; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.marquee-track { display: flex; gap: 0.8rem; width: max-content; animation: marq 36s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.plat { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.4rem 1rem 0.4rem 0.4rem; background: #fff; border: 1px solid var(--border); border-radius: 99px; font-weight: 700; font-size: 0.85rem; box-shadow: var(--shadow-sm); white-space: nowrap; }
+.plat span.pi { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-size: 0.95rem; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4); }
+
+/* ============ SECTION HEADS ============ */
+.sec-head { text-align: center; max-width: 700px; margin: 3.6rem auto 1.8rem; }
+.eyebrow { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.32rem 0.85rem; border-radius: 99px; background: var(--primary-soft); color: var(--primary-dark); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; }
+.sec-head h2 { font-size: clamp(1.55rem, 3.4vw, 2.2rem); font-weight: 900; letter-spacing: -0.03em; margin-top: 0.7rem; color: var(--brand-900); line-height: 1.2; }
+.sec-head h2 span { background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.sec-head p { color: var(--text-muted); margin-top: 0.55rem; font-size: 0.96rem; }
+
+/* ============ STATS ============ */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.6rem; }
+.stat { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem 1rem; text-align: center; box-shadow: var(--shadow-sm); }
+.stat:hover { border-color: var(--primary); box-shadow: 0 20px 36px -22px rgba(11, 193, 92, 0.6); }
+.stat .tile3d { margin: 0 auto 0.8rem; width: 52px; height: 52px; font-size: 1.3rem; }
+.stat-number { font-size: 1.85rem; font-weight: 900; color: var(--brand-900); line-height: 1; letter-spacing: -0.03em; }
+.stat-label { margin-top: 0.4rem; font-size: 0.74rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; }
+
+/* ============ FEATURES ============ */
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
+.feat { position: relative; overflow: hidden; background: #fff; border: 1px solid var(--border); border-radius: 22px; padding: 1.5rem 1.4rem; box-shadow: var(--shadow-sm); }
+.feat::after { content: ''; position: absolute; right: -50px; top: -50px; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, var(--c1, #34d399) 0%, transparent 70%); opacity: 0.16; transition: opacity 0.3s; }
+.feat:hover { border-color: var(--c1, var(--primary)); box-shadow: 0 26px 44px -26px var(--c2, rgba(11,193,92,0.5)); }
+.feat:hover::after { opacity: 0.3; }
+.feat h3 { margin: 1rem 0 0.35rem; font-size: 1.08rem; font-weight: 800; letter-spacing: -0.01em; color: var(--brand-900); }
+.feat p { font-size: 0.88rem; color: var(--text-muted); }
+.feat a.more { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.8rem; font-size: 0.82rem; font-weight: 800; color: var(--c2, var(--primary-dark)); }
+.feat a.more i { transition: transform 0.2s; }
+.feat:hover a.more i { transform: translateX(4px); }
+
+/* ============ STEPS ============ */
+.steps { list-style: none; position: relative; padding-left: 64px; display: grid; gap: 1.2rem; }
+.steps::before { content: ''; position: absolute; left: 25px; top: 10px; bottom: 10px; width: 3px; border-radius: 3px; background: linear-gradient(180deg, var(--primary), #0dbfa1, #6366f1); opacity: 0.35; }
+.step { position: relative; }
+.step-num {
+  position: absolute; left: -64px; top: 12px; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; font-size: 1.25rem; font-weight: 900; color: #fff;
+  background: linear-gradient(145deg, var(--c1), var(--c2)); box-shadow: inset 0 2px 0 rgba(255,255,255,0.45), inset 0 -8px 12px rgba(0,0,0,0.2), 0 14px 22px -8px var(--c2), 0 0 0 6px var(--bg);
+}
+.step-card { display: flex; gap: 1.1rem; align-items: flex-start; background: #fff; border: 1px solid var(--border); border-radius: 22px; padding: 1.3rem 1.4rem; box-shadow: var(--shadow-sm); }
+.step-card:hover { border-color: var(--c1); box-shadow: 0 24px 40px -26px var(--c2); }
+.step-card h3 { font-size: 1.08rem; font-weight: 800; color: var(--brand-900); letter-spacing: -0.01em; }
+.step-card p { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem; }
+.step-links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; }
+.mini-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.85rem; border-radius: 99px; font-size: 0.78rem; font-weight: 800; background: var(--primary-soft); color: var(--primary-dark); transition: all 0.2s; }
+.mini-btn:hover { background: var(--primary); color: #fff; transform: translateY(-2px); }
+
+/* ============ URDU QUICK GUIDE ============ */
+.urdu-card { position: relative; overflow: hidden; margin-top: 1.4rem; background: linear-gradient(145deg, #ffffff 55%, #effcf4 100%); border: 1.5px solid var(--border); border-radius: 24px; padding: 1.6rem 1.6rem 1.4rem; box-shadow: var(--shadow-sm); }
+.urdu-card::before { content: ''; position: absolute; top: 0; right: 0; left: 0; height: 5px; background: var(--gradient); }
+.urdu-title { display: flex; align-items: center; gap: 0.7rem; justify-content: flex-end; font-family: 'Noto Nastaliq Urdu', serif; font-size: 1.3rem; font-weight: 700; color: var(--brand-900); direction: rtl; margin-bottom: 0.6rem; }
+.urdu-list { font-family: 'Noto Nastaliq Urdu', serif; direction: rtl; text-align: right; font-size: 1.02rem; line-height: 2.5; color: var(--brand-900); list-style: none; }
+.urdu-list li::before { content: '✔'; margin-left: 0.55rem; color: var(--primary); font-family: 'Inter', sans-serif; }
+
+/* ============ FUNDS GUIDE ============ */
+.pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.pay-card { position: relative; overflow: hidden; background: #fff; border: 1.5px solid var(--border); border-radius: 26px; padding: 1.3rem; box-shadow: var(--shadow-sm); }
+.pay-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--ac); }
+.pay-card.auto { --ac: #0bc15c; --acg: rgba(11, 193, 92, 0.4); background: linear-gradient(135deg, #ffffff 55%, #effcf4 100%); }
+.pay-card.manual { --ac: #7c3aed; --acg: rgba(124, 58, 237, 0.36); background: linear-gradient(135deg, #ffffff 55%, #f5f0ff 100%); }
+.pay-card:hover { border-color: var(--ac); box-shadow: 0 28px 48px -26px var(--acg); }
+.pay-top { display: flex; align-items: center; gap: 1rem; }
+.pay-media { position: relative; width: 112px; height: 104px; border-radius: 18px; background: #fff; border: 2px solid var(--ac); display: grid; place-items: center; overflow: hidden; flex-shrink: 0; box-shadow: 0 8px 20px -10px var(--acg), inset 0 0 0 4px #fff; }
+.pay-media .fb { position: absolute; font-size: 2.2rem; color: var(--ac); opacity: 0.85; }
+.pay-media img { position: relative; width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.22rem 0.65rem; border-radius: 99px; font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.35rem; }
+.chip .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.chip.fast { background: #dcfce7; color: #15803d; }
+.chip.slow { background: #fef3c7; color: #b45309; }
+.pay-top h3 { font-size: 1.2rem; font-weight: 900; letter-spacing: -0.02em; color: var(--brand-900); line-height: 1.2; }
+.pay-top p { font-size: 0.84rem; color: var(--text-muted); margin-top: 0.2rem; }
+.pay-list { list-style: none; margin: 1.1rem 0 1rem; display: grid; gap: 0.55rem; }
+.pay-list li { display: flex; gap: 0.65rem; align-items: flex-start; font-size: 0.88rem; color: var(--text); }
+.pay-list li i { margin-top: 0.22rem; color: var(--ac); }
+
+/* ============ STATUS ============ */
+.status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; }
+.status-card { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 1.1rem; box-shadow: var(--shadow-sm); }
+.status-card:hover { border-color: var(--sc); box-shadow: 0 20px 34px -24px var(--sc); }
+.badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.28rem 0.75rem; border-radius: 99px; font-size: 0.74rem; font-weight: 800; background: color-mix(in srgb, var(--sc) 14%, white); color: var(--sc); }
+.badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.status-card p { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.6rem; }
+
+/* ============ DO / DON'T ============ */
+.dd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+.dd-card { border-radius: 24px; padding: 1.5rem; border: 1.5px solid var(--border); background: #fff; box-shadow: var(--shadow-sm); }
+.dd-card.do { border-color: rgba(11, 193, 92, 0.45); background: linear-gradient(145deg, #fff 55%, #effcf4); }
+.dd-card.dont { border-color: rgba(239, 68, 68, 0.35); background: linear-gradient(145deg, #fff 55%, #fff1f1); }
+.dd-card h3 { display: flex; align-items: center; gap: 0.65rem; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.9rem; }
+.dd-card ul { list-style: none; display: grid; gap: 0.6rem; }
+.dd-card li { display: flex; gap: 0.6rem; font-size: 0.88rem; }
+.dd-card.do li i { color: var(--primary); margin-top: 0.25rem; }
+.dd-card.dont li i { color: #ef4444; margin-top: 0.25rem; }
+
+/* ============ POLICIES ============ */
+.policy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
+.policy { background: #fff; border: 1px solid var(--border); border-radius: 22px; padding: 1.5rem 1.4rem; box-shadow: var(--shadow-sm); }
+.policy:hover { border-color: var(--c1); box-shadow: 0 24px 40px -26px var(--c2); }
+.policy h3 { margin: 0.95rem 0 0.4rem; font-size: 1.05rem; font-weight: 800; color: var(--brand-900); }
+.policy p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.7; }
+.policy-note { margin-top: 1rem; display: flex; gap: 0.7rem; align-items: center; padding: 0.9rem 1.1rem; border-radius: 16px; background: var(--primary-soft); color: var(--brand-900); font-size: 0.86rem; font-weight: 600; }
+.policy-note i { color: var(--primary-dark); font-size: 1.1rem; }
+
+/* ============ FAQ ============ */
+.faq { max-width: 820px; margin: 0 auto; display: grid; gap: 0.75rem; }
+.faq details { background: #fff; border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow-sm); transition: border-color 0.2s, box-shadow 0.2s; }
+.faq details[open] { border-color: var(--primary); box-shadow: 0 20px 34px -26px rgba(11, 193, 92, 0.7); }
+.faq summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.05rem 1.3rem; font-weight: 700; font-size: 0.96rem; color: var(--brand-900); }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary i { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary-dark); font-size: 0.8rem; transition: transform 0.3s, background 0.3s; flex-shrink: 0; }
+.faq details[open] summary i { transform: rotate(180deg); background: var(--primary); color: #fff; }
+.faq .ans { padding: 0 1.3rem 1.15rem; font-size: 0.9rem; color: var(--text-muted); }
+
+/* ============ CHANNEL + ADMIN ============ */
+.connect-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 1.2rem; }
+.channel-card {
+  position: relative; overflow: hidden; border-radius: 28px; padding: 2rem 1.8rem; color: #fff;
+  background: radial-gradient(420px 260px at 95% 0%, rgba(255,255,255,0.22), transparent 65%), linear-gradient(135deg, #128c4a 0%, #25d366 60%, #5ff2a0 100%);
+  box-shadow: 0 30px 56px -26px rgba(18, 140, 74, 0.85);
+}
+.channel-card::before { content: '\f232'; font-family: 'Font Awesome 6 Brands'; position: absolute; right: -18px; bottom: -42px; font-size: 13rem; color: rgba(255,255,255,0.12); transform: rotate(-12deg); pointer-events: none; }
+.channel-card > * { position: relative; }
+.ch-ic { width: 66px; height: 66px; border-radius: 20px; display: grid; place-items: center; font-size: 2rem; background: #fff; color: #25d366; box-shadow: 0 16px 26px -10px rgba(0,0,0,0.4); animation: floaty 4s ease-in-out infinite; }
+.channel-card h3 { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.02em; margin: 1.1rem 0 0.4rem; line-height: 1.2; }
+.channel-card p { font-size: 0.93rem; color: rgba(255,255,255,0.92); max-width: 440px; }
+.ch-perks { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0 1.3rem; }
+.ch-perks span { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.75rem; border-radius: 99px; background: rgba(255,255,255,0.18); font-size: 0.76rem; font-weight: 700; }
+
+.admin-card { position: relative; overflow: hidden; border-radius: 28px; padding: 1.8rem 1.5rem; background: linear-gradient(145deg, #ffffff 55%, #effcf4 100%); border: 1.5px solid var(--border); box-shadow: 0 24px 50px -28px rgba(6, 31, 16, 0.45); text-align: center; scroll-margin-top: calc(var(--header-h) + 1rem); }
+.admin-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--gradient); }
+.admin-dp-wrap { position: relative; width: 96px; height: 96px; margin: 0.4rem auto 0.9rem; padding: 4px; border-radius: 50%; background: linear-gradient(135deg, #25d366, #0dbfa1); animation: pulseRing 2.2s ease-out infinite; }
+.admin-dp { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #fff; background: #fff; }
+.admin-dp-wrap::after { content: ''; position: absolute; right: 3px; bottom: 5px; width: 18px; height: 18px; border-radius: 50%; background: #25d366; border: 3px solid #fff; }
+.admin-name-row { display: flex; align-items: center; justify-content: center; gap: 0.4rem; font-weight: 900; font-size: 1.3rem; color: var(--brand-900); letter-spacing: -0.02em; }
+.verified-ticks { display: inline-flex; align-items: center; }
+.wa-verified-badge { width: 22px; height: 22px; fill: #25d366; flex-shrink: 0; }
+.admin-role { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-top: 0.1rem; }
+.admin-card p.msg { font-size: 0.88rem; color: var(--text-muted); margin: 0.9rem 0 1.2rem; }
+.admin-card .btn { width: 100%; }
+
+/* ============ FOOTER ============ */
+.wave { display: block; width: 100%; height: 70px; margin-top: 3.4rem; }
+.site-footer { position: relative; margin-top: -1px; padding: 2.2rem 1rem 1.6rem; text-align: center; background: linear-gradient(180deg, #0c331c 0%, #061f10 100%); color: rgba(238, 247, 243, 0.8); border-radius: 0; }
+.site-footer img { height: 46px; width: auto; margin: 0 auto 0.9rem; filter: brightness(0) invert(1); opacity: 0.95; }
+.site-footer .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem 1.2rem; margin: 0.6rem 0 1rem; }
+.site-footer .links a { color: rgba(238, 247, 243, 0.8); font-weight: 600; font-size: 0.86rem; }
+.site-footer .links a:hover { color: #3ee88a; }
+.site-footer .copy { font-size: 0.78rem; color: rgba(238, 247, 243, 0.55); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; padding: 2rem 1.4rem 1rem; }
+  .scene { height: 330px; }
+  .feat-grid, .policy-grid { grid-template-columns: repeat(2, 1fr); }
+  .status-grid { grid-template-columns: repeat(2, 1fr); }
+  .connect-grid, .pay-grid, .dd-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 860px) {
+  .mobile-menu-btn { display: grid; place-items: center; }
+  .sidebar { transform: translateX(100%); width: 72%; max-width: 300px; top: var(--header-h) !important; height: calc(100vh - var(--header-h)) !important; padding-top: 1rem; box-shadow: -12px 0 30px rgba(0,0,0,0.15); }
+  .sidebar.active { transform: translateX(0); }
+  .main-content { margin-right: 0; }
+  .user-name-display { display: none; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .feat-grid, .policy-grid { grid-template-columns: 1fr; }
+  .scene { --r: 112px; height: 290px; }
+  .core { width: 96px; height: 96px; margin: -48px 0 0 -48px; }
+  .core img { width: 54px; height: 54px; }
+  .chip3d, .chip3d .c1, .chip3d .c2 { width: 44px; height: 44px; }
+  .chip3d { left: -22px; top: -22px; }
+  .chip3d .c2 { font-size: 1.2rem; border-radius: 14px; }
+  .steps { padding-left: 54px; }
+  .step-num { left: -54px; width: 44px; height: 44px; font-size: 1.05rem; }
+  .steps::before { left: 20px; }
+  .step-card { flex-direction: column; gap: 0.8rem; }
+  .pay-top { flex-direction: column; align-items: flex-start; }
+  .pay-media { width: 100%; height: 130px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js .reveal { opacity: 1; translate: 0 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- Page loader: gifs/loading.gif, background auto-matched to the gif's own colour -->
+<div id="page-loader" class="loader-screen">
+  <img src="gifs/loading.gif" alt="Loading" class="loader-gif" id="loader-gif">
+</div>
+<script>
+document.documentElement.classList.add('js');
+window.__hideLoader = function () { var l = document.getElementById('page-loader'); if (l) l.remove(); };
+setTimeout(window.__hideLoader, 6000);
+(function () {
+  var loader = document.getElementById('page-loader');
+  var img = document.getElementById('loader-gif');
+  if (!loader || !img) return;
+  function reveal() { img.style.opacity = '1'; }
+  function sample() {
+    try {
+      var w = img.naturalWidth, h = img.naturalHeight;
+      if (!w || !h) { reveal(); return; }
+      var c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      var x = c.getContext('2d', { willReadFrequently: true });
+      x.drawImage(img, 0, 0);
+      var t = Math.max(2, Math.round(Math.min(w, h) * 0.02));
+      var r = 0, g = 0, b = 0, n = 0;
+      var add = function (sx, sy, sw, sh) {
+        var d = x.getImageData(sx, sy, sw, sh).data;
+        for (var i = 0; i < d.length; i += 4) {
+          if (d[i + 3] < 250) continue;
+          r += d[i]; g += d[i + 1]; b += d[i + 2]; n++;
+        }
+      };
+      add(0, 0, w, t);
+      add(0, h - t, w, t);
+      add(0, t, t, h - 2 * t);
+      add(w - t, t, t, h - 2 * t);
+      if (n) loader.style.background = 'rgb(' + Math.round(r / n) + ',' + Math.round(g / n) + ',' + Math.round(b / n) + ')';
+    } catch (e) { /* keep fallback colour */ }
+    reveal();
+  }
+  if (img.complete && img.naturalWidth) sample();
+  else { img.addEventListener('load', sample); img.addEventListener('error', reveal); }
+})();
+</script>
+
+<header>
+  <div class="header-content" style="justify-content: space-between;">
+    <div class="logo-area" style="flex: 1; text-align: left;">
+      <a href="dashboard.html"><img id="site-logo-header" src="https://i.postimg.cc/D0NthZgz/pak-digital.png" alt="Logo"></a>
+    </div>
+    <div class="user-info">
+      <span id="user-name-display" class="user-name-display">Guest</span>
+      <a href="login.html" id="header-login-btn" class="btn btn-primary d-none" style="padding: 0.45rem 0.95rem; font-size: 0.8rem; border-radius: 99px;"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+      <span class="avatar-chip" id="user-avatar">G</span>
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-title">Menu</div>
+  <div class="sidebar-menu">
+      <a href="dashboard.html"><i class="fa-solid fa-bolt"></i> New Order</a>
+      <a href="other-services.html"><i class="fa-solid fa-wand-magic-sparkles"></i> Other Services</a>
+      <a href="funds.html" data-requires-auth="true"><i class="fa-solid fa-wallet" style="color:#10b981"></i> Add Funds</a>
+      <a href="history.html" data-requires-auth="true"><i class="fa-solid fa-clock-rotate-left" style="color:#38bdf8"></i> History</a>
+      <a href="profile.html" data-requires-auth="true"><i class="fa-solid fa-user" style="color:#a78bfa"></i> My Profile</a>
+      <a href="about.html" class="active"><i class="fa-solid fa-circle-info" style="color:#fbbf24"></i> About</a>
+      <a href="login.html" id="sidebar-login-btn" class="d-none mt-4" style="color: var(--primary);"><i class="fa-solid fa-right-to-bracket"></i> Login / Register</a>
+      <a href="#" id="logout-btn" class="text-danger mt-4"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </div>
+  <div class="sidebar-foot" style="text-align: center; padding: 1.5rem 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 14px; margin-top: auto;">
+    <div style="font-size: 0.75rem; color: rgba(238, 247, 243, 0.6); line-height: 1.4;">
+      Contact The Main Admin On WhatsApp If Anything Not Working Properly.
+      <br>
+      <a href="#contact-admin" style="display: inline-block; background: none; border: 1px solid var(--primary); color: var(--primary); padding: 0.35rem 0.8rem; border-radius: 99px; margin-top: 0.6rem; font-size: 0.7rem; font-weight: 600;">Contact Support</a>
+    </div>
+  </div>
+</nav>
+
+<main class="main-content">
+  <div class="container">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <div>
+        <span class="hero-badge"><i class="fa-solid fa-circle-info"></i> About Us</span>
+        <h1>Grow Your Social Presence with <span class="grad-text">Pak Digital</span></h1>
+        <p class="lead">Pakistan's simple, fast and affordable panel for social media growth and premium digital services. Add funds, pick a service, place your order and track everything from one clean dashboard.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="dashboard.html"><i class="fa-solid fa-bolt"></i> Place New Order</a>
+          <a class="btn btn-ghost" href="funds.html" data-requires-auth="true"><i class="fa-solid fa-wallet"></i> Add Funds</a>
+        </div>
+        <div class="hero-pills">
+          <span class="hero-pill"><i class="fa-solid fa-bolt"></i> Instant Auto Deposit</span>
+          <span class="hero-pill"><i class="fa-solid fa-shield-halved"></i> Secure Wallet</span>
+          <span class="hero-pill"><i class="fa-brands fa-whatsapp"></i> WhatsApp Support</span>
+        </div>
+      </div>
+
+      <div class="scene" aria-hidden="true">
+        <div class="float-bubble b1"><i class="fa-solid fa-heart"></i></div>
+        <div class="float-bubble b2"><i class="fa-solid fa-eye"></i></div>
+        <div class="float-bubble b3"><i class="fa-solid fa-user-plus"></i></div>
+        <div class="float-bubble b4"><i class="fa-solid fa-thumbs-up"></i></div>
+        <div class="scene-inner">
+          <div class="core">
+            <i class="fa-solid fa-bolt core-fallback"></i>
+            <img src="pakdigital.png" alt="" onerror="this.style.display='none'">
+          </div>
+          <div class="ring-tilt">
+            <div class="orbit o1"></div>
+            <div class="orbit o2"></div>
+            <div class="ring" id="ring"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platforms marquee -->
+    <div class="marquee reveal" aria-hidden="true"><div class="marquee-track" id="marquee-track"></div></div>
+
+    <!-- ===================== STATS ===================== -->
+    <div class="stats" id="stats">
+      <div class="stat tilt reveal" data-target="400" data-suffix="+" style="--d:0s">
+        <div class="tile3d" style="--c1:#60a5fa;--c2:#2563eb"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-number">0</div><div class="stat-label">Active Users</div>
+      </div>
+      <div class="stat tilt reveal" data-target="80" data-suffix="k+" style="--d:0.08s">
+        <div class="tile3d" style="--c1:#a78bfa;--c2:#7c3aed"><i class="fa-solid fa-cart-shopping"></i></div>
+        <div class="stat-number">0</div><div class="stat-label">Orders Completed</div>
+      </div>
+      <div class="stat tilt reveal" data-target="5000" data-suffix="+" style="--d:0.16s">
+        <div class="tile3d" style="--c1:#34d399;--c2:#059669"><i class="fa-solid fa-wallet"></i></div>
+        <div class="stat-number">0</div><div class="stat-label">Funds Added</div>
+      </div>
+      <div class="stat tilt reveal" data-target="2000" data-suffix="+" style="--d:0.24s">
+        <div class="tile3d" style="--c1:#fcd34d;--c2:#f59e0b"><i class="fa-solid fa-crown"></i></div>
+        <div class="stat-number">0</div><div class="stat-label">Community</div>
+      </div>
+    </div>
+
+    <!-- ===================== WHAT'S INSIDE ===================== -->
+    <div class="sec-head reveal">
+      <span class="eyebrow"><i class="fa-solid fa-cubes"></i> What's Inside</span>
+      <h2>Everything You Need, <span>One Panel</span></h2>
+      <p>Here is a quick tour of every page in Pak Digital and what it does for you.</p>
+    </div>
+
+    <div class="feat-grid">
+      <div class="feat tilt reveal" style="--c1:#facc15;--c2:#d97706;--d:0s">
+        <div class="tile3d" style="--c1:#facc15;--c2:#d97706"><i class="fa-solid fa-bolt"></i></div>
+        <h3>New Order</h3>
+        <p>Choose a category and service, paste your public link, enter the quantity and see the total charge instantly before you confirm.</p>
+        <a class="more" href="dashboard.html">Open New Order <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="feat tilt reveal" style="--c1:#f472b6;--c2:#db2777;--d:0.07s">
+        <div class="tile3d" style="--c1:#f472b6;--c2:#db2777"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <h3>Other Services</h3>
+        <p>Fixed-price premium subscriptions, software, APIs, source codes and digital tools — delivered by instant download or on WhatsApp.</p>
+        <a class="more" href="other-services.html">Explore Services <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="feat tilt reveal" style="--c1:#34d399;--c2:#059669;--d:0.14s">
+        <div class="tile3d" style="--c1:#34d399;--c2:#059669"><i class="fa-solid fa-wallet"></i></div>
+        <h3>Add Funds</h3>
+        <p>Top up your wallet with Auto Pay (Raast, JazzCash, Easypaisa — instant) or Manual Pay with a payment screenshot.</p>
+        <a class="more" href="funds.html" data-requires-auth="true">Add Funds <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="feat tilt reveal" style="--c1:#38bdf8;--c2:#0284c7;--d:0s">
+        <div class="tile3d" style="--c1:#38bdf8;--c2:#0284c7"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <h3>History</h3>
+        <p>Track every order and every deposit with live status badges. Copy your order links with one tap.</p>
+        <a class="more" href="history.html" data-requires-auth="true">View History <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="feat tilt reveal" style="--c1:#a78bfa;--c2:#7c3aed;--d:0.07s">
+        <div class="tile3d" style="--c1:#a78bfa;--c2:#7c3aed"><i class="fa-solid fa-user"></i></div>
+        <h3>My Profile</h3>
+        <p>Manage your account details and keep your wallet and activity in one safe place.</p>
+        <a class="more" href="profile.html" data-requires-auth="true">Open Profile <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="feat tilt reveal" style="--c1:#4ade80;--c2:#16a34a;--d:0.14s">
+        <div class="tile3d" style="--c1:#4ade80;--c2:#16a34a"><i class="fa-brands fa-whatsapp"></i></div>
+        <h3>WhatsApp Support</h3>
+        <p>Stuck anywhere? Message the main admin directly on WhatsApp and get help with orders and payments.</p>
+        <a class="more" href="#contact-admin">Contact Admin <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <!-- ===================== HOW TO USE ===================== -->
+    <div class="sec-head reveal">
+      <span class="eyebrow"><i class="fa-solid fa-route"></i> How To Use</span>
+      <h2>Start in <span>5 Easy Steps</span></h2>
+      <p>Follow these steps and your first order will be placed in a couple of minutes.</p>
+    </div>
+
+    <ol class="steps">
+      <li class="step reveal" style="--c1:#60a5fa;--c2:#2563eb">
+        <div class="step-num">1</div>
+        <div class="step-card tilt" style="--c1:#60a5fa;--c2:#2563eb">
+          <div class="tile3d" style="--c1:#60a5fa;--c2:#2563eb"><i class="fa-solid fa-user-plus"></i></div>
+          <div>
+            <h3>Create Your Account / Login</h3>
+            <p>Register with your email or log in to your existing account. Your wallet, orders and payments are saved to your account.</p>
+            <div class="step-links"><a class="mini-btn" href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Login / Register</a></div>
+          </div>
+        </div>
+      </li>
+      <li class="step reveal" style="--c1:#34d399;--c2:#059669">
+        <div class="step-num">2</div>
+        <div class="step-card tilt" style="--c1:#34d399;--c2:#059669">
+          <div class="tile3d" style="--c1:#34d399;--c2:#059669"><i class="fa-solid fa-wallet"></i></div>
+          <div>
+            <h3>Add Funds To Your Wallet</h3>
+            <p>Go to <b>Add Funds</b> and choose <b>Auto Pay</b> (instant) or <b>Manual Pay</b> (upload a payment slip). The minimum deposit is Rs. 30.</p>
+            <div class="step-links"><a class="mini-btn" href="funds.html" data-requires-auth="true"><i class="fa-solid fa-plus"></i> Add Funds</a><a class="mini-btn" href="#funds-guide"><i class="fa-solid fa-circle-question"></i> Funds Guide</a></div>
+          </div>
+        </div>
+      </li>
+      <li class="step reveal" style="--c1:#facc15;--c2:#d97706">
+        <div class="step-num">3</div>
+        <div class="step-card tilt" style="--c1:#facc15;--c2:#d97706">
+          <div class="tile3d" style="--c1:#facc15;--c2:#d97706"><i class="fa-solid fa-bolt"></i></div>
+          <div>
+            <h3>Place Your Order</h3>
+            <p>Open <b>New Order</b>, select a <b>Category</b> and a <b>Service</b>, read the price, min / max and description, paste your <b>public link</b>, enter the <b>quantity</b> and tap <b>Place Order</b>.</p>
+            <div class="step-links"><a class="mini-btn" href="dashboard.html"><i class="fa-solid fa-bolt"></i> New Order</a></div>
+          </div>
+        </div>
+      </li>
+      <li class="step reveal" style="--c1:#38bdf8;--c2:#0284c7">
+        <div class="step-num">4</div>
+        <div class="step-card tilt" style="--c1:#38bdf8;--c2:#0284c7">
+          <div class="tile3d" style="--c1:#38bdf8;--c2:#0284c7"><i class="fa-solid fa-clock-rotate-left"></i></div>
+          <div>
+            <h3>Track In History</h3>
+            <p>Open <b>History</b> to see your orders and payments. Order statuses update automatically so you always know what is happening.</p>
+            <div class="step-links"><a class="mini-btn" href="history.html" data-requires-auth="true"><i class="fa-solid fa-clock-rotate-left"></i> History</a><a class="mini-btn" href="#statuses"><i class="fa-solid fa-tags"></i> Status Guide</a></div>
+          </div>
+        </div>
+      </li>
+      <li class="step reveal" style="--c1:#f472b6;--c2:#db2777">
+        <div class="step-num">5</div>
+        <div class="step-card tilt" style="--c1:#f472b6;--c2:#db2777">
+          <div class="tile3d" style="--c1:#f472b6;--c2:#db2777"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <div>
+            <h3>Explore Other Services</h3>
+            <p>Need tools, APIs, source codes or premium subscriptions? Pick a fixed-price service in <b>Other Services</b> and get it by instant download or on WhatsApp.</p>
+            <div class="step-links"><a class="mini-btn" href="other-services.html"><i class="fa-solid fa-toolbox"></i> Other Services</a></div>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <!-- Urdu quick guide -->
+    <div class="urdu-card reveal">
+      <div class="urdu-title"><span>اردو میں مختصر طریقہ</span><span class="tile3d" style="--c1:#34d399;--c2:#059669;width:44px;height:44px;font-size:1.1rem"><i class="fa-solid fa-language"></i></span></div>
+      <ul class="urdu-list">
+        <li>سب سے پہلے اکاؤنٹ بنائیں یا لاگ اِن کریں۔</li>
+        <li>Add Funds میں جا کر Auto Pay (فوراً) یا Manual Pay کے ذریعے والٹ میں پیسے ڈالیں۔</li>
+        <li>New Order میں کیٹیگری اور سروس منتخب کریں، پبلک لنک پیسٹ کریں، مقدار لکھیں اور آرڈر کر دیں۔</li>
+        <li>History میں اپنے آرڈرز اور پیمنٹس کا اسٹیٹس دیکھتے رہیں۔</li>
+        <li>کوئی مسئلہ ہو تو ایڈمن سے واٹس ایپ پر رابطہ کریں۔</li>
+      </ul>
+    </div>
+
+    <!-- ===================== FUNDS GUIDE ===================== -->
+    <div class="sec-head reveal" id="funds-guide" style="scroll-margin-top: calc(var(--header-h) + 1rem)">
+      <span class="eyebrow"><i class="fa-solid fa-money-bill-transfer"></i> Add Funds Guide</span>
+      <h2>Two Ways To <span>Top Up</span></h2>
+      <p>Pick the method that suits you. Both have a minimum of Rs. 30 and a maximum of Rs. 50,000 per deposit.</p>
+    </div>
+
+    <div class="pay-grid">
+      <div class="pay-card auto tilt reveal">
+        <div class="pay-top">
+          <div class="pay-media"><i class="fa-solid fa-qrcode fb"></i><img src="gifs/qr.gif" alt="Raast QR" onerror="this.style.display='none'"></div>
+          <div>
+            <span class="chip fast"><span class="dot"></span> Instant</span>
+            <h3>Raast Auto Payment</h3>
+            <p>Auto Payment Instantly Approved</p>
+          </div>
+        </div>
+        <ul class="pay-list">
+          <li><i class="fa-solid fa-circle-check"></i> Choose <b>Auto Pay</b> on the Add Funds page and enter the amount.</li>
+          <li><i class="fa-solid fa-circle-check"></i> Pay securely through JazzCash, Easypaisa or Raast QR on the checkout page.</li>
+          <li><i class="fa-solid fa-circle-check"></i> You return to Pak Digital and the amount is added to your wallet automatically — no waiting.</li>
+          <li><i class="fa-solid fa-circle-check"></i> If a payment fails, no funds are deducted.</li>
+        </ul>
+        <a class="btn btn-primary" href="funds.html" data-requires-auth="true"><i class="fa-solid fa-bolt"></i> Use Auto Pay</a>
+      </div>
+
+      <div class="pay-card manual tilt reveal" style="--d:0.1s">
+        <div class="pay-top">
+          <div class="pay-media"><i class="fa-solid fa-receipt fb"></i><img src="gifs/manual.gif" alt="Manual Payment" onerror="this.style.display='none'"></div>
+          <div>
+            <span class="chip slow"><span class="dot"></span> 15–30 Mins</span>
+            <h3>Easypaisa Sadapay</h3>
+            <p>Manually Add Funds Need Admin Approval (Slow)</p>
+          </div>
+        </div>
+        <ul class="pay-list">
+          <li><i class="fa-solid fa-circle-check"></i> Choose <b>Manual Pay</b>, copy the account number shown and send the money.</li>
+          <li><i class="fa-solid fa-circle-check"></i> Take a clear screenshot of the payment and upload it.</li>
+          <li><i class="fa-solid fa-circle-check"></i> Enter the exact amount you sent and submit the request.</li>
+          <li><i class="fa-solid fa-circle-check"></i> The admin reviews it and your wallet is credited once approved.</li>
+        </ul>
+        <a class="btn btn-primary" href="funds.html" data-requires-auth="true" style="background: linear-gradient(135deg, #4f46e5, #7c3aed 55%, #db2777); box-shadow: 0 10px 26px -8px rgba(124, 58, 237, 0.6);"><i class="fa-solid fa-receipt"></i> Use Manual Pay</a>
+      </div>
+    </div>
+
+    <!-- ===================== ORDER STATUSES ===================== -->
+    <div class="sec-head reveal" id="statuses" style="scroll-margin-top: calc(var(--header-h) + 1rem)">
+      <span class="eyebrow"><i class="fa-solid fa-tags"></i> Order Status Guide</span>
+      <h2>What Your <span>Order Status</span> Means</h2>
+      <p>You will see one of these badges next to each order in your History page.</p>
+    </div>
+
+    <div class="status-grid">
+      <div class="status-card tilt reveal" style="--sc:#b97708"><span class="badge">Pending</span><p>Your order is received and waiting to start.</p></div>
+      <div class="status-card tilt reveal" style="--sc:#099e4b;--d:0.05s"><span class="badge">Processing</span><p>The order is being prepared for delivery.</p></div>
+      <div class="status-card tilt reveal" style="--sc:#0a8f55;--d:0.1s"><span class="badge">In Progress</span><p>Delivery has started and is running now.</p></div>
+      <div class="status-card tilt reveal" style="--sc:#0e8a5b;--d:0.15s"><span class="badge">Completed</span><p>Your order was delivered successfully.</p></div>
+      <div class="status-card tilt reveal" style="--sc:#0b7c8c"><span class="badge">Partial</span><p>Only a part of the quantity was delivered.</p></div>
+      <div class="status-card tilt reveal" style="--sc:#c73339;--d:0.05s"><span class="badge">Cancelled</span><p>The order could not be completed and was cancelled.</p></div>
+      <div class="status-card tilt reveal" style="--sc:#4b58c9;--d:0.1s"><span class="badge">Refunded</span><p>The charge for the order was returned to your wallet.</p></div>
+      <div class="status-card tilt reveal" style="--sc:#0e8a5b;--d:0.15s"><span class="badge">Approved</span><p>For deposits: your payment was approved and added.</p></div>
+    </div>
+
+    <!-- ===================== DO / DON'T ===================== -->
+    <div class="sec-head reveal">
+      <span class="eyebrow"><i class="fa-solid fa-lightbulb"></i> Pro Tips</span>
+      <h2>Get The <span>Best Results</span></h2>
+      <p>A few simple habits that avoid mistakes and keep your orders smooth.</p>
+    </div>
+
+    <div class="dd-grid">
+      <div class="dd-card do tilt reveal">
+        <h3><span class="tile3d" style="--c1:#34d399;--c2:#059669;width:42px;height:42px;font-size:1.05rem;border-radius:14px"><i class="fa-solid fa-check"></i></span> Do</h3>
+        <ul>
+          <li><i class="fa-solid fa-circle-check"></i> Make sure your profile or post is <b>public</b> before ordering.</li>
+          <li><i class="fa-solid fa-circle-check"></i> Paste the <b>full link</b> starting with https://.</li>
+          <li><i class="fa-solid fa-circle-check"></i> Check the <b>price, min / max and description</b> of the service first.</li>
+          <li><i class="fa-solid fa-circle-check"></i> Upload a <b>clear screenshot</b> and enter the exact amount for manual deposits.</li>
+          <li><i class="fa-solid fa-circle-check"></i> Wait for an order to finish before placing another on the same link.</li>
+        </ul>
+      </div>
+      <div class="dd-card dont tilt reveal" style="--d:0.1s">
+        <h3><span class="tile3d" style="--c1:#fb7185;--c2:#e11d48;width:42px;height:42px;font-size:1.05rem;border-radius:14px"><i class="fa-solid fa-xmark"></i></span> Don't</h3>
+        <ul>
+          <li><i class="fa-solid fa-circle-xmark"></i> Don't order on a <b>private</b> account or a wrong link.</li>
+          <li><i class="fa-solid fa-circle-xmark"></i> Don't enter a quantity below the service minimum or above the maximum.</li>
+          <li><i class="fa-solid fa-circle-xmark"></i> Don't expect a cancel, edit or refund after an order is processed.</li>
+          <li><i class="fa-solid fa-circle-xmark"></i> Don't send manual payments to any account other than the ones shown on the Add Funds page.</li>
+          <li><i class="fa-solid fa-circle-xmark"></i> Don't share your account details with anyone.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===================== POLICIES ===================== -->
+    <div class="sec-head reveal" id="policies" style="scroll-margin-top: calc(var(--header-h) + 1rem)">
+      <span class="eyebrow"><i class="fa-solid fa-shield-halved"></i> Policies</span>
+      <h2>Privacy Policy &amp; <span>Terms of Service</span></h2>
+      <p>Please read these carefully. By using Pak Digital you agree to them.</p>
+    </div>
+
+    <div class="policy-grid">
+      <div class="policy tilt reveal" style="--c1:#60a5fa;--c2:#2563eb">
+        <div class="tile3d" style="--c1:#60a5fa;--c2:#2563eb"><i class="fa-solid fa-file-contract"></i></div>
+        <h3>1. Terms of Service</h3>
+        <p>By placing an order on our platform, you automatically agree to our terms. We are not responsible for any drops or profile suspensions that result from utilizing third-party marketing services. Make sure your destination link is fully public before submitting details.</p>
+      </div>
+      <div class="policy tilt reveal" style="--c1:#34d399;--c2:#059669;--d:0.08s">
+        <div class="tile3d" style="--c1:#34d399;--c2:#059669"><i class="fa-solid fa-user-shield"></i></div>
+        <h3>2. Privacy Policy</h3>
+        <p>We value your privacy. Your personal registration details, wallet transactions, and order history are kept highly secure on our cloud servers and will never be shared with third parties.</p>
+      </div>
+      <div class="policy tilt reveal" style="--c1:#fb923c;--c2:#ea580c;--d:0.16s">
+        <div class="tile3d" style="--c1:#fb923c;--c2:#ea580c"><i class="fa-solid fa-rotate-left"></i></div>
+        <h3>3. Refund &amp; Cancellation</h3>
+        <p>Once an order is successfully processed, it cannot be edited, cancelled, or refunded. Refill is available only for services explicitly marked as “Lifetime Refill” or “30 Days Refill.”</p>
+      </div>
+    </div>
+    <div class="policy-note reveal"><i class="fa-solid fa-circle-info"></i> Questions about any policy? Message the main admin on WhatsApp — we are happy to explain.</div>
+
+    <!-- ===================== FAQ ===================== -->
+    <div class="sec-head reveal">
+      <span class="eyebrow"><i class="fa-solid fa-circle-question"></i> FAQ</span>
+      <h2>Frequently Asked <span>Questions</span></h2>
+    </div>
+
+    <div class="faq reveal">
+      <details>
+        <summary>What is the minimum and maximum deposit? <i class="fa-solid fa-chevron-down"></i></summary>
+        <div class="ans">Both Auto Pay and Manual Pay start from Rs. 30, and the maximum per deposit is Rs. 50,000.</div>
+      </details>
+      <details>
+        <summary>Which payment methods are available? <i class="fa-solid fa-chevron-down"></i></summary>
+        <div class="ans">Auto Pay works with JazzCash, Easypaisa and Raast QR and is added to your wallet instantly. Manual Pay uses the active accounts shown on the Add Funds page (such as Easypaisa and SadaPay) and needs admin approval.</div>
+      </details>
+      <details>
+        <summary>How long does manual approval take? <i class="fa-solid fa-chevron-down"></i></summary>
+        <div class="ans">Manual deposits are normally reviewed within 15–30 minutes. For instant top-ups, use Auto Pay.</div>
+      </details>
+      <details>
+        <summary>My auto payment shows “Payment Not Found”. What now? <i class="fa-solid fa-chevron-down"></i></summary>
+        <div class="ans">If the payment was not completed, no funds are deducted. If money left your account but your wallet was not updated, message the main admin on WhatsApp with your payment details and we will check it.</div>
+      </details>
+      <details>
+        <summary>Can I cancel or refund an order? <i class="fa-solid fa-chevron-down"></i></summary>
+        <div class="ans">Once an order is successfully processed it cannot be edited, cancelled or refunded. Refill is available only for services marked “Lifetime Refill” or “30 Days Refill.”</div>
+      </details>
+      <details>
+        <summary>What are “Other Services”? <i class="fa-solid fa-chevron-down"></i></summary>
+        <div class="ans">They are fixed-price digital products such as premium subscriptions, software, APIs and source codes. After purchase you get an instant download button or a WhatsApp delivery button.</div>
+      </details>
+    </div>
+
+    <!-- ===================== CHANNEL + ADMIN ===================== -->
+    <div class="sec-head reveal">
+      <span class="eyebrow"><i class="fa-brands fa-whatsapp"></i> Stay Connected</span>
+      <h2>Join Us &amp; <span>Talk To The Admin</span></h2>
+      <p>Follow our channel for updates and message the admin directly whenever you need help.</p>
+    </div>
+
+    <div class="connect-grid">
+      <div class="channel-card tilt reveal">
+        <div class="ch-ic"><i class="fa-brands fa-whatsapp"></i></div>
+        <h3>Join Our WhatsApp Channel</h3>
+        <p>Be the first to know about new services, offers, price updates and important announcements from Pak Digital.</p>
+        <div class="ch-perks">
+          <span><i class="fa-solid fa-bell"></i> Live Updates</span>
+          <span><i class="fa-solid fa-gift"></i> Offers</span>
+          <span><i class="fa-solid fa-bullhorn"></i> Announcements</span>
+        </div>
+        <a class="btn btn-white" href="https://whatsapp.com/channel/0029VbDQFi9KmCPUDQEwVW2W" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" style="font-size:1.2rem"></i> Join Channel <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="admin-card tilt reveal" id="contact-admin" style="--d:0.1s">
+        <div class="admin-dp-wrap"><img src="https://i.postimg.cc/CMz3cpZr/ftgm.jpg" alt="FTGM Admin" class="admin-dp"></div>
+        <div class="admin-name-row">
+          <span>FTGM</span>
+          <span class="verified-ticks" title="Verified Official Admin">
+            <svg class="wa-verified-badge" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.033-.513 1.158-.687 1.943-1.99 1.943-3.484zm-6.616-3.334l-4.334 6.5c-.145.217-.382.334-.625.334-.143 0-.288-.04-.416-.126l-.115-.094-2.415-2.415c-.293-.293-.293-.768 0-1.06s.768-.294 1.06 0l1.77 1.767 3.825-5.74c.23-.345.696-.436 1.04-.207.346.23.44.696.21 1.04z"/>
+            </svg>
+          </span>
+        </div>
+        <div class="admin-role">Official Admin • Pak Digital</div>
+        <p class="msg">Contact the main admin if support is not responding, or for any order or payment problem.</p>
+        <a class="btn btn-wa" href="https://wa.me/923104882921" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" style="font-size:1.25rem"></i> Contact Admin</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== FOOTER ===================== -->
+  <svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true"><path fill="#0c331c" d="M0,40 C240,80 480,0 720,30 C960,60 1200,10 1440,40 L1440,70 L0,70 Z"/></svg>
+  <footer class="site-footer">
+    <img src="https://i.postimg.cc/D0NthZgz/pak-digital.png" alt="Pak Digital">
+    <div class="links">
+      <a href="dashboard.html">New Order</a>
+      <a href="other-services.html">Other Services</a>
+      <a href="funds.html" data-requires-auth="true">Add Funds</a>
+      <a href="history.html" data-requires-auth="true">History</a>
+      <a href="profile.html" data-requires-auth="true">My Profile</a>
+      <a href="#policies">Policies</a>
+    </div>
+    <div class="copy">&copy; 2026 Pak Digital. All rights reserved.</div>
+  </footer>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD6VSIGbUJqIMQb53k1mXAcGjNu9PFC1w0",
+  authDomain: "new-smm02.firebaseapp.com",
+  databaseURL: "https://new-smm02-default-rtdb.firebaseio.com",
+  projectId: "new-smm02",
+  storageBucket: "new-smm02.firebasestorage.app",
+  messagingSenderId: "2203224901",
+  appId: "1:2203224901:web:7b328bb0ea4c381afe0c2c"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const initials = (name) => (name || 'U').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+let isLoggedIn = false;
+
+onAuthStateChanged(auth, async (user) => {
+  const headerLogin = document.getElementById('header-login-btn');
+  const sideLogin = document.getElementById('sidebar-login-btn');
+  const logoutBtn = document.getElementById('logout-btn');
+  const nameEl = document.getElementById('user-name-display');
+  const avatarEl = document.getElementById('user-avatar');
+
+  if (user) {
+    isLoggedIn = true;
+    headerLogin?.classList.add('d-none');
+    sideLogin?.classList.add('d-none');
+    logoutBtn?.classList.remove('d-none');
+    let shown = (user.email || 'User').split('@')[0];
+    try {
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      if (snap.exists()) {
+        const u = snap.data();
+        shown = u.username || u.name || shown;
+      }
+    } catch (e) { console.error(e); }
+    nameEl.textContent = shown;
+    avatarEl.textContent = initials(shown);
+  } else {
+    isLoggedIn = false;
+    headerLogin?.classList.remove('d-none');
+    sideLogin?.classList.remove('d-none');
+    logoutBtn?.classList.add('d-none');
+    nameEl.textContent = 'Guest';
+    avatarEl.textContent = 'G';
+  }
+  if (window.__hideLoader) window.__hideLoader();
+});
+
+// Pages that need a login send guests to the login page first
+document.querySelectorAll('[data-requires-auth="true"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      window.location.href = 'login.html?redirect=' + encodeURIComponent(a.getAttribute('href'));
+    }
+  });
+});
+
+document.getElementById('logout-btn')?.addEventListener('click', async (e) => {
+  e.preventDefault();
+  await signOut(auth);
+  window.location.href = 'index.html';
+});
+</script>
+
+<script>
+(function () {
+  /* ---------- Mobile sidebar ---------- */
+  var btn = document.getElementById('mobile-menu-btn');
+  var sidebar = document.getElementById('sidebar');
+  var backdrop = document.createElement('div');
+  backdrop.className = 'sidebar-backdrop';
+  document.body.appendChild(backdrop);
+  function closeSide() { sidebar.classList.remove('active'); backdrop.classList.remove('active'); }
+  btn && btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    sidebar.classList.toggle('active');
+    backdrop.classList.toggle('active', sidebar.classList.contains('active'));
+  });
+  backdrop.addEventListener('click', closeSide);
+  sidebar.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeSide); });
+
+  /* ---------- Platform data: 3D ring + marquee ---------- */
+  var PLATS = [
+    { ic: 'fa-instagram', n: 'Instagram', bg: 'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)' },
+    { ic: 'fa-facebook-f', n: 'Facebook', bg: 'linear-gradient(145deg,#3b9bff,#1877F2)' },
+    { ic: 'fa-youtube', n: 'YouTube', bg: 'linear-gradient(145deg,#ff4d4d,#e60000)' },
+    { ic: 'fa-tiktok', n: 'TikTok', bg: 'linear-gradient(145deg,#2a2a33,#000)' },
+    { ic: 'fa-telegram', n: 'Telegram', bg: 'linear-gradient(145deg,#3cc0f5,#0088CC)' },
+    { ic: 'fa-x-twitter', n: 'X (Twitter)', bg: 'linear-gradient(145deg,#2b2f36,#0f1419)' },
+    { ic: 'fa-whatsapp', n: 'WhatsApp', bg: 'linear-gradient(145deg,#4ce38a,#1fb855)' },
+    { ic: 'fa-snapchat', n: 'Snapchat', bg: 'linear-gradient(145deg,#fffd57,#ffe500)', fg: '#111' },
+    { ic: 'fa-linkedin-in', n: 'LinkedIn', bg: 'linear-gradient(145deg,#2d8ae6,#0A66C2)' },
+    { ic: 'fa-discord', n: 'Discord', bg: 'linear-gradient(145deg,#7b87ff,#5865F2)' },
+    { ic: 'fa-pinterest-p', n: 'Pinterest', bg: 'linear-gradient(145deg,#ff4b63,#E60023)' },
+    { ic: 'fa-spotify', n: 'Spotify', bg: 'linear-gradient(145deg,#3ee57c,#1DB954)' }
+  ];
+
+  var ring = document.getElementById('ring');
+  if (ring) {
+    PLATS.slice(0, 8).forEach(function (p, i) {
+      var chip = document.createElement('div');
+      chip.className = 'chip3d';
+      chip.style.setProperty('--i', i);
+      chip.innerHTML = '<div class="c1"><div class="c2" style="background:' + p.bg + ';color:' + (p.fg || '#fff') + '"><i class="fa-brands ' + p.ic + '"></i></div></div>';
+      ring.appendChild(chip);
+    });
+  }
+
+  var track = document.getElementById('marquee-track');
+  if (track) {
+    var html = PLATS.map(function (p) {
+      return '<span class="plat"><span class="pi" style="background:' + p.bg + ';color:' + (p.fg || '#fff') + '"><i class="fa-brands ' + p.ic + '"></i></span>' + p.n + '</span>';
+    }).join('');
+    track.innerHTML = html + html;
+  }
+
+  /* ---------- Scroll reveal ---------- */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(function (el) { io.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ---------- 3D tilt on cards (desktop pointers only) ---------- */
+  if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.tilt').forEach(function (el) {
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5;
+        var y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = 'perspective(900px) rotateX(' + (-y * 7).toFixed(2) + 'deg) rotateY(' + (x * 9).toFixed(2) + 'deg) translateY(-4px)';
+      });
+      el.addEventListener('pointerleave', function () { el.style.transform = ''; });
+    });
+  }
+
+  /* ---------- Animated counters ---------- */
+  function fmt(n) { return n >= 1000 ? (n / 1000).toFixed(0) + 'k' : String(n); }
+  function count(el, target, suffix, dur) {
+    var t0 = performance.now();
+    function step(t) {
+      var p = Math.min((t - t0) / dur, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(Math.floor(target * e)) + suffix;
+      if (p < 1) requestAnimationFrame(step); else el.textContent = fmt(target) + suffix;
+    }
+    requestAnimationFrame(step);
+  }
+  var statsEl = document.getElementById('stats');
+  var counted = false;
+  function runCounters() {
+    if (counted) return;
+    counted = true;
+    document.querySelectorAll('.stat').forEach(function (card, i) {
+      var num = card.querySelector('.stat-number');
+      setTimeout(function () { count(num, parseInt(card.dataset.target, 10), card.dataset.suffix || '', 1800 + i * 250); }, i * 120);
+    });
+  }
+  if (statsEl && 'IntersectionObserver' in window) {
+    var so = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { runCounters(); so.disconnect(); } }, { threshold: 0.3 });
+    so.observe(statsEl);
+  } else { runCounters(); }
+})();
+</script>
+</body>
+</html>
